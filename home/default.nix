@@ -1,5 +1,5 @@
 # Home Manager module aggregator plus home identity and state version.
-{ config, pkgs, inputs, username, ... }:
+{ config, pkgs, inputs, username, self, ... }:
 
 {
   imports = [

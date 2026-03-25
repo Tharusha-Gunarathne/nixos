@@ -1,8 +1,8 @@
 # Home-level Niri configuration extension point
-{ lib, config, ... }:
+{ lib, config, self, ... }:
 
 let 
-    here = toString ./.;
+    here = "${self}/pkgs/niri";
 in 
 {
     # Niri Confiuration 

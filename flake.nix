@@ -51,7 +51,7 @@
                   useGlobalPkgs = true;
                   useUserPackages = true;
                   users.${username} = import .REDACTED-HOME.nix;
-                  extraSpecialArgs = { inherit inputs username; };
+                  extraSpecialArgs = { inherit inputs username self; };
                   backupFileExtension = "backup";
                 };
               }
