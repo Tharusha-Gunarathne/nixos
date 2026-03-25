@@ -15,14 +15,20 @@ in
   };
 
   # Noctalia Shell Settings configuration, with symlink to out-of-store settings file.
-  xdg.configFile."noctalia/settings.json" = {
-    source = config.lib.file.mkOutOfStoreSymlink 
-      "${here}/settings.json";
-  };
+  home.activation.noctaliaSettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    mkdir -p "${config.xdg.configHome}/noctalia"
+    if [ ! -f "${config.xdg.configHome}/noctalia/settings.json" ]; then
+      cp ${here}/settings.json ${config.xdg.configHome}/noctalia/settings.json
+    fi
+    ln -sf "${config.xdg.configHome}/noctalia/settings.json" ${here}/settings.json
+  '';
 
   # Noctalia plugin configuration, with symlink to out-of-store plugin config file.
-  xdg.configFile."noctalia/plugins.json" = {
-    source = config.lib.file.mkOutOfStoreSymlink
-      "${here}/plugins.json";
-  };
+  home.activation.noctaliaPlugins = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    mkdir -p "${config.xdg.configHome}/noctalia"
+    if [ ! -f "${config.xdg.configHome}/noctalia/plugins.json" ]; then
+      cp ${here}/plugins.json ${config.xdg.configHome}/noctalia/plugins.json
+    fi
+    ln -sf "${config.xdg.configHome}/noctalia/plugins.json" ${here}/plugins.json
+  '';
 }
