@@ -4,11 +4,11 @@
       "flake": false,
       "locked": {
         "dir": "fancy-audiovisualizer",
-        "lastModified": 1774445520,
-        "narHash": "sha256-8eYaRYfLmFINx6B0CmWT4vaAhE4sKJFMwMCp/g/CTH8=",
+        "lastModified": 1774450728,
+        "narHash": "sha256-fGYTeBFYn0yt8gDTnFDcAO0nBm421q7s6WQC0VCA4C8=",
         "owner": "noctalia-dev",
         "repo": "noctalia-plugins",
-        "rev": "a09a8049b5f77cde2f7ab2dd2e7c9eeead762eb7",
+        "rev": "2465c7f073dd945180f224ad351a5537236985b1",
         "type": "github"
       },
       "original": {
@@ -60,11 +60,11 @@
       "flake": false,
       "locked": {
         "dir": "kde-connect",
-        "lastModified": 1774445520,
-        "narHash": "sha256-8eYaRYfLmFINx6B0CmWT4vaAhE4sKJFMwMCp/g/CTH8=",
+        "lastModified": 1774450728,
+        "narHash": "sha256-fGYTeBFYn0yt8gDTnFDcAO0nBm421q7s6WQC0VCA4C8=",
         "owner": "noctalia-dev",
         "repo": "noctalia-plugins",
-        "rev": "a09a8049b5f77cde2f7ab2dd2e7c9eeead762eb7",
+        "rev": "2465c7f073dd945180f224ad351a5537236985b1",
         "type": "github"
       },
       "original": {
@@ -78,11 +78,11 @@
       "flake": false,
       "locked": {
         "dir": "keybind-cheatsheet",
-        "lastModified": 1774445520,
-        "narHash": "sha256-8eYaRYfLmFINx6B0CmWT4vaAhE4sKJFMwMCp/g/CTH8=",
+        "lastModified": 1774450728,
+        "narHash": "sha256-fGYTeBFYn0yt8gDTnFDcAO0nBm421q7s6WQC0VCA4C8=",
         "owner": "noctalia-dev",
         "repo": "noctalia-plugins",
-        "rev": "a09a8049b5f77cde2f7ab2dd2e7c9eeead762eb7",
+        "rev": "2465c7f073dd945180f224ad351a5537236985b1",
         "type": "github"
       },
       "original": {
@@ -96,11 +96,11 @@
       "flake": false,
       "locked": {
         "dir": "niri-auto-tile",
-        "lastModified": 1774445520,
-        "narHash": "sha256-8eYaRYfLmFINx6B0CmWT4vaAhE4sKJFMwMCp/g/CTH8=",
+        "lastModified": 1774450728,
+        "narHash": "sha256-fGYTeBFYn0yt8gDTnFDcAO0nBm421q7s6WQC0VCA4C8=",
         "owner": "noctalia-dev",
         "repo": "noctalia-plugins",
-        "rev": "a09a8049b5f77cde2f7ab2dd2e7c9eeead762eb7",
+        "rev": "2465c7f073dd945180f224ad351a5537236985b1",
         "type": "github"
       },
       "original": {
@@ -228,11 +228,11 @@
       "flake": false,
       "locked": {
         "dir": "polkit-agent",
-        "lastModified": 1774445520,
-        "narHash": "sha256-8eYaRYfLmFINx6B0CmWT4vaAhE4sKJFMwMCp/g/CTH8=",
+        "lastModified": 1774450728,
+        "narHash": "sha256-fGYTeBFYn0yt8gDTnFDcAO0nBm421q7s6WQC0VCA4C8=",
         "owner": "noctalia-dev",
         "repo": "noctalia-plugins",
-        "rev": "a09a8049b5f77cde2f7ab2dd2e7c9eeead762eb7",
+        "rev": "2465c7f073dd945180f224ad351a5537236985b1",
         "type": "github"
       },
       "original": {
@@ -254,11 +254,11 @@
       "flake": false,
       "locked": {
         "dir": "screen-recorder",
-        "lastModified": 1774445520,
-        "narHash": "sha256-8eYaRYfLmFINx6B0CmWT4vaAhE4sKJFMwMCp/g/CTH8=",
+        "lastModified": 1774450728,
+        "narHash": "sha256-fGYTeBFYn0yt8gDTnFDcAO0nBm421q7s6WQC0VCA4C8=",
         "owner": "noctalia-dev",
         "repo": "noctalia-plugins",
-        "rev": "a09a8049b5f77cde2f7ab2dd2e7c9eeead762eb7",
+        "rev": "2465c7f073dd945180f224ad351a5537236985b1",
         "type": "github"
       },
       "original": {
