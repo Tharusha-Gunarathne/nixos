@@ -14,4 +14,14 @@ in
         rm -f ${here}/niri/config.kdl
         ln -sf "${config.xdg.configHome}/niri/config.kdl" ${here}/niri/config.kdl
     '';
+
+    # Noctalia Theme Configuration
+    home.activation.noctaliaTheme = lib.hm.dag.entryAfter ["writeBoundary"] ''
+        mkdir -p "${config.xdg.configHome}/noctalia"
+        if [ ! -f "${config.xdg.configHome}/noctalia/theme.json" ]; then
+            cp ${here}/noctalia/theme.json ${config.xdg.configHome}/noctalia/theme.json
+        fi
+        rm -f ${here}/noctalia/theme.json
+        ln -sf "${config.xdg.configHome}/noctalia/theme.json" ${here}/noctalia/theme.json
+    '';
 }
