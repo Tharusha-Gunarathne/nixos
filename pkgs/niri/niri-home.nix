@@ -1,5 +1,5 @@
 # Home-level Niri configuration extension point
-{ username, config, ... }:
+{ lib, config, ... }:
 
 let 
     here = toString ./.;

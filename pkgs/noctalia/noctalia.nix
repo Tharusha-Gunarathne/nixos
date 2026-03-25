@@ -1,5 +1,5 @@
 # Noctalia Home Manager module import and shell enablement.
-{ config, pkgs, inputs, username, ... }:
+{ config, pkgs, inputs, lib, ... }:
 
 let 
   here = toString ./.;
