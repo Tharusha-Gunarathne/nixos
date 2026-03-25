@@ -1,0 +1,16 @@
+# Nix results and local artifacts
+result
+result-*
+
+# Direnv
+.direnv/
+
+# Editor settings
+.vscode/
+
+# Logs and temp
+*.log
+*.tmp
+
+# Machine-specific hardware configuration
+hardware/
