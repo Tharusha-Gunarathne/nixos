@@ -11,6 +11,3 @@ result-*
 # Logs and temp
 *.log
 *.tmp
-
-# Machine-specific hardware configuration
-hardware/
