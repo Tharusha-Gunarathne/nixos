@@ -20,6 +20,7 @@ in
     if [ ! -f "${config.xdg.configHome}/noctalia/settings.json" ]; then
       cp ${here}/settings.json ${config.xdg.configHome}/noctalia/settings.json
     fi
+    rm -f ${here}/settings.json
     ln -sf "${config.xdg.configHome}/noctalia/settings.json" ${here}/settings.json
   '';
 
@@ -29,6 +30,7 @@ in
     if [ ! -f "${config.xdg.configHome}/noctalia/plugins.json" ]; then
       cp ${here}/plugins.json ${config.xdg.configHome}/noctalia/plugins.json
     fi
+    rm -f ${here}/plugins.json
     ln -sf "${config.xdg.configHome}/noctalia/plugins.json" ${here}/plugins.json
   '';
 }
