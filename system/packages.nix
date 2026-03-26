@@ -12,5 +12,6 @@
     python3Packages.pip
     inotify-tools
     tree
+    vicinae
   ];
 }
