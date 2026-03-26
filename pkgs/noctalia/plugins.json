@@ -14,7 +14,7 @@
             "enabled": true
         },
         "keybind-cheatsheet": {
-            "enabled": false
+            "enabled": true
         },
         "niri-auto-tile": {
             "enabled": false
