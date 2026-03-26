@@ -10,5 +10,7 @@
     brightnessctl
     python3
     python3Packages.pip
+    inotify-tools
+    tree
   ];
 }
