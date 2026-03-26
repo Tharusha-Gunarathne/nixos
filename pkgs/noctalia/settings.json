@@ -234,6 +234,9 @@
                 },
                 {
                     "id": "plugin:kde-connect"
+                },
+                {
+                    "id": "plugin:keybind-cheatsheet"
                 }
             ]
         }
