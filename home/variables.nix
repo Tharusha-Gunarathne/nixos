@@ -12,5 +12,8 @@
     GTK_THEME = "Adwaita-dark";
     XDG_DATA_DIRS = "$XDG_DATA_DIRS:/run/current-system/sw/share";
     GI_TYPELIB_PATH = "/run/current-system/sw/lib/girepository-1.0";
+  
+    QT_QPA_PLATFORM = "wayland";
+    QT_PLUGIN_PATH = "${pkgs.qt6.qtbase}/lib/qt-6/plugins:${pkgs.qt6.qtwayland}/lib/qt-6/plugins";
   };
 }
