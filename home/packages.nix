@@ -9,6 +9,7 @@
     bat
     throne
     inotify-tools
+    fastfetch
     
     python3
     python3Packages.pip
