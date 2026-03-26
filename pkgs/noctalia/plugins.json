@@ -11,7 +11,7 @@
             "enabled": true
         },
         "kde-connect": {
-            "enabled": false
+            "enabled": true
         },
         "keybind-cheatsheet": {
             "enabled": false
