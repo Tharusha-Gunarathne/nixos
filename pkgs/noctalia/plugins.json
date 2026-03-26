@@ -20,7 +20,7 @@
             "enabled": true
         },
         "polkit-agent": {
-            "enabled": false
+            "enabled": true
         },
         "screen-recorder": {
             "enabled": false
