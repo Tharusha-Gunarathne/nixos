@@ -10,6 +10,6 @@
     owner = "root";
     group = "root";
     capabilities = "cap_net_admin+ep";
-    source = "${pkgs.throne}/bin/nekoray";
+    source = "${pkgs.throne}/bin/Throne";
   };
 }
