@@ -7,6 +7,6 @@
     kitty
     vscode
     bat
-    nekoray
+    throne
   ];
 }
