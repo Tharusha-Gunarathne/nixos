@@ -1,5 +1,5 @@
 # System module aggregator importing all machine-wide NixOS modules.
-{ config, lib, pkgs, username, self, ... }:
+{ config, lib, pkgs, username, baseDir, ... }:
 
 {
   imports = [

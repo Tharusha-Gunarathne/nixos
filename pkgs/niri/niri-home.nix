@@ -1,11 +1,11 @@
 # Home-level Niri configuration extension point
-{ lib, config, self, ... }:
+{ lib, config, baseDir, ... }:
 
 let 
-    here = "${self}/pkgs/niri";
+    here = "${baseDir}/pkgs/niri";
 in 
 {
-    # Niri Confiuration 
+    # Niri Configuration 
     home.activation.niriConfig = lib.hm.dag.entryAfter ["writeBoundary"] ''
         mkdir -p "${config.xdg.configHome}/niri"
         if [ ! -f "${config.xdg.configHome}/niri/config.kdl" ]; then

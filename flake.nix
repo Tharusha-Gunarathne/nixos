@@ -38,10 +38,11 @@
         let
           system = "x86_64-linux";
           username = "tharusha-gunarathne";
+          baseDir = "/home/${username}/nixos-configs/structure";
         in {
           nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
             inherit system;
-            specialArgs = { inherit inputs username; };
+            specialArgs = { inherit inputs username baseDir; };
 
             modules = [
               ./system/default.nix
@@ -51,7 +52,7 @@
                   useGlobalPkgs = true;
                   useUserPackages = true;
                   users.${username} = import .REDACTED-HOME.nix;
-                  extraSpecialArgs = { inherit inputs username self; };
+                  extraSpecialArgs = { inherit inputs username baseDir; };
                   backupFileExtension = "backup";
                 };
               }

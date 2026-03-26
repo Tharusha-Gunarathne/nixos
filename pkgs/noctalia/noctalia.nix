@@ -1,8 +1,8 @@
 # Noctalia Home Manager module import and shell enablement.
-{ config, pkgs, inputs, lib, self, ... }:
+{ config, pkgs, inputs, lib, baseDir, ... }:
 
 let 
-  here = "${self}/pkgs/noctalia";
+  here = "${baseDir}/noctalia";
 in 
 {
   imports = [
