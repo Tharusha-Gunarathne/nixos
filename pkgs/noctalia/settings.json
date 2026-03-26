@@ -231,6 +231,9 @@
                     "icon": "noctalia",
                     "id": "ControlCenter",
                     "useDistroLogo": true
+                },
+                {
+                    "id": "plugin:kde-connect"
                 }
             ]
         }
