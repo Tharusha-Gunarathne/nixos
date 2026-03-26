@@ -7,5 +7,6 @@
     kitty
     vscode
     bat
+    nekoray
   ];
 }

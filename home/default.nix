@@ -11,6 +11,8 @@
     ../pkgs/kitty/kitty.nix
     ../pkgs/niri/niri-home.nix  
     ../pkgs/gtk/gtk-home.nix
+    ../pkgs/vicinae/vicinae.nix
+    ../pkgs/neovim/neovim.nix
   ];
 
   home.username = username;
