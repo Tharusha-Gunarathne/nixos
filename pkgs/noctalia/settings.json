@@ -237,6 +237,9 @@
                 },
                 {
                     "id": "plugin:keybind-cheatsheet"
+                },
+                {
+                    "id": "plugin:niri-auto-tile"
                 }
             ]
         }
