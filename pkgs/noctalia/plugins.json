@@ -7,6 +7,24 @@
         }
     ],
     "states": {
+        "fancy-audiovisualizer": {
+            "enabled": true
+        },
+        "kde-connect": {
+            "enabled": false
+        },
+        "keybind-cheatsheet": {
+            "enabled": false
+        },
+        "niri-auto-tile": {
+            "enabled": false
+        },
+        "polkit-agent": {
+            "enabled": false
+        },
+        "screen-recorder": {
+            "enabled": false
+        }
     },
     "version": 2
 }
