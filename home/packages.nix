@@ -8,5 +8,9 @@
     vscode
     bat
     throne
+    inotify-tools
+    
+    python3
+    python3Packages.pip
   ];
 }

@@ -19,5 +19,6 @@
     ../pkgs/nautilus/nautilus-system.nix
     ../pkgs/niri/niri-system.nix
     ../pkgs/gtk/gtk-system.nix
+    ../pkgs/throne/throne-system.nix
   ];
 }

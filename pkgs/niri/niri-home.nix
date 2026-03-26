@@ -1,9 +1,6 @@
 # Home-level Niri configuration extension point
 { lib, config, baseDir, ... }:
 
-let 
-    here = "${baseDir}/pkgs/niri";
-in 
 {
     # Placeholder for Noctalia-Niri theming
     home.activation.noctaliaNiriConfig = lib.hm.dag.entryAfter ["writeBoundary"] ''

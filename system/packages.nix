@@ -8,15 +8,8 @@
     wget
     wl-clipboard
     brightnessctl
-    python3
-    python3Packages.pip
-    inotify-tools
     tree
     vicinae
-
-    libsForQt5.qt5.qtwayland
-    qt6.qtwayland
-    kdePackages.qtwayland
     xwayland-satellite
   ];
 }
