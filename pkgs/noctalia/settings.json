@@ -81,12 +81,17 @@
         "widgets": {
             "center": [
                 {
-                    "hideWhenZero": false,
-                    "hideWhenZeroUnread": false,
-                    "iconColor": "none",
-                    "id": "NotificationHistory",
-                    "showUnreadBadge": true,
-                    "unreadBadgeColor": "primary"
+                    "defaultSettings": {
+                        "debounceMs": 300,
+                        "enabled": true,
+                        "language": "auto",
+                        "maxEventsPerSecond": 20,
+                        "maxVisible": 4,
+                        "perWorkspace": false,
+                        "workspaceMaxVisible": {
+                        }
+                    },
+                    "id": "plugin:niri-auto-tile"
                 },
                 {
                     "characterCount": 2,
@@ -117,6 +122,21 @@
                     "id": "Clock",
                     "tooltipFormat": "HH:mm ddd, MMM dd",
                     "useCustomFont": false
+                },
+                {
+                    "defaultSettings": {
+                        "autoHeight": true,
+                        "cheatsheetData": [
+                        ],
+                        "columnCount": 3,
+                        "detectedCompositor": "",
+                        "hyprlandConfigPath": "~/.config/hypr/hyprland.conf",
+                        "modKeyVariable": "$mod",
+                        "niriConfigPath": "~/.config/niri/config.kdl",
+                        "windowHeight": 0,
+                        "windowWidth": 1400
+                    },
+                    "id": "plugin:keybind-cheatsheet"
                 }
             ],
             "left": [
@@ -180,6 +200,14 @@
             ],
             "right": [
                 {
+                    "hideWhenZero": false,
+                    "hideWhenZeroUnread": false,
+                    "iconColor": "none",
+                    "id": "NotificationHistory",
+                    "showUnreadBadge": true,
+                    "unreadBadgeColor": "primary"
+                },
+                {
                     "blacklist": [
                     ],
                     "chevronColor": "none",
@@ -220,8 +248,28 @@
                     "textColor": "none"
                 },
                 {
-                    "iconColor": "none",
-                    "id": "WallpaperSelector"
+                    "defaultSettings": {
+                        "audioCodec": "opus",
+                        "audioSource": "default_output",
+                        "colorRange": "limited",
+                        "copyToClipboard": false,
+                        "customReplayDuration": "30",
+                        "directory": "",
+                        "filenamePattern": "recording_yyyyMMdd_HHmmss",
+                        "frameRate": "60",
+                        "hideInactive": false,
+                        "iconColor": "none",
+                        "quality": "very_high",
+                        "replayDuration": "30",
+                        "replayEnabled": false,
+                        "replayStorage": "ram",
+                        "resolution": "original",
+                        "restorePortalSession": false,
+                        "showCursor": true,
+                        "videoCodec": "h264",
+                        "videoSource": "portal"
+                    },
+                    "id": "plugin:screen-recorder"
                 },
                 {
                     "colorizeDistroLogo": false,
@@ -231,18 +279,6 @@
                     "icon": "noctalia",
                     "id": "ControlCenter",
                     "useDistroLogo": true
-                },
-                {
-                    "id": "plugin:kde-connect"
-                },
-                {
-                    "id": "plugin:keybind-cheatsheet"
-                },
-                {
-                    "id": "plugin:niri-auto-tile"
-                },
-                {
-                    "id": "plugin:screen-recorder"
                 }
             ]
         }
@@ -319,10 +355,10 @@
                     "id": "Bluetooth"
                 },
                 {
-                    "id": "WallpaperSelector"
+                    "id": "NoctaliaPerformance"
                 },
                 {
-                    "id": "NoctaliaPerformance"
+                    "id": "WallpaperSelector"
                 }
             ],
             "right": [
@@ -337,6 +373,9 @@
                 },
                 {
                     "id": "NightLight"
+                },
+                {
+                    "id": "WallpaperSelector"
                 }
             ]
         }
