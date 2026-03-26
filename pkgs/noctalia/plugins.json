@@ -17,7 +17,7 @@
             "enabled": true
         },
         "niri-auto-tile": {
-            "enabled": false
+            "enabled": true
         },
         "polkit-agent": {
             "enabled": false
