@@ -1,13 +1,14 @@
 { config, pkgs, username, baseDir, ... }:
 
 let
-  repoDir = "/home/${username}/nixos-configs/structure/pkgs/noctalia";
+  repoDir = "${baseDir}/pkgs/noctalia";
   watchDir = "/home/${username}/.config/noctalia";
 
   # Service 1: watches and copies files immediately on change
   syncScript = pkgs.writeShellScript "noctalia-sync" ''
     WATCH_DIR="${watchDir}"
     REPO_DIR="${repoDir}"
+    CP="${pkgs.coreutils}/bin/cp"
 
     mkdir -p "$REPO_DIR"
 
@@ -15,7 +16,7 @@ let
     while read -r dir event file; do
       if [[ "$file" == "settings.json" || "$file" == "plugins.json" ]]; then
         echo "Detected change: $file ($event)"
-        cp "$WATCH_DIR/$file" "$REPO_DIR/$file"
+        $CP "$WATCH_DIR/$file" "$REPO_DIR/$file"
         echo "Copied $file to repo dir"
       fi
     done
@@ -23,13 +24,14 @@ let
 
   # Service 2: commits anything staged every 15 minutes
   commitScript = pkgs.writeShellScript "noctalia-commit" ''
-    REPO_ROOT="${baseDir}"
+    REPO_ROOT="/home/${username}/nixos-configs/structure"
+    GIT="${pkgs.git}/bin/git"
 
     cd "$REPO_ROOT"
-    git add "pkgs/noctalia/settings.json" "pkgs/noctalia/plugins.json"
+    $GIT add "pkgs/noctalia/settings.json" "pkgs/noctalia/plugins.json"
 
-    if ! git diff --cached --quiet; then
-      git commit -m "chore(noctalia): auto-sync config changes"
+    if ! $GIT diff --cached --quiet; then
+      $GIT commit -m "chore(noctalia): auto-sync config changes"
       echo "Committed noctalia changes"
     else
       echo "No changes to commit"
