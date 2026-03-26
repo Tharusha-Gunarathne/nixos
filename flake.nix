@@ -38,7 +38,8 @@
         let
           system = "x86_64-linux";
           username = "tharusha-gunarathne";
-          baseDir = "/home/${username}/nixos-configs/structure";
+          # baseDir = "/home/${username}/nixos-configs/structure";
+          baseDir = toString ./.;
         in {
           nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
             inherit system;
