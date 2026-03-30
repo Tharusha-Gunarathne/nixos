@@ -15,7 +15,7 @@ This repository contains a modular NixOS + Home Manager configuration managed wi
 - system/: NixOS system-level modules.
 - home/: Home Manager user-level modules.
 - pkgs/: Feature modules grouped by component (GTK, Niri, Nautilus, Noctalia, Kitty).
-- hardware/: Machine-generated hardware configuration (intentionally ignored in git).
+- hardware/: Machine-generated hardware configuration.
 
 ## Module Responsibilities
 
@@ -135,11 +135,3 @@ If evaluation fails:
 3. Confirm external fetchers are compatible with pure flake evaluation.
 4. Run a dry build first and fix errors in order.
 
-## Contributing
-
-When adding a new feature:
-
-1. Decide whether it belongs to system/, home/, or both.
-2. Add module(s) under pkgs/<feature>/.
-3. Import them from system/default.nix and or home/default.nix.
-4. Run dry evaluation before committing changes.
