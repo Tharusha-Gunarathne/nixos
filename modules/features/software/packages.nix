@@ -1,5 +1,5 @@
 { self, ... }: {
-  flake.nixosModules.packages = { pkgs, ... }: {
+  flake.nixosModules.packages = { pkgs, config, ... }: {
     environment.systemPackages = with pkgs; [
       vim
       git
@@ -10,19 +10,19 @@
       vicinae
       xwayland-satellite
     ];
-  };
 
-  flake.homeManagerModules.packages = { pkgs, ... }: {
-    home.packages = with pkgs; [
-      brave
-      kitty
-      vscode
-      bat
-      throne
-      inotify-tools
-      fastfetch
-      python3
-      python3Packages.pip
-    ];
+    home-manager.users.${config.myConfig.username} = { ... }: {
+      home.packages = with pkgs; [
+        brave
+        kitty
+        vscode
+        bat
+        throne
+        inotify-tools
+        fastfetch
+        python3
+        python3Packages.pip
+      ];
+    };
   };
 }

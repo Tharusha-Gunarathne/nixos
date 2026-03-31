@@ -16,11 +16,17 @@
       self.nixosModules.nvidia
       self.nixosModules.services
       # software
+      self.nixosModules.git
       self.nixosModules.gtk
+      self.nixosModules.kitty
       self.nixosModules.nautilus
       self.nixosModules.niri
+      self.nixosModules.noctalia
       self.nixosModules.packages
       self.nixosModules.throne
+      self.nixosModules.variables
+      self.nixosModules.vicinae
+      self.nixosModules.neovim
     ];
   };
 }

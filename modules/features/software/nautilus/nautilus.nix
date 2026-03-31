@@ -1,5 +1,13 @@
 { self, ... }: {
-  flake.nixosModules.nautilus = { pkgs, ... }: {
+  flake.nixosModules.nautilus = { pkgs, lib, config, ... }:
+  let
+    username = config.myConfig.username;
+    sourceDir = ./extensions;
+    extensionFiles = builtins.attrNames (
+      lib.filterAttrs (name: type: type == "regular" && lib.hasSuffix ".py" name)
+        (builtins.readDir sourceDir)
+    );
+  in {
     environment.systemPackages = with pkgs; [
       nautilus
       nautilus-python
@@ -22,19 +30,12 @@
 
     environment.sessionVariables.NAUTILUS_4_EXTENSION_DIR =
       "${pkgs.nautilus-python}/lib/nautilus/extensions-4";
-  };
 
-  flake.homeManagerModules.nautilus = { lib, ... }:
-  let
-    sourceDir = ./extensions;
-    extensionFiles = builtins.attrNames (
-      lib.filterAttrs (name: type: type == "regular" && lib.hasSuffix ".py" name)
-        (builtins.readDir sourceDir)
-    );
-  in {
-    xdg.dataFile = builtins.listToAttrs (map (name: {
-      name = "nautilus-python/extensions/${name}";
-      value = { source = sourceDir + "/${name}"; };
-    }) extensionFiles);
+    home-manager.users.${username} = { ... }: {
+      xdg.dataFile = builtins.listToAttrs (map (name: {
+        name = "nautilus-python/extensions/${name}";
+        value = { source = sourceDir + "/${name}"; };
+      }) extensionFiles);
+    };
   };
 }
