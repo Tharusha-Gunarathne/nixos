@@ -9,6 +9,7 @@
       repoRoot = "${config.home.homeDirectory}/nixos-configs/structure";
       repoNoctaliaDir = "${repoRoot}/modules/features/software/noctalia";
 
+      // Noctalia sync script - watches for changes in the Noctalia config directory and copies them to the repo
       syncScript = pkgs.writeShellScript "noctalia-sync" ''
         WATCH_DIR="${watchDir}"
         REPO_DIR="${repoNoctaliaDir}"
@@ -26,17 +27,35 @@
         done
       '';
 
+      // Noctalia commit script - commits only settings.json/plugins.json via a temporary index
       commitScript = pkgs.writeShellScript "noctalia-commit" ''
         REPO_ROOT="${repoRoot}"
         GIT="${pkgs.git}/bin/git"
 
         cd "$REPO_ROOT"
-        $GIT add "modules/features/software/noctalia/settings.json" \
-                 "modules/features/software/noctalia/plugins.json"
 
-        if ! $GIT diff --cached --quiet; then
-          $GIT commit -m "chore(noctalia): auto-sync config changes"
+        TARGETS=(
+          "modules/features/software/noctalia/settings.json"
+          "modules/features/software/noctalia/plugins.json"
+        )
+
+        TMP_INDEX=$(mktemp)
+        cleanup() { rm -f "$TMP_INDEX"; }
+        trap cleanup EXIT
+
+        GIT_INDEX_FILE="$TMP_INDEX" "$GIT" read-tree HEAD
+
+        for path in "${TARGETS[@]}"; do
+          if [ -e "$path" ]; then
+            GIT_INDEX_FILE="$TMP_INDEX" "$GIT" add "$path"
+          fi
+        done
+
+        if GIT_INDEX_FILE="$TMP_INDEX" "$GIT" diff --cached --quiet; then
+          exit 0
         fi
+
+        GIT_INDEX_FILE="$TMP_INDEX" "$GIT" commit -m "chore(noctalia): auto-sync config changes"
       '';
     in {
       imports = [ inputs.noctalia.noctalia-main.homeModules.default ];
