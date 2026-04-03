@@ -11,6 +11,8 @@
         settings = {
           window_padding_width = 10;
           confirm_os_window_close = 0;
+          shell = "${pkgs.fish}/bin/fish"; # launch fish in kitty
+          cursor_trail = 1;
         };
       };
     };
