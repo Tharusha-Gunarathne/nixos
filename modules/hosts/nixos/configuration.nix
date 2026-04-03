@@ -29,6 +29,7 @@
       self.nixosModules.neovim
       self.nixosModules.spotify
       self.nixosModules.fish
+      self.nixosModules.vscode
     ];
   };
 }
