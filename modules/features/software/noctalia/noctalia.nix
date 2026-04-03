@@ -2,11 +2,11 @@
   flake.nixosModules.noctalia = { config, pkgs, lib, ... }:
   let
     username = config.myConfig.username;
+    repoRoot = config.myConfig.repoRoot;
   in {
     home-manager.users.${username} = { config, pkgs, lib, ... }:
     let
       watchDir = "${config.xdg.configHome}/noctalia";
-      repoRoot = self.outPath;
       repoNoctaliaDir = "${repoRoot}/modules/features/software/noctalia";
 
       # Noctalia sync script - watches for changes in the Noctalia config directory and copies them to the repo
