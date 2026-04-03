@@ -40,11 +40,11 @@
         monospace-font-name = "JetBrainsMono Nerd Font 11";
       };
 
-      home.file.".config/gtk-3.0/gtk.css".text = ''
+      gtk.gtk3.extraCss = ''
         @import url("noctalia.css");
       '';
 
-      home.file.".config/gtk-4.0/gtk.css".text = ''
+      gtk.gtk4.extraCss = ''
         @import url("noctalia.css");
       '';
     };
