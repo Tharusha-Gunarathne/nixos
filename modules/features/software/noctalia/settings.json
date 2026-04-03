@@ -56,7 +56,7 @@
         "frameRadius": 12,
         "frameThickness": 8,
         "hideOnOverview": false,
-        "marginHorizontal": 12,
+        "marginHorizontal": 10,
         "marginVertical": 4,
         "middleClickAction": "none",
         "middleClickCommand": "",
@@ -259,6 +259,8 @@
                     "id": "plugin:screen-recorder"
                 },
                 {
+                    "defaultSettings": {
+                    },
                     "id": "plugin:kde-connect"
                 },
                 {
