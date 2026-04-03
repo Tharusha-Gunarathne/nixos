@@ -6,10 +6,10 @@
     home-manager.users.${username} = { config, pkgs, lib, ... }:
     let
       watchDir = "${config.xdg.configHome}/noctalia";
-      repoRoot = "${config.home.homeDirectory}/nixos-configs/structure";
+      repoRoot = self.outPath;
       repoNoctaliaDir = "${repoRoot}/modules/features/software/noctalia";
 
-      // Noctalia sync script - watches for changes in the Noctalia config directory and copies them to the repo
+      # Noctalia sync script - watches for changes in the Noctalia config directory and copies them to the repo
       syncScript = pkgs.writeShellScript "noctalia-sync" ''
         WATCH_DIR="${watchDir}"
         REPO_DIR="${repoNoctaliaDir}"
@@ -27,17 +27,12 @@
         done
       '';
 
-      // Noctalia commit script - commits only settings.json/plugins.json via a temporary index
+      # Noctalia commit script - commits only settings.json/plugins.json via a temporary index
       commitScript = pkgs.writeShellScript "noctalia-commit" ''
         REPO_ROOT="${repoRoot}"
         GIT="${pkgs.git}/bin/git"
 
         cd "$REPO_ROOT"
-
-        TARGETS=(
-          "modules/features/software/noctalia/settings.json"
-          "modules/features/software/noctalia/plugins.json"
-        )
 
         TMP_INDEX=$(mktemp)
         cleanup() { rm -f "$TMP_INDEX"; }
@@ -45,7 +40,8 @@
 
         GIT_INDEX_FILE="$TMP_INDEX" "$GIT" read-tree HEAD
 
-        for path in "${TARGETS[@]}"; do
+        for path in modules/features/software/noctalia/settings.json \
+                   modules/features/software/noctalia/plugins.json; do
           if [ -e "$path" ]; then
             GIT_INDEX_FILE="$TMP_INDEX" "$GIT" add "$path"
           fi
