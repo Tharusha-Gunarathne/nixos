@@ -23,7 +23,7 @@
         python3
         python3Packages.pip
         ente-auth
-        bitwarden
+        bitwarden-desktop
       ];
     };
   };
