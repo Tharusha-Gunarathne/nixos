@@ -3,7 +3,7 @@
   let
     username = config.myConfig.username;
   in {
-    home-manager.users.${username} = { pkgs, ... }: {
+    home-manager.users.${username} = { pkgs, lib, config, ... }: {
 
       #  Add placeholder noctalia color scheme settings
       home.activation.kittyNoctaliaTheme = lib.hm.dag.entryAfter ["writeBoundary"] ''
@@ -16,8 +16,8 @@
       programs.kitty = {
         enable = true;
         font.name = "JetBrainsMono Nerd Font";
-        font.size = 12;
-        extraConfig = "include themes/noctalia.conf";;
+        font.size = 11;
+        extraConfig = "include themes/noctalia.conf";
         settings = {
           window_padding_width = 10;
           confirm_os_window_close = 0;
