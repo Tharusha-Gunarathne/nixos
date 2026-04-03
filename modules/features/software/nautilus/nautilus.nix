@@ -14,7 +14,6 @@
       gvfs
       glib
       xdg-utils
-      gsettings-desktop-schemas
     ];
 
     services.gvfs.enable = true;
