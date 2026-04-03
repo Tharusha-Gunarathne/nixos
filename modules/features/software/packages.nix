@@ -14,8 +14,6 @@
     home-manager.users.${config.myConfig.username} = { ... }: {
       home.packages = with pkgs; [
         brave
-        kitty
-        vscode
         bat
         throne
         inotify-tools
