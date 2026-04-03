@@ -5,6 +5,7 @@
   in {
     programs.niri.enable = true;
 
+    # Add placeholder noctalia color scheme settings
     home-manager.users.${username} = { config, lib, ... }: {
       home.activation.noctaliaNiriConfig = lib.hm.dag.entryAfter ["writeBoundary"] ''
         mkdir -p "${config.xdg.configHome}/niri"
