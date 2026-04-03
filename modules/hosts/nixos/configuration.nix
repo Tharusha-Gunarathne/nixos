@@ -27,6 +27,8 @@
       self.nixosModules.variables
       self.nixosModules.vicinae
       self.nixosModules.neovim
+      self.nixosModules.spotify
+      self.nixosModules.fish
     ];
   };
 }

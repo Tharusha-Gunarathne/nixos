@@ -12,7 +12,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Third Party Plugins
     noctalia.url = "path:./plugins/noctalia";
+    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
   };
 
   outputs = inputs:
