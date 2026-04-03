@@ -15,6 +15,10 @@
     # Third Party Plugins
     noctalia.url = "path:./plugins/noctalia";
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
+    nix4vscode = {
+      url = "github:nix-community/nix4vscode";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs:
