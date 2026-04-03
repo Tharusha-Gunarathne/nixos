@@ -733,6 +733,10 @@
             {
                 "enabled": true,
                 "id": "kitty"
+            },
+            {
+                "enabled": true,
+                "id": "spicetify"
             }
         ],
         "enableUserTheming": false
