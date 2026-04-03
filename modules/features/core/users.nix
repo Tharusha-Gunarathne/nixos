@@ -1,5 +1,5 @@
 { self, ... }: {
-  flake.nixosModules.users = { config, lib, ... }: {
+  flake.nixosModules.users = { config, lib, pkgs, ... }: {
     myConfig.username = lib.mkDefault "tharusha-gunarathne";
 
     users.users.${config.myConfig.username} = {

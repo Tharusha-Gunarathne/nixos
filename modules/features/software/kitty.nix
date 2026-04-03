@@ -3,7 +3,7 @@
   let
     username = config.myConfig.username;
   in {
-    home-manager.users.${username} = { ... }: {
+    home-manager.users.${username} = { pkgs, ... }: {
       programs.kitty = {
         enable = true;
         font.name = "JetBrainsMono Nerd Font";
