@@ -8,6 +8,9 @@
       brightnessctl
       tree
       xwayland-satellite
+      nil
+      ripgrep
+      gedit
     ];
 
     home-manager.users.${config.myConfig.username} = { ... }: {
@@ -21,6 +24,9 @@
         python3Packages.pip
         ente-auth
         bitwarden-desktop
+        nodejs
+        gcc
+        btop
       ];
     };
   };
