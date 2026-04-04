@@ -14,7 +14,6 @@
       xwayland-satellite
       nil
       ripgrep
-      gedit
     ];
 
     home-manager.users.${config.myConfig.username} = {...}: {
