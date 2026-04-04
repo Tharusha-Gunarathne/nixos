@@ -19,7 +19,7 @@
         font.size = 11;
         extraConfig = "include themes/noctalia.conf";
         settings = {
-          window_padding_width = 10;
+          window_padding_width = 12;
           confirm_os_window_close = 0;
           shell = "${pkgs.fish}/bin/fish"; # launch fish in kitty
           cursor_trail = 1;
