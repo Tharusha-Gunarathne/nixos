@@ -1,20 +1,33 @@
-{ self, inputs, ... }: {
-  flake.nixosModules.spotify = { config, pkgs, ... }:
-  let
+{
+  self,
+  inputs,
+  ...
+}: {
+  flake.nixosModules.spotify = {
+    config,
+    pkgs,
+    ...
+  }: let
     username = config.myConfig.username;
     spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system};
   in {
-    home-manager.users.${username} = { config, lib, ... }: {
-      imports = [ inputs.spicetify-nix.homeManagerModules.default ];
+    home-manager.users.${username} = {
+      config,
+      lib,
+      ...
+    }: {
+      imports = [inputs.spicetify-nix.homeManagerModules.default];
 
       programs.spicetify = {
         enable = true;
 
         spotifyPackage = pkgs.spotify.overrideAttrs (oldAttrs: {
-          postInstall = (oldAttrs.postInstall or "") + ''
-            wrapProgram $out/bin/spotify \
-              --add-flags "--ozone-platform=x11"
-          '';
+          postInstall =
+            (oldAttrs.postInstall or "")
+            + ''
+              wrapProgram $out/bin/spotify \
+                --add-flags "--ozone-platform=x11"
+            '';
         });
 
         enabledExtensions = with spicePkgs.extensions; [

@@ -1,9 +1,8 @@
-{ self, ... }: {
-  flake.nixosModules.git = { config, ... }:
-  let
+{self, ...}: {
+  flake.nixosModules.git = {config, ...}: let
     username = config.myConfig.username;
   in {
-    home-manager.users.${username} = { ... }: {
+    home-manager.users.${username} = {...}: {
       programs.git = {
         enable = true;
         settings.user = {

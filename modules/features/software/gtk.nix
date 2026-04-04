@@ -1,6 +1,9 @@
-{ self, ... }: {
-  flake.nixosModules.gtk = { pkgs, config, ... }:
-  let
+{self, ...}: {
+  flake.nixosModules.gtk = {
+    pkgs,
+    config,
+    ...
+  }: let
     username = config.myConfig.username;
     schemaDir = "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/gsettings-desktop-schemas-${pkgs.gsettings-desktop-schemas.version}/glib-2.0/schemas";
   in {
@@ -19,13 +22,31 @@
       "/share/gsettings-schemas/gsettings-desktop-schemas-${pkgs.gsettings-desktop-schemas.version}"
     ];
 
-    home-manager.users.${username} = { pkgs, config, lib, ... }: {
+    home-manager.users.${username} = {
+      pkgs,
+      config,
+      lib,
+      ...
+    }: {
       gtk = {
         enable = true;
-        font = { name = "Ubuntu Sans"; size = 11; package = pkgs.ubuntu-sans; };
-        theme = { name = "Adwaita-dark"; package = pkgs.gnome-themes-extra; };
-        iconTheme = { name = "Papirus-Dark"; package = pkgs.papirus-icon-theme; };
-        cursorTheme = { name = "Adwaita"; package = pkgs.adwaita-icon-theme; };
+        font = {
+          name = "Ubuntu Sans";
+          size = 11;
+          package = pkgs.ubuntu-sans;
+        };
+        theme = {
+          name = "Adwaita-dark";
+          package = pkgs.gnome-themes-extra;
+        };
+        iconTheme = {
+          name = "Papirus-Dark";
+          package = pkgs.papirus-icon-theme;
+        };
+        cursorTheme = {
+          name = "Adwaita";
+          package = pkgs.adwaita-icon-theme;
+        };
         gtk4.theme = config.gtk.theme;
       };
 

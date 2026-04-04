@@ -1,11 +1,23 @@
-{ self, inputs, ... }: {
-  flake.nixosModules.noctalia = { config, pkgs, lib, ... }:
-  let
+{
+  self,
+  inputs,
+  ...
+}: {
+  flake.nixosModules.noctalia = {
+    config,
+    pkgs,
+    lib,
+    ...
+  }: let
     username = config.myConfig.username;
     repoRoot = config.myConfig.repoRoot;
   in {
-    home-manager.users.${username} = { config, pkgs, lib, ... }:
-    let
+    home-manager.users.${username} = {
+      config,
+      pkgs,
+      lib,
+      ...
+    }: let
       watchDir = "${config.xdg.configHome}/noctalia";
       repoNoctaliaDir = "${repoRoot}/modules/features/software/noctalia";
 
@@ -54,13 +66,13 @@
         GIT_INDEX_FILE="$TMP_INDEX" "$GIT" commit -m "chore(noctalia): auto-sync config changes"
       '';
     in {
-      imports = [ inputs.noctalia.noctalia-main.homeModules.default ];
+      imports = [inputs.noctalia.noctalia-main.homeModules.default];
 
       programs.noctalia-shell.enable = true;
 
       xdg.configFile = builtins.listToAttrs (map (name: {
         name = "noctalia/plugins/${name}";
-        value = { source = inputs.noctalia.plugins.${name}; };
+        value = {source = inputs.noctalia.plugins.${name};};
       }) (builtins.attrNames inputs.noctalia.plugins));
 
       home.activation.noctaliaSettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
@@ -80,7 +92,7 @@
       systemd.user.services.noctalia-sync = {
         Unit = {
           Description = "Watch and copy Noctalia config changes to repo";
-          After = [ "default.target" ];
+          After = ["default.target"];
         };
         Service = {
           ExecStart = "${syncScript}";
@@ -88,7 +100,7 @@
           RestartSec = "3s";
         };
         Install = {
-          WantedBy = [ "default.target" ];
+          WantedBy = ["default.target"];
         };
       };
 
@@ -107,7 +119,7 @@
           OnUnitActiveSec = "15min";
           Unit = "noctalia-commit.service";
         };
-        Install.WantedBy = [ "timers.target" ];
+        Install.WantedBy = ["timers.target"];
       };
     };
   };

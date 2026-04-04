@@ -1,9 +1,8 @@
-{ self, ... }: {
-  flake.nixosModules.vicinae = { config, ... }:
-  let
+{self, ...}: {
+  flake.nixosModules.vicinae = {config, ...}: let
     username = config.myConfig.username;
   in {
-    home-manager.users.${username} = { ... }: {
+    home-manager.users.${username} = {...}: {
       programs.vicinae.enable = true;
     };
   };

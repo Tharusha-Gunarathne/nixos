@@ -1,5 +1,9 @@
-{ self, ... }: {
-  flake.nixosModules.options = { lib, config, ... }: {
+{self, ...}: {
+  flake.nixosModules.options = {
+    lib,
+    config,
+    ...
+  }: {
     options.myConfig = {
       username = lib.mkOption {
         type = lib.types.str;

@@ -1,9 +1,12 @@
-{ self, ... }: {
-  flake.nixosModules.variables = { config, pkgs, ... }:
-  let
+{self, ...}: {
+  flake.nixosModules.variables = {
+    config,
+    pkgs,
+    ...
+  }: let
     username = config.myConfig.username;
   in {
-    home-manager.users.${username} = { ... }: {
+    home-manager.users.${username} = {...}: {
       home.sessionVariables = {
         LIBVA_DRIVER_NAME = "nvidia";
         XDG_SESSION_TYPE = "wayland";

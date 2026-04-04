@@ -1,5 +1,5 @@
-{ self, ... }: {
-  flake.nixosModules.nixosConfiguration = { ... }: {
+{self, ...}: {
+  flake.nixosModules.nixosConfiguration = {...}: {
     imports = [
       # core
       self.nixosModules.options

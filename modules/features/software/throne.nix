@@ -1,5 +1,5 @@
-{ self, ... }: {
-  flake.nixosModules.throne = { pkgs, ... }: {
+{self, ...}: {
+  flake.nixosModules.throne = {pkgs, ...}: {
     security.wrappers.throne = {
       owner = "root";
       group = "root";

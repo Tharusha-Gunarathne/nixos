@@ -1,5 +1,9 @@
-{ self, ... }: {
-  flake.nixosModules.packages = { pkgs, config, ... }: {
+{self, ...}: {
+  flake.nixosModules.packages = {
+    pkgs,
+    config,
+    ...
+  }: {
     environment.systemPackages = with pkgs; [
       vim
       git
@@ -13,7 +17,7 @@
       gedit
     ];
 
-    home-manager.users.${config.myConfig.username} = { ... }: {
+    home-manager.users.${config.myConfig.username} = {...}: {
       home.packages = with pkgs; [
         brave
         bat

@@ -1,10 +1,13 @@
-{ self, ... }: {
-  flake.nixosModules.kitty = { config, ... }:
-  let
+{self, ...}: {
+  flake.nixosModules.kitty = {config, ...}: let
     username = config.myConfig.username;
   in {
-    home-manager.users.${username} = { pkgs, lib, config, ... }: {
-
+    home-manager.users.${username} = {
+      pkgs,
+      lib,
+      config,
+      ...
+    }: {
       #  Add placeholder noctalia color scheme settings
       home.activation.kittyNoctaliaTheme = lib.hm.dag.entryAfter ["writeBoundary"] ''
         mkdir -p "${config.xdg.configHome}/kitty/themes"
