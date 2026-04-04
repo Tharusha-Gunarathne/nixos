@@ -7,6 +7,20 @@
     username = config.myConfig.username;
   in {
     home-manager.users.${username} = {...}: {
+      xdg.userDirs = {
+        enable = true;
+        createDirectories = true;
+        setSessionVariables = true; # add this line
+        desktop = "$HOME/Desktop";
+        download = "$HOME/Downloads";
+        templates = "$HOME/Templates";
+        publicShare = "$HOME/Public";
+        documents = "$HOME/Documents";
+        music = "$HOME/Music";
+        pictures = "$HOME/Pictures";
+        videos = "$HOME/Videos";
+      };
+
       home.sessionVariables = {
         LIBVA_DRIVER_NAME = "nvidia";
         XDG_SESSION_TYPE = "wayland";
