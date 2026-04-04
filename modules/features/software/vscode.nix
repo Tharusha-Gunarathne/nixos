@@ -41,13 +41,34 @@
             "files.autoSave" = "afterDelay";
             "files.autoSaveDelay" = 1000;
             "terminal.integrated.fontFamily" = "JetBrainsMono Nerd Font";
-            "python.defaultInterpreterPath" = "${pkgs.python3}/bin/python";
-            "php.validate.enable" = false;
-            "php.suggest.basic" = false;
-            "terminal.integrated.defaultProfile.linux" = "fish";
+            "editor.defaultFormatter" = "esbenp.prettier-vscode";
+            # Fish shell integration
             "terminal.integrated.profiles.linux" = {
               "fish" = {
                 path = "${pkgs.fish}/bin/fish";
+              };
+            };
+            
+            # Python-specific settings
+            "python.defaultInterpreterPath" = "${pkgs.python3}/bin/python";
+            
+            # PHP-specific settings
+            "php.validate.enable" = false;
+            "php.suggest.basic" = false;
+            "terminal.integrated.defaultProfile.linux" = "fish";
+
+            # Nix-specific settings
+            "[nix]" = {
+              "editor.defaultFormatter" = "jnoortheen.nix-ide";
+            };
+
+            "nix.formatterPath" = "${pkgs.alejandra}/bin/alejandra";
+            "nix.enableLanguageServer" = true;
+            "nix.serverPath" = "${pkgs.nil}/bin/nil";
+            
+            "nix.serverSettings" = {
+              "nil" = {
+                "formatting" = { "command" = [ "${pkgs.alejandra}/bin/alejandra" ]; };
               };
             };
           };
