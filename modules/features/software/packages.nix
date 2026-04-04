@@ -30,6 +30,15 @@
         nodejs
         gcc
         btop
+        discord
+        libreoffice
+        ferdium
+        mpv
+        drawio
+        localsend
+        bleachbit
+        timeshift
+        obs-studio
       ];
     };
   };
