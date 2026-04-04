@@ -7,7 +7,6 @@
       wl-clipboard
       brightnessctl
       tree
-      vicinae
       xwayland-satellite
     ];
 
