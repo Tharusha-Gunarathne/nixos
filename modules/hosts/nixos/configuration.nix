@@ -30,6 +30,8 @@
       self.nixosModules.spotify
       self.nixosModules.fish
       self.nixosModules.vscode
+      self.nixosModules.lotion
+      self.nixosModules.xdm
     ];
   };
 }
