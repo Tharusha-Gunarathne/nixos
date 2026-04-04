@@ -39,6 +39,7 @@
         bleachbit
         timeshift
         obs-studio
+        microsoft-edge
       ];
     };
   };
