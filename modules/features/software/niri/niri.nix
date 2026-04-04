@@ -2,6 +2,7 @@
   flake.nixosModules.niri = { config, lib, ... }:
   let
     username = config.myConfig.username;
+    configPath = "${config.myConfig.repoRoot}/modules/features/software/niri/config.kdl";
   in {
     programs.niri.enable = true;
 
@@ -14,7 +15,9 @@
         fi
       '';
 
-      xdg.configFile."niri/config.kdl".source = ./config.kdl;
+      xdg.configFile."niri/config.kdl" = {
+        source = config.lib.file.mkOutOfStoreSymlink "${configPath}";
+      };
     };
   };
 }
