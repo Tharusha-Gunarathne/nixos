@@ -34,12 +34,14 @@
         libreoffice
         ferdium
         mpv
+        ffmpeg
         drawio
         localsend
         bleachbit
         timeshift
         obs-studio
         microsoft-edge
+        handbrake
       ];
     };
   };
