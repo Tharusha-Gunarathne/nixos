@@ -1,72 +1,104 @@
 {self, ...}: {
   flake.nixosModules.xdm = {
-    config,
     pkgs,
+    config,
     lib,
     ...
   }: let
     username = config.myConfig.username;
 
-    xdm-pkg = pkgs.stdenv.mkDerivation rec {
+    xdm = pkgs.stdenv.mkDerivation rec {
       pname = "xdm";
-      version = "7.2.11";
+      version = "8.0.29";
 
       src = pkgs.fetchurl {
-        url = "https://github.com/subhra74/xdm/releases/download/${version}/xdm-setup-${version}.tar.xz";
-        sha256 = "0f04c7f6j6ivfjynmlrbcp9lcvns532z18piql9ppncp2xji610l";
+        url = "https://github.com/subhra74/xdm/releases/download/${version}/xdman_gtk_${version}_amd64.deb";
+        sha256 = "04cydd5i94qbnsi2535mswapng6hbwc567jhzbq8s715n0nvnn9n";
       };
 
-      nativeBuildInputs = [
-        pkgs.autoPatchelfHook
-        pkgs.makeWrapper
+      nativeBuildInputs = with pkgs; [
+        autoPatchelfHook
+        wrapGAppsHook3 # handles GDK_PIXBUF_MODULE_FILE, GSETTINGS_SCHEMA_DIR, etc.
       ];
 
-      buildInputs = [
-        pkgs.stdenv.cc.cc.lib
-        pkgs.gtk3
-        pkgs.glib
-        pkgs.xorg.libX11
+      buildInputs = with pkgs; [
+        gtk3
+        glib
+        gdk-pixbuf
+        librsvg # wrapGAppsHook3 sees this and adds SVG loader to cache
+        pango
+        cairo
+        atk
+        libGL
+        openssl
+        zlib
+        icu
       ];
-
-      # Disable phases that don't apply
-      dontConfigure = true;
-      dontBuild = true;
 
       unpackPhase = ''
-        # The tarball is a self-extracting script; payload starts at block 2 (bs=8K skip=1)
-        tar -xf $src install.sh
-        dd if=install.sh bs=8K skip=1 | tar -xJf - 2>/dev/null
+        ar x $src
+        tar xf data.tar.xz
       '';
+
+      dontConfigure = true;
+      dontBuild = true;
+      dontWrapGApps = false;
+      autoPatchelfIgnoreMissingDeps = ["liblttng-ust.so.0"];
 
       installPhase = ''
-        mkdir -p $out/lib $out/bin
-        mkdir -p $out/share/applications
-        mkdir -p $out/share/pixmaps
-        mkdir -p $out/share/icons/hicolor/256x256/apps
-        mkdir -p $out/share/icons/hicolor/48x48/apps
+        runHook preInstall
 
-        # Copy the whole app directory (includes bundled JRE and jar)
-        cp -r opt/xdman $out/lib/xdman
+        mkdir -p $out/opt/xdman $out/bin $out/share/applications $out/share/pixmaps
 
-        # Copy icon
-        cp $out/lib/xdman/icon.png $out/share/pixmaps/xdman.png
-        cp $out/lib/xdman/icon.png $out/share/icons/hicolor/256x256/apps/xdman.png
-        cp $out/lib/xdman/icon.png $out/share/icons/hicolor/48x48/apps/xdman.png
+        cp -r opt/xdman/. $out/opt/xdman/
+        cp $out/opt/xdman/xdm-logo-512.png $out/share/pixmaps/xdm.png
+        cp $out/opt/xdman/xdm-app.desktop $out/share/applications/
 
-        # Copy desktop file and fix icon path
-        cp usr/share/applications/xdman.desktop $out/share/applications/
-        substituteInPlace $out/share/applications/xdman.desktop \
-          --replace "Icon=xdman" "Icon=$out/share/pixmaps/xdman.png"
+        substituteInPlace $out/share/applications/xdm-app.desktop \
+          --replace "Exec=xdman" "Exec=$out/bin/xdman"
 
-        # The bundled xdman launcher script references /opt/xdman — rewrite it
-        makeWrapper $out/lib/xdman/jre/bin/java $out/bin/xdman \
-          --add-flags "-jar $out/lib/xdman/xdman.jar" \
-          --set XDG_CURRENT_DESKTOP gtk
+        # Shell script so the binary stays next to its .dll
+        # wrapGAppsHook3 wraps this script in fixupPhase
+        cat > $out/bin/xdman << EOF
+        #!/bin/sh
+        cd $out/opt/xdman
+        exec $out/opt/xdman/xdm-app "\$@"
+        EOF
+        chmod +x $out/bin/xdman
+
+        runHook postInstall
       '';
+
+      preFixup = ''
+        gappsWrapperArgs+=(
+          --chdir "$out/opt/xdman"
+          --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath (with pkgs; [
+          gtk3
+          glib
+          gdk-pixbuf
+          librsvg
+          pango
+          cairo
+          atk
+          libGL
+          openssl
+          zlib
+          icu
+        ])}
+        )
+      '';
+
+      meta = with lib; {
+        description = "Xtreme Download Manager — accelerates downloads up to 500%";
+        homepage = "https://xtremedownloadmanager.com";
+        license = licenses.lgpl21Only;
+        platforms = ["x86_64-linux"];
+        mainProgram = "xdman";
+      };
     };
   in {
     home-manager.users.${username} = {...}: {
-      home.packages = [xdm-pkg];
+      home.packages = [xdm];
     };
   };
 }
