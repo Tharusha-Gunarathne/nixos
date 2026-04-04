@@ -44,6 +44,12 @@
             "python.defaultInterpreterPath" = "${pkgs.python3}/bin/python";
             "php.validate.enable" = false;
             "php.suggest.basic" = false;
+            "terminal.integrated.defaultProfile.linux" = "fish";
+            "terminal.integrated.profiles.linux" = {
+              "fish" = {
+                path = "${pkgs.fish}/bin/fish";
+              };
+            };
           };
         };
       };
