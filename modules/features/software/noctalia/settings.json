@@ -9,7 +9,7 @@
         "density": "default",
         "enableClipPreview": true,
         "enableClipboardChips": true,
-        "enableClipboardHistory": false,
+        "enableClipboardHistory": true,
         "enableClipboardSmartIcons": true,
         "enableSessionSearch": true,
         "enableSettingsSearch": true,
@@ -62,6 +62,7 @@
         "middleClickCommand": "",
         "middleClickFollowMouse": false,
         "monitors": [
+            "eDP-1"
         ],
         "mouseWheelAction": "none",
         "mouseWheelWrap": true,
@@ -127,17 +128,6 @@
                 }
             ],
             "left": [
-                {
-                    "colorizeSystemIcon": "none",
-                    "customIconPath": "",
-                    "enableColorization": false,
-                    "icon": "list",
-                    "iconColor": "none",
-                    "id": "Launcher",
-                    "useDistroLogo": false , 
-                    "clickCommand": "vicinae",
-                    "useClickCommand": true
-                },
                 {
                     "compactMode": true,
                     "diskPath": "/",
@@ -715,6 +705,10 @@
             {
                 "enabled": true,
                 "id": "spicetify"
+            },
+            {
+                "enabled": true,
+                "id": "vicinae"
             }
         ],
         "enableUserTheming": false
