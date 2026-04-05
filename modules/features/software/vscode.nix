@@ -47,30 +47,30 @@
             "files.autoSaveDelay" = 1000;
             "terminal.integrated.fontFamily" = "JetBrainsMono Nerd Font";
             "editor.defaultFormatter" = "esbenp.prettier-vscode";
+            
             # Fish shell integration
+            "terminal.integrated.defaultProfile.linux" = "fish";
             "terminal.integrated.profiles.linux" = {
               "fish" = {
                 path = "${pkgs.fish}/bin/fish";
               };
             };
 
+            # Extension-specific settings
+            "markdown-pdf.executablePath" = "${pkgs.brave}/bin/brave";
+
             # Python-specific settings
             "python.defaultInterpreterPath" = "${pkgs.python3}/bin/python";
-
             # PHP-specific settings
             "php.validate.enable" = false;
             "php.suggest.basic" = false;
-            "terminal.integrated.defaultProfile.linux" = "fish";
-
             # Nix-specific settings
             "[nix]" = {
               "editor.defaultFormatter" = "jnoortheen.nix-ide";
             };
-
             "nix.formatterPath" = "${pkgs.alejandra}/bin/alejandra";
             "nix.enableLanguageServer" = true;
             "nix.serverPath" = "${pkgs.nil}/bin/nil";
-
             "nix.serverSettings" = {
               "nil" = {
                 "formatting" = {"command" = ["${pkgs.alejandra}/bin/alejandra"];};
