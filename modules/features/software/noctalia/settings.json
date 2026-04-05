@@ -163,7 +163,7 @@
                     "hideMode": "hidden",
                     "id": "ActiveWindow",
                     "maxWidth": 145,
-                    "scrollingMode": "always",
+                    "scrollingMode": "hover",
                     "showIcon": true,
                     "showText": true,
                     "textColor": "none",
