@@ -134,7 +134,9 @@
                     "icon": "list",
                     "iconColor": "none",
                     "id": "Launcher",
-                    "useDistroLogo": false
+                    "useDistroLogo": false , 
+                    "clickCommand": "vicinae",
+                    "useClickCommand": true
                 },
                 {
                     "compactMode": true,
