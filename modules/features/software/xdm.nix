@@ -65,12 +65,13 @@
 
         cp opt/xdman/xdm-app.desktop $out/share/applications/
 
-        # Use sed regex to replace the ENTIRE Exec line — no fragile string matching
         sed -i "s|^Exec=.*|Exec=$out/bin/xdman %U|" \
           $out/share/applications/xdm-app.desktop
 
-        # Fix icon
         sed -i "s|^Icon=.*|Icon=$out/share/icons/hicolor/scalable/apps/xdm-app.svg|" \
+          $out/share/applications/xdm-app.desktop
+
+        sed -i "s|^MimeType=.*|MimeType=application/xdm-app;x-scheme-handler/xdm-app;x-scheme-handler/xdm+app;|" \
           $out/share/applications/xdm-app.desktop
 
         sed "s|@out@|$out|g" ${xdmanScript} > $out/bin/xdman
@@ -115,27 +116,32 @@
       chromiumExtensionPath = "${config.home.homeDirectory}/.local/share/xdm";
     in {
       home.packages = [xdm];
+
       # Autostart Configuration for XDM
-      # Home-manager owns the autostart file so XDM can never
-      # overwrite it with a raw-binary path at runtime
       # Uncomment to enable autostart on activation
       # xdg.configFile."autostart/xdm-app.desktop" = {
       #   source = "${xdm}/share/applications/xdm-app.desktop";
       #   force = true;
       # };
 
-      # Remove XDM autostart entries on deactivation
-      # Comment to reenable autostart on reactivation
+      # Remove XDM autostart entries so it never starts without a proper Wayland session
       home.activation.removeXdmAutostart = lib.hm.dag.entryAfter ["writeBoundary"] ''
         rm -f "${config.home.homeDirectory}/.config/autostart/xdm-app.desktop"
         rm -f "${config.home.homeDirectory}/.config/autostart/xdman.desktop"
       '';
 
-      # XDM Browser Extension Configuration - CHROMIUM-BASED BROWSERS
+      # Stable symlink for Chromium-based browser extension — load unpacked once,
+      # survives all rebuilds automatically
       home.activation.xdmExtensionLink = lib.hm.dag.entryAfter ["writeBoundary"] ''
         mkdir -p "${chromiumExtensionPath}"
         ln -sfn "${xdm}/opt/xdman/chrome-extension" \
           "${chromiumExtensionPath}/chrome-extension"
+      '';
+
+      # Register xdm+app:// URI scheme handler so the browser extension
+      # can launch XDM when clicking download links
+      home.activation.xdmSchemeHandler = lib.hm.dag.entryAfter ["writeBoundary"] ''
+        ${pkgs.xdg-utils}/bin/xdg-mime default xdm-app.desktop x-scheme-handler/xdm+app
       '';
     };
   };
