@@ -1,4 +1,4 @@
-{self, ...}: {
+{...}: {
   flake.nixosModules.vicinae = {config, ...}: let
     username = config.myConfig.username;
   in {

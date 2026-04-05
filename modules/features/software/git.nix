@@ -1,4 +1,4 @@
-{self, ...}: {
+{...}: {
   flake.nixosModules.git = {config, ...}: let
     username = config.myConfig.username;
   in {

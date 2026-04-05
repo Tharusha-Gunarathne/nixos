@@ -1,4 +1,4 @@
-{self, ...}: {
+{...}: {
   flake.nixosModules.audio = {...}: {
     services.pipewire = {
       enable = true;

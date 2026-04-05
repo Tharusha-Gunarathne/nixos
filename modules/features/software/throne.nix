@@ -1,4 +1,4 @@
-{self, ...}: {
+{...}: {
   flake.nixosModules.throne = {pkgs, ...}: {
     security.wrappers.throne = {
       owner = "root";

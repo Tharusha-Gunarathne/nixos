@@ -1,4 +1,4 @@
-{self, ...}: {
+{...}: {
   flake.nixosModules.kitty = {config, ...}: let
     username = config.myConfig.username;
   in {

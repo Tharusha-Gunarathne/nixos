@@ -1,4 +1,4 @@
-{self, ...}: {
+{...}: {
   flake.nixosModules.neovim = {config, ...}: let
     username = config.myConfig.username;
   in {

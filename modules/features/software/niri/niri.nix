@@ -1,4 +1,4 @@
-{self, ...}: {
+{...}: {
   flake.nixosModules.niri = {
     config,
     lib,
