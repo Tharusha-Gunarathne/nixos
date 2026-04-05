@@ -5,7 +5,15 @@
     lib,
     ...
   }: let
+    chromiumExtensionPath = "${config.home.homeDirectory}/.local/share/xdm";
     username = config.myConfig.username;
+
+    xdmanScript = pkgs.writeShellScript "xdman" ''
+      pkill -f xdm-app 2>/dev/null
+      sleep 0.5
+      cd @out@/opt/xdman
+      exec @out@/opt/xdman/xdm-app "$@"
+    '';
 
     xdm = pkgs.stdenv.mkDerivation rec {
       pname = "xdm";
@@ -66,12 +74,7 @@
         sed -i "s|^Icon=.*|Icon=$out/share/icons/hicolor/scalable/apps/xdm-app.svg|" \
           $out/share/applications/xdm-app.desktop
 
-        cat > $out/bin/xdman << 'SCRIPT'
-#!/bin/sh
-cd @out@/opt/xdman
-exec @out@/opt/xdman/xdm-app "$@"
-SCRIPT
-        sed -i "s|@out@|$out|g" $out/bin/xdman
+        sed "s|@out@|$out|g" ${xdmanScript} > $out/bin/xdman
         chmod +x $out/bin/xdman
 
         runHook postInstall
@@ -81,18 +84,18 @@ SCRIPT
         gappsWrapperArgs+=(
           --chdir "$out/opt/xdman"
           --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath (with pkgs; [
-            gtk3
-            glib
-            gdk-pixbuf
-            librsvg
-            pango
-            cairo
-            atk
-            libGL
-            openssl
-            zlib
-            icu
-          ])}
+          gtk3
+          glib
+          gdk-pixbuf
+          librsvg
+          pango
+          cairo
+          atk
+          libGL
+          openssl
+          zlib
+          icu
+        ])}
         )
       '';
 
@@ -105,15 +108,34 @@ SCRIPT
       };
     };
   in {
-    home-manager.users.${username} = {...}: {
+    home-manager.users.${username} = {
+      config,
+      lib,
+      ...
+    }: {
       home.packages = [xdm];
-
+      # Autostart Configuration for XDM
       # Home-manager owns the autostart file so XDM can never
       # overwrite it with a raw-binary path at runtime
-      xdg.configFile."autostart/xdm-app.desktop" = {
-        source = "${xdm}/share/applications/xdm-app.desktop";
-        force = true;
-      };
+      # Uncomment to enable autostart on activation
+      # xdg.configFile."autostart/xdm-app.desktop" = {
+      #   source = "${xdm}/share/applications/xdm-app.desktop";
+      #   force = true;
+      # };
+
+      # Remove XDM autostart entries on deactivation
+      # Comment to reenable autostart on reactivation
+      home.activation.removeXdmAutostart = lib.hm.dag.entryAfter ["writeBoundary"] ''
+        rm -f "${config.home.homeDirectory}/.config/autostart/xdm-app.desktop"
+        rm -f "${config.home.homeDirectory}/.config/autostart/xdman.desktop"
+      '';
+
+      # XDM Browser Extension Configuration - CHROMIUM-BASED BROWSERS
+      home.activation.xdmExtensionLink = lib.hm.dag.entryAfter ["writeBoundary"] ''
+        mkdir -p "${chromiumExtensionPath}"
+        ln -sfn "${xdm}/opt/xdman/chrome-extension" \
+          "${chromiumExtensionPath}/chrome-extension"
+      '';
     };
   };
 }
