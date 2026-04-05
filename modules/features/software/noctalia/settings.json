@@ -47,7 +47,7 @@
         "backgroundOpacity": 0,
         "barType": "floating",
         "capsuleColorKey": "none",
-        "capsuleOpacity": 0.85,
+        "capsuleOpacity": 0.9,
         "contentPadding": 2,
         "density": "comfortable",
         "displayMode": "always_visible",
@@ -57,7 +57,7 @@
         "frameThickness": 8,
         "hideOnOverview": false,
         "marginHorizontal": 10,
-        "marginVertical": 4,
+        "marginVertical": 8,
         "middleClickAction": "none",
         "middleClickCommand": "",
         "middleClickFollowMouse": false,
@@ -438,7 +438,7 @@
         "enableLockScreenMediaControls": false,
         "enableShadows": false,
         "forceBlackScreenCorners": false,
-        "iRadiusRatio": 0.62,
+        "iRadiusRatio": 0.65,
         "keybinds": {
             "keyDown": [
                 "Down"
@@ -472,7 +472,7 @@
         ],
         "lockScreenTint": 0,
         "passwordChars": false,
-        "radiusRatio": 1,
+        "radiusRatio": 0.5,
         "reverseScroll": false,
         "scaleRatio": 1.05,
         "screenRadiusRatio": 1,
@@ -718,7 +718,7 @@
         "enableUserTheming": false
     },
     "ui": {
-        "boxBorderEnabled": true,
+        "boxBorderEnabled": false,
         "fontDefault": "Ubuntu Sans",
         "fontDefaultScale": 1,
         "fontFixed": "JetBrainsMono Nerd Font",
@@ -729,7 +729,7 @@
         "settingsPanelMode": "centered",
         "settingsPanelSideBarCardStyle": true,
         "tooltipsEnabled": true,
-        "translucentWidgets": true
+        "translucentWidgets": false
     },
     "wallpaper": {
         "automationEnabled": false,
