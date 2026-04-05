@@ -32,6 +32,7 @@
       self.nixosModules.vscode
       self.nixosModules.lotion
       self.nixosModules.xdm
+      self.nixosModules.brave
     ];
   };
 }
