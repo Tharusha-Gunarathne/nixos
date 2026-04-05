@@ -1,11 +1,10 @@
-{self, ...}: {
+{...}: {
   flake.nixosModules.xdm = {
     pkgs,
     config,
     lib,
     ...
   }: let
-    chromiumExtensionPath = "${config.home.homeDirectory}/.local/share/xdm";
     username = config.myConfig.username;
 
     xdmanScript = pkgs.writeShellScript "xdman" ''
@@ -112,7 +111,9 @@
       config,
       lib,
       ...
-    }: {
+    }: let
+      chromiumExtensionPath = "${config.home.homeDirectory}/.local/share/xdm";
+    in {
       home.packages = [xdm];
       # Autostart Configuration for XDM
       # Home-manager owns the autostart file so XDM can never
