@@ -16,6 +16,7 @@
         "bbenoist.nix"
         "jnoortheen.nix-ide"
         "ecmel.vscode-html-css"
+        "noctalia.noctaliatheme"
       ]
       ++ (with pkgs.vscode-extensions; [
         github.copilot
@@ -36,7 +37,8 @@
         profiles.default = {
           extensions = extensions;
           userSettings = {
-            "workbench.colorTheme" = "Gruvbox Dark Medium";
+            # "workbench.colorTheme" = "Gruvbox Dark Medium";
+            "workbench.colorTheme" = "NoctaliaTheme";
             "workbench.iconTheme" = "material-icon-theme";
             "editor.fontFamily" = "JetBrainsMono Nerd Font";
             "editor.fontSize" = 14;
