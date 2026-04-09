@@ -1,6 +1,11 @@
 {
   description = "Tharusha's NixOS Flake";
 
+  nixConfig = {
+    extra-substituters = ["https://vicinae.cachix.org"];
+    extra-trusted-public-keys = ["vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc="];
+  };
+  
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
@@ -22,6 +27,7 @@
       url = "github:nix-community/nix4vscode";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    vicinae.url = "github:vicinaehq/vicinae";
   };
 
   outputs = inputs:
