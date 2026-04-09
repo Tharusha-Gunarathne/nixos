@@ -6,24 +6,6 @@
   }: let
     username = config.myConfig.username;
 
-    noctaliaThemeCss = pkgs.writeText "noctalia.theme.css" ''
-      /**
-       * @name Noctalia
-       * @description Noctalia color scheme theme for Discord
-       * @author Noctalia
-       */
-      /* Colors will be populated by Noctalia on first color scheme change */
-    '';
-
-    noctaliaMaterialThemeCss = pkgs.writeText "noctalia-material.theme.css" ''
-      /**
-       * @name Noctalia Material
-       * @description Noctalia material color scheme theme for Discord
-       * @author Noctalia
-       */
-      /* Colors will be populated by Noctalia on first color scheme change */
-    '';
-
     vesktopSettingsFallback = pkgs.writeText "vesktop-settings.json" (builtins.toJSON {
       discordBranch = "stable";
       minimizeToTray = false;
@@ -37,12 +19,9 @@
       import sys
 
       settings_path = sys.argv[1]
-
       with open(settings_path, "r") as f:
           data = json.load(f)
-
       data["minimizeToTray"] = False
-
       with open(settings_path, "w") as f:
           json.dump(data, f, indent=2)
     '';
@@ -79,7 +58,7 @@
 
         rm -f "$SETTINGS.backup"
         rm -f "$VENCORD_SETTINGS.backup"
-        
+
         # Patch or seed vesktop settings
         if [ -f "$SETTINGS" ] && [ ! -L "$SETTINGS" ]; then
           ${patchMinimizeToTray} "$SETTINGS"
@@ -96,13 +75,13 @@
         fi
 
         # Seed Noctalia theme files if they don't exist
-        if [ ! -f "$HOME/.config/vesktop/themes/noctalia.theme.css" ]; then
-          ${pkgs.coreutils}/bin/install -m 644 ${noctaliaThemeCss} \
+        if [ ! -e "$HOME/.config/vesktop/themes/noctalia.theme.css" ]; then
+          ${pkgs.coreutils}/bin/install -m 644 /dev/null \
             "$HOME/.config/vesktop/themes/noctalia.theme.css"
         fi
 
-        if [ ! -f "$HOME/.config/vesktop/themes/noctalia-material.theme.css" ]; then
-          ${pkgs.coreutils}/bin/install -m 644 ${noctaliaMaterialThemeCss} \
+        if [ ! -e "$HOME/.config/vesktop/themes/noctalia-material.theme.css" ]; then
+          ${pkgs.coreutils}/bin/install -m 644 /dev/null \
             "$HOME/.config/vesktop/themes/noctalia-material.theme.css"
         fi
       '';
