@@ -737,7 +737,7 @@
         "translucentWidgets": false
     },
     "wallpaper": {
-        "automationEnabled": false,
+        "automationEnabled": true,
         "directory": "REDACTED-HOME/Pictures/Wallpapers",
         "enableMultiMonitorDirectories": false,
         "enabled": true,
