@@ -1,4 +1,4 @@
-{inputs, ...}: {
+{ inputs, ...}: {
   flake.nixosModules.vicinae = {config, ...}: let
     username = config.myConfig.username;
   in {
@@ -12,6 +12,18 @@
           autoStart = true;
           environment = {
             USE_LAYER_SHELL = 1;
+          };
+        };
+        settings = {
+          theme = {
+            dark.name = "noctalia";
+            light.name = "noctalia";
+          };
+          font = {
+            normal = {
+              family = "Ubuntu Sans";
+              size = 10.5;
+            };
           };
         };
       };
