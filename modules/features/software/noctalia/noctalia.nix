@@ -74,14 +74,14 @@
       home.activation.noctaliaSettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
         mkdir -p "${config.xdg.configHome}/noctalia"
         if [ ! -f "${config.xdg.configHome}/noctalia/settings.json" ]; then
-          cp ${./settings.json} ${config.xdg.configHome}/noctalia/settings.json
+          ${pkgs.coreutils}/bin/install -m 644 ${./settings.json} ${config.xdg.configHome}/noctalia/settings.json
         fi
       '';
 
       home.activation.noctaliaPlugins = lib.hm.dag.entryAfter ["writeBoundary"] ''
         mkdir -p "${config.xdg.configHome}/noctalia"
         if [ ! -f "${config.xdg.configHome}/noctalia/plugins.json" ]; then
-          cp ${./plugins.json} ${config.xdg.configHome}/noctalia/plugins.json
+          ${pkgs.coreutils}/bin/install -m 644 ${./plugins.json} ${config.xdg.configHome}/noctalia/plugins.json
         fi
       '';
 
