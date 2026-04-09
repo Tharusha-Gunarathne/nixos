@@ -697,10 +697,6 @@
             },
             {
                 "enabled": true,
-                "id": "gtk"
-            },
-            {
-                "enabled": true,
                 "id": "kitty"
             },
             {
@@ -710,6 +706,14 @@
             {
                 "enabled": true,
                 "id": "vicinae"
+            },
+            {
+                "enabled": true,
+                "id": "qt"
+            },
+            {
+                "enabled": true,
+                "id": "gtk"
             }
         ],
         "enableUserTheming": false
