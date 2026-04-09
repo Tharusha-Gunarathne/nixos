@@ -30,7 +30,6 @@
         nodejs
         gcc
         btop
-        vesktop
         libreoffice
         ferdium
         mpv

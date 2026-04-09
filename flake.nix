@@ -28,6 +28,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vicinae.url = "github:vicinaehq/vicinae";
+    nixcord.url = "github:FlameFlag/nixcord";
   };
 
   outputs = inputs:
