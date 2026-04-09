@@ -77,6 +77,9 @@
         SETTINGS="$HOME/.config/vesktop/settings.json"
         VENCORD_SETTINGS="$HOME/.config/vesktop/settings/settings.json"
 
+        rm -f "$SETTINGS.backup"
+        rm -f "$VENCORD_SETTINGS.backup"
+        
         # Patch or seed vesktop settings
         if [ -f "$SETTINGS" ] && [ ! -L "$SETTINGS" ]; then
           ${patchMinimizeToTray} "$SETTINGS"
