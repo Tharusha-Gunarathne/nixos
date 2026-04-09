@@ -15,6 +15,7 @@
       self.nixosModules.network
       self.nixosModules.nvidia
       self.nixosModules.services
+      self.nixosModules.swap
       # software
       self.nixosModules.git
       self.nixosModules.gtk
