@@ -32,6 +32,7 @@
     # Settings as a Nix attribute set — written by activation script
     # not managed as a HM symlink so Noctalia can write to it freely
     vscodeSettings = {
+      "workbench.colorTheme" = "Gruvbox Dark Medium"; 
       "workbench.iconTheme" = "material-icon-theme";
       "editor.fontFamily" = "JetBrainsMono Nerd Font";
       "editor.fontSize" = 14;
