@@ -714,6 +714,10 @@
             {
                 "enabled": true,
                 "id": "code"
+            },
+            {
+                "enabled": true,
+                "id": "discord"
             }
         ],
         "enableUserTheming": false
