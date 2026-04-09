@@ -34,6 +34,7 @@
       self.nixosModules.lotion
       self.nixosModules.xdm
       self.nixosModules.brave
+      self.nixosModules.discord
     ];
   };
 }
