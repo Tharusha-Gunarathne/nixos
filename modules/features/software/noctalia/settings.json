@@ -713,11 +713,11 @@
             },
             {
                 "enabled": true,
-                "id": "code"
+                "id": "discord"
             },
             {
                 "enabled": true,
-                "id": "discord"
+                "id": "code"
             }
         ],
         "enableUserTheming": false
