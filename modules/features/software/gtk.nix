@@ -10,7 +10,7 @@
     environment.systemPackages = with pkgs; [
       adwaita-icon-theme
       papirus-icon-theme
-      gnome-themes-extra
+      adw-gtk3                  # required by Noctalia for GTK theming
       gsettings-desktop-schemas
     ];
 
@@ -25,7 +25,6 @@
     home-manager.users.${username} = {
       pkgs,
       config,
-      lib,
       ...
     }: {
       gtk = {
@@ -36,8 +35,8 @@
           package = pkgs.ubuntu-sans;
         };
         theme = {
-          name = "Adwaita-dark";
-          package = pkgs.gnome-themes-extra;
+          name = "adw-gtk3-dark";
+          package = pkgs.adw-gtk3;
         };
         iconTheme = {
           name = "Papirus-Dark";
@@ -47,27 +46,17 @@
           name = "Adwaita";
           package = pkgs.adwaita-icon-theme;
         };
-        gtk4.theme = config.gtk.theme;
+        gtk4.theme = null;
       };
 
       dconf.settings."org/gnome/desktop/interface" = {
         color-scheme = "prefer-dark";
-        gtk-theme = "Adwaita-dark";
+        gtk-theme = "adw-gtk3-dark";
         icon-theme = "Papirus-Dark";
-        scaling-factor = 1;
-        text-scaling-factor = 1.0;
         font-name = "Ubuntu Sans 11";
         document-font-name = "Ubuntu Sans 11";
         monospace-font-name = "JetBrainsMono Nerd Font 11";
       };
-
-      gtk.gtk3.extraCss = ''
-        @import url("noctalia.css");
-      '';
-
-      gtk.gtk4.extraCss = ''
-        @import url("noctalia.css");
-      '';
     };
   };
 }
