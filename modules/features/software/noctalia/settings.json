@@ -480,7 +480,7 @@
         "telemetryEnabled": false
     },
     "hooks": {
-        "colorGeneration": "",
+        "colorGeneration": "/etc/profiles/per-user/tharusha-gunarathne/bin/spicetify apply",
         "darkModeChange": "",
         "enabled": true,
         "performanceModeDisabled": "",
@@ -758,7 +758,7 @@
         "overviewEnabled": true,
         "overviewTint": 0.6,
         "panelPosition": "follow_bar",
-        "randomIntervalSec": 2400,
+        "randomIntervalSec": 3000,
         "setWallpaperOnAllMonitors": true,
         "showHiddenFiles": false,
         "skipStartupTransition": false,
