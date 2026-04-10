@@ -73,15 +73,21 @@
 
       home.activation.noctaliaSettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
         mkdir -p "${config.xdg.configHome}/noctalia"
-        if [ ! -f "${config.xdg.configHome}/noctalia/settings.json" ]; then
-          ${pkgs.coreutils}/bin/install -m 644 ${./settings.json} ${config.xdg.configHome}/noctalia/settings.json
+        SETTINGS="${config.xdg.configHome}/noctalia/settings.json"
+        # Seed if: file is a store symlink (created by upstream noctalia HM module)
+        # OR file doesn't exist at all. Leave it alone if it's a real writable file.
+        if [ -L "$SETTINGS" ] || [ ! -e "$SETTINGS" ]; then
+          rm -f "$SETTINGS"
+          ${pkgs.coreutils}/bin/install -m 644 ${./settings.json} "$SETTINGS"
         fi
       '';
 
       home.activation.noctaliaPlugins = lib.hm.dag.entryAfter ["writeBoundary"] ''
         mkdir -p "${config.xdg.configHome}/noctalia"
-        if [ ! -f "${config.xdg.configHome}/noctalia/plugins.json" ]; then
-          ${pkgs.coreutils}/bin/install -m 644 ${./plugins.json} ${config.xdg.configHome}/noctalia/plugins.json
+        PLUGINS="${config.xdg.configHome}/noctalia/plugins.json"
+        if [ -L "$PLUGINS" ] || [ ! -e "$PLUGINS" ]; then
+          rm -f "$PLUGINS"
+          ${pkgs.coreutils}/bin/install -m 644 ${./plugins.json} "$PLUGINS"
         fi
       '';
 
