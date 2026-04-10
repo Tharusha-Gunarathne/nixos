@@ -104,7 +104,6 @@
 
         GIT_INDEX_FILE="$TMP_INDEX" "$GIT" commit -m "chore(noctalia): auto-sync config changes"
       '';
-
     in {
       imports = [inputs.noctalia.noctalia-main.homeModules.default];
 
@@ -114,6 +113,15 @@
         name = "noctalia/plugins/${name}";
         value = {source = inputs.noctalia.plugins.${name};};
       }) (builtins.attrNames inputs.noctalia.plugins));
+
+      # Clean up any existing backup files from Noctalia or Home Manager to avoid confusion.
+      home.activation.noctaliaCleanupBackups = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
+        rm -f \
+          "${configDir}/settings.json.backup" \
+          "${configDir}/plugins.json.backup" \
+          "${configDir}/settings.json.hmbackup" \
+          "${configDir}/plugins.json.hmbackup"
+      '';
 
       # On every nixos-rebuild switch:
       #   1. If repo has settings.json → copy it to config (repo is source of truth)
