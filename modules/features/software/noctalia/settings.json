@@ -448,7 +448,7 @@
     "telemetryEnabled": false
   },
   "hooks": {
-    "colorGeneration": "/etc/profiles/per-user/tharusha-gunarathne/bin/spicetify apply",
+    "colorGeneration": "/etc/profiles/per-user/tharusha-gunarathne/bin/spicetify-noctalia-color-hook",
     "darkModeChange": "",
     "enabled": true,
     "performanceModeDisabled": "",
