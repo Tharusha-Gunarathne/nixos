@@ -658,7 +658,7 @@
         "id": "kitty"
       },
       {
-        "enabled": false,
+        "enabled": true,
         "id": "spicetify"
       },
       {
@@ -682,7 +682,7 @@
         "id": "code"
       }
     ],
-    "enableUserTheming": true
+    "enableUserTheming": false
   },
   "ui": {
     "boxBorderEnabled": false,
