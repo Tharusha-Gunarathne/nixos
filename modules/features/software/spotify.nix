@@ -20,17 +20,54 @@
     # Absolute store path avoids PATH/profile resolution issues.
     spicetifyBin = "${pkgs.spicetify-cli}/bin/spicetify";
 
-    # Noctalia hook: update theme without launching Spotify if it is closed.
-    # If Spotify is already running, allow restart so new colors apply immediately.
+    # Noctalia hook: apply updated theme without auto-launching Spotify.
+    # If Spotify is running and focused, send Ctrl+R for instant in-app reload.
     spicetifyColorHook = pkgs.writeShellScriptBin "spicetify-noctalia-color-hook" ''
       set -euo pipefail
       SPICE="${spicetifyBin}"
-      WORK="${workDir}"
+      PGREP="${pkgs.procps}/bin/pgrep"
+      SPICE_INI="$HOME/.config/spicetify/config-xpui.ini"
+      NIRI="${pkgs.niri}/bin/niri"
+      JQ="${pkgs.jq}/bin/jq"
+      WTYPE="${pkgs.wtype}/bin/wtype"
 
-      if ${pkgs.procps}/bin/pgrep -f "$WORK/.spotify-wrapped" >/dev/null 2>&1; then
-        "$SPICE" backup apply >/dev/null 2>&1 || "$SPICE" apply >/dev/null 2>&1 || true
+        reload_spotify_window() {
+        focused_id="$($NIRI msg -j focused-window 2>/dev/null | $JQ -r '.id // empty' || true)"
+          spotify_id="$($NIRI msg -j windows 2>/dev/null | $JQ -r 'map(select(.app_id == "spotify")) | first | .id // empty' || true)"
+
+        if [ -n "$spotify_id" ]; then
+          if [ -n "$focused_id" ] && [ "$focused_id" != "$spotify_id" ]; then
+            $NIRI msg action focus-window --id "$spotify_id" >/dev/null 2>&1 || true
+          fi
+
+          # Ctrl+R is handled by Spotify itself (repeat), so prefer F5.
+          $WTYPE -k F5 >/dev/null 2>&1 || true
+          # Fallback hard-reload chord if F5 is ignored.
+          $WTYPE -M ctrl -M shift r -m shift -m ctrl >/dev/null 2>&1 || true
+
+          if [ -n "$focused_id" ] && [ "$focused_id" != "$spotify_id" ]; then
+            $NIRI msg action focus-window --id "$focused_id" >/dev/null 2>&1 || true
+          fi
+        fi
+      }
+
+      # Guard against accidental custom_apps pollution.
+      if [ -f "$SPICE_INI" ]; then
+        ${pkgs.gnused}/bin/sed -i -E \
+          's|^custom_apps\s*=.*$|custom_apps           = marketplace|' \
+          "$SPICE_INI"
+      fi
+
+      # Detect both wrapped and fallback spotify processes.
+      if "$PGREP" -f 'spotify|\.spotify-wrapped' >/dev/null 2>&1; then
+        # refresh is much faster than apply; only fall back to apply when needed.
+        if ! "$SPICE" -n -s -a -e refresh >/dev/null 2>&1; then
+          "$SPICE" -n apply >/dev/null 2>&1 || "$SPICE" -n backup apply >/dev/null 2>&1 || true
+          "$SPICE" -n -s -a -e refresh >/dev/null 2>&1 || "$SPICE" -n -s refresh >/dev/null 2>&1 || true
+        fi
+        reload_spotify_window
       else
-        "$SPICE" backup apply -n >/dev/null 2>&1 || "$SPICE" apply -n >/dev/null 2>&1 || true
+        "$SPICE" -n apply >/dev/null 2>&1 || "$SPICE" -n backup apply >/dev/null 2>&1 || true
       fi
     '';
 
@@ -155,6 +192,9 @@
       home.activation.noctaliaTemplateCleanup = lib.hm.dag.entryAfter ["writeBoundary"] ''
         rm -f "$HOME/.config/noctalia/user-templates.toml"
         rm -f "$HOME/.config/noctalia/templates/comfy-color.ini.tmpl"
+        rm -f "$HOME/.config/systemd/user/spicetify-watch.service"
+        ${pkgs.systemd}/bin/systemctl --user daemon-reload || true
+        ${pkgs.systemd}/bin/systemctl --user disable --now spicetify-watch.service || true
       '';
     };
   };
