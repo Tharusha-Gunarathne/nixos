@@ -34,10 +34,8 @@
           if [ -n "$focused_id" ] && [ "$focused_id" != "$spotify_id" ]; then
             $NIRI msg action focus-window --id "$spotify_id" >/dev/null 2>&1 || true
           fi
-
           $WTYPE -k F5 >/dev/null 2>&1 || true
           $WTYPE -M ctrl -M shift r -m shift -m ctrl >/dev/null 2>&1 || true
-
           if [ -n "$focused_id" ] && [ "$focused_id" != "$spotify_id" ]; then
             $NIRI msg action focus-window --id "$focused_id" >/dev/null 2>&1 || true
           fi
@@ -50,14 +48,14 @@
           "$SPICE_INI"
       fi
 
+      # Always do a full restore backup apply to ensure color.ini changes compile through
       if "$PGREP" -f 'spotify|\.spotify-wrapped' >/dev/null 2>&1; then
-        if ! "$SPICE" -n -s -a -e refresh >/dev/null 2>&1; then
-          "$SPICE" -n apply >/dev/null 2>&1 || "$SPICE" -n backup apply >/dev/null 2>&1 || true
-          "$SPICE" -n -s -a -e refresh >/dev/null 2>&1 || "$SPICE" -n -s refresh >/dev/null 2>&1 || true
-        fi
+        "$SPICE" -n restore backup apply >/dev/null 2>&1 || \
+          "$SPICE" -n backup apply >/dev/null 2>&1 || true
         reload_spotify_window
       else
-        "$SPICE" -n apply >/dev/null 2>&1 || "$SPICE" -n backup apply >/dev/null 2>&1 || true
+        "$SPICE" -n restore backup apply >/dev/null 2>&1 || \
+          "$SPICE" -n backup apply >/dev/null 2>&1 || true
       fi
     '';
 
@@ -67,14 +65,12 @@
       SPICE_CFG="$HOME/.config/spicetify"
       THEME_DIR="$SPICE_CFG/Themes/Comfy"
       SPICE_INI="$SPICE_CFG/config-xpui.ini"
-      NEEDS_APPLY=0
 
       if [ ! -f "$THEME_DIR/user.css" ]; then
         ${pkgs.coreutils}/bin/rm -rf "$THEME_DIR"
         mkdir -p "$THEME_DIR"
         ${pkgs.coreutils}/bin/cp -r "${comfySrc}/Comfy/." "$THEME_DIR/"
         chmod -R u+w "$THEME_DIR"
-        NEEDS_APPLY=1
       fi
 
       "$SPICE" config current_theme Comfy
@@ -86,9 +82,8 @@
           "$SPICE_INI"
       fi
 
-      if [ "$NEEDS_APPLY" -eq 1 ]; then
-        "$SPICE" backup apply
-      fi
+      "$SPICE" -n restore backup apply 2>/dev/null || \
+        "$SPICE" -n backup apply 2>/dev/null || true
     '';
   in {
     config = lib.mkIf (shell == "noctalia") {
@@ -99,7 +94,7 @@
           pkgs.jq
         ];
 
-        home.activation.noctaliaSpotifySetup = lib.hm.dag.entryAfter ["writeBoundary"] ''
+        home.activation.noctaliaSpotifySetup = lib.hm.dag.entryAfter ["writeBoundary" "spotifyCleanupShellTheme"] ''
           ${comfySetupScript}
         '';
 

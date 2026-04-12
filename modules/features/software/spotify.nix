@@ -109,6 +109,20 @@
       ];
 
       xdg.mimeApps.defaultApplications."x-scheme-handler/spotify" = ["spotify.desktop"];
+
+      home.activation.spotifyCleanupShellTheme = lib.hm.dag.entryAfter ["writeBoundary"] ''
+        SPICE="${spicetifyBin}"
+        SPICE_INI="$HOME/.config/spicetify/config-xpui.ini"
+
+        if [ -f "$SPICE_INI" ]; then
+          ${pkgs.gnused}/bin/sed -i -E \
+            's|^current_theme\s*=.*$|current_theme         = |' \
+            "$SPICE_INI"
+          ${pkgs.gnused}/bin/sed -i -E \
+            's|^color_scheme\s*=.*$|color_scheme          = |' \
+            "$SPICE_INI"
+        fi
+      '';
     };
   };
 }
