@@ -75,11 +75,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1775900011,
-        "narHash": "sha256-QUGu6CJYFQ5AWVV0n3/FsJyV+1/gj7HSDx68/SX9pwM=",
+        "lastModified": 1775983377,
+        "narHash": "sha256-ZeRjipGQnVtQ/6batI+yVOrL853FZsL0m9A63OaSfgM=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "b0569dc6ec1e6e7fefd8f6897184e4c191cd768e",
+        "rev": "e0ca734ffc85d25297715e98010b93303fa165c4",
         "type": "github"
       },
       "original": {
@@ -139,6 +139,24 @@
         "type": "github"
       }
     },
+    "network-manager-vpn": {
+      "flake": false,
+      "locked": {
+        "dir": "network-manager-vpn",
+        "lastModified": 1775738768,
+        "narHash": "sha256-QgRAarKHK+iKxa3GvUwCm2JiqTQlIW/uH4bQVa5nhaM=",
+        "owner": "noctalia-dev",
+        "repo": "noctalia-plugins",
+        "rev": "96ac1bf32ef080dac518c625bf1ee800446bf1c0",
+        "type": "github"
+      },
+      "original": {
+        "dir": "network-manager-vpn",
+        "owner": "noctalia-dev",
+        "repo": "noctalia-plugins",
+        "type": "github"
+      }
+    },
     "niri-auto-tile": {
       "flake": false,
       "locked": {
@@ -165,11 +183,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1775876161,
-        "narHash": "sha256-RiLmcXpK9ytPuWsozx2mox7ElEYsEpG3E62tCxMZVpQ=",
+        "lastModified": 1775964649,
+        "narHash": "sha256-DNyx0POPQZbqVh4AHz5i+VjJ8Q2U3H+Cv36qg0cptJg=",
         "owner": "nix-community",
         "repo": "nix4vscode",
-        "rev": "98c5bbb8b5cd5f3fe1ce1de3dabf744dfa100c49",
+        "rev": "dca0d3f8550530f519133a6f1c658a3e6bc22939",
         "type": "github"
       },
       "original": {
@@ -314,6 +332,7 @@
         "fancy-audiovisualizer": "fancy-audiovisualizer",
         "kde-connect": "kde-connect",
         "keybind-cheatsheet": "keybind-cheatsheet",
+        "network-manager-vpn": "network-manager-vpn",
         "niri-auto-tile": "niri-auto-tile",
         "nixpkgs": "nixpkgs_3",
         "noctalia": "noctalia_2",
