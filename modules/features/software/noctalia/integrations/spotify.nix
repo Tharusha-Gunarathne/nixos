@@ -65,12 +65,21 @@
       SPICE_CFG="$HOME/.config/spicetify"
       THEME_DIR="$SPICE_CFG/Themes/Comfy"
       SPICE_INI="$SPICE_CFG/config-xpui.ini"
+      NEEDS_APPLY=0
 
       if [ ! -f "$THEME_DIR/user.css" ]; then
         ${pkgs.coreutils}/bin/rm -rf "$THEME_DIR"
         mkdir -p "$THEME_DIR"
         ${pkgs.coreutils}/bin/cp -r "${comfySrc}/Comfy/." "$THEME_DIR/"
         chmod -R u+w "$THEME_DIR"
+        NEEDS_APPLY=1
+      fi
+
+      if [ ! -f "$SPICE_INI" ] || \
+         ! ${pkgs.gnugrep}/bin/grep -Eq '^current_theme\s*=\s*Comfy$' "$SPICE_INI" || \
+         ! ${pkgs.gnugrep}/bin/grep -Eq '^color_scheme\s*=\s*Comfy$' "$SPICE_INI" || \
+         ! ${pkgs.gnugrep}/bin/grep -Eq '^custom_apps\s*=\s*marketplace$' "$SPICE_INI"; then
+        NEEDS_APPLY=1
       fi
 
       "$SPICE" config current_theme Comfy
@@ -82,8 +91,12 @@
           "$SPICE_INI"
       fi
 
-      "$SPICE" -n restore backup apply 2>/dev/null || \
-        "$SPICE" -n backup apply 2>/dev/null || true
+      if [ "$NEEDS_APPLY" -eq 1 ]; then
+        "$SPICE" -n restore backup apply 2>/dev/null || \
+          "$SPICE" -n backup apply 2>/dev/null || true
+      else
+        echo "[spicetify] No setup changes detected; skipping apply."
+      fi
     '';
   in {
     config = lib.mkIf (shell == "noctalia") {
