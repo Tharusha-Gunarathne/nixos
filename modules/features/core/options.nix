@@ -14,6 +14,11 @@
         description = "Absolute path to the nixos-configs repo root";
         default = "/home/${config.myConfig.username}/nixos-configs";
       };
+      myConfig.shell = lib.mkOption {
+        type = lib.types.enum [ "noctalia" "none" ];
+        description = "Default shell for the user";
+        default = "noctalia";
+      };
     };
   };
 }

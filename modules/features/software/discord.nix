@@ -40,12 +40,7 @@
         config = {
           autoUpdate = false;
           autoUpdateNotification = false;
-          plugins = {
-            # Add plugins here as needed, for example:
-            # clearURLs.enable = true;
-            # noTrack.enable = true;
-            # callTimer.enable = true;
-          };
+          plugins = {};
         };
       };
 
@@ -54,35 +49,14 @@
         mkdir -p "$HOME/.config/vesktop/settings"
 
         SETTINGS="$HOME/.config/vesktop/settings.json"
-        VENCORD_SETTINGS="$HOME/.config/vesktop/settings/settings.json"
 
         rm -f "$SETTINGS.backup"
-        rm -f "$VENCORD_SETTINGS.backup"
 
-        # Patch or seed vesktop settings
         if [ -f "$SETTINGS" ] && [ ! -L "$SETTINGS" ]; then
           ${patchMinimizeToTray} "$SETTINGS"
         else
           rm -f "$SETTINGS"
           ${pkgs.coreutils}/bin/install -m 644 ${vesktopSettingsFallback} "$SETTINGS"
-        fi
-
-        # Make Vencord settings writable for Noctalia
-        if [ -L "$VENCORD_SETTINGS" ]; then
-          STORE_VENCORD=$(readlink "$VENCORD_SETTINGS")
-          rm "$VENCORD_SETTINGS"
-          ${pkgs.coreutils}/bin/install -m 644 "$STORE_VENCORD" "$VENCORD_SETTINGS"
-        fi
-
-        # Seed Noctalia theme files if they don't exist
-        if [ ! -e "$HOME/.config/vesktop/themes/noctalia.theme.css" ]; then
-          ${pkgs.coreutils}/bin/install -m 644 /dev/null \
-            "$HOME/.config/vesktop/themes/noctalia.theme.css"
-        fi
-
-        if [ ! -e "$HOME/.config/vesktop/themes/noctalia-material.theme.css" ]; then
-          ${pkgs.coreutils}/bin/install -m 644 /dev/null \
-            "$HOME/.config/vesktop/themes/noctalia-material.theme.css"
         fi
       '';
     };
