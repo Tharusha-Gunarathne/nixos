@@ -5,6 +5,7 @@
     ...
   }: let
     username = config.myConfig.username;
+    shell = config.myConfig.shell;
 
     spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 
@@ -114,7 +115,7 @@
         SPICE="${spicetifyBin}"
         SPICE_INI="$HOME/.config/spicetify/config-xpui.ini"
 
-        if [ -f "$SPICE_INI" ]; then
+        if [ "${shell}" != "noctalia" ] && [ -f "$SPICE_INI" ]; then
           ${pkgs.gnused}/bin/sed -i -E \
             's|^current_theme\s*=.*$|current_theme         = |' \
             "$SPICE_INI"
