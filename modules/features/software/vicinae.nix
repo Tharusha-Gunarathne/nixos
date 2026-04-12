@@ -1,6 +1,7 @@
-{ inputs, ...}: {
+{inputs, ...}: {
   flake.nixosModules.vicinae = {config, ...}: let
     username = config.myConfig.username;
+    shell = config.myConfig.shell;
   in {
     home-manager.users.${username} = {...}: {
       imports = [inputs.vicinae.homeManagerModules.default];
@@ -16,8 +17,8 @@
         };
         settings = {
           theme = {
-            dark.name = "noctalia";
-            light.name = "noctalia";
+            dark.name = if shell == "noctalia" then "noctalia" else "dark";
+            light.name = if shell == "noctalia" then "noctalia" else "light";
           };
           font = {
             normal = {
