@@ -25,6 +25,16 @@
         ];
       };
 
+      xdg.desktopEntries.brave-profile-1 = {
+        name = "Brave Web Browser | Incognito";
+        genericName = "Web Browser";
+        comment = "Open Brave using Profile 1";
+        exec = "brave --profile-directory=\"Profile 1\" %U";
+        icon = "brave-browser";
+        categories = ["Network" "WebBrowser"];
+        terminal = false;
+      };
+
       home.activation.braveDesktopExecFlags = lib.hm.dag.entryAfter ["writeBoundary"] ''
         SRC="${pkgs.brave}/share/applications/brave-browser.desktop"
         DST="$HOME/.local/share/applications/brave-browser.desktop"
@@ -36,6 +46,15 @@
           BEGIN { OFS = "" }
           /^Exec=/ {
             cmd = substr($0, 6)
+
+            if (cmd !~ /--profile-directory=\"Default\"/) {
+              if (cmd ~ / %U$/) {
+                sub(/ %U$/, " --profile-directory=\"Default\" %U", cmd)
+              } else {
+                cmd = cmd " --profile-directory=\"Default\""
+              }
+            }
+
             if (cmd !~ /TouchpadOverscrollHistoryNavigation/) {
               if (cmd ~ / %U$/) {
                 sub(/ %U$/, flags " %U", cmd)
