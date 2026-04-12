@@ -49,8 +49,10 @@
         mkdir -p "$HOME/.config/vesktop/settings"
 
         SETTINGS="$HOME/.config/vesktop/settings.json"
+        VENCORD_SETTINGS="$HOME/.config/vesktop/settings/settings.json"
 
         rm -f "$SETTINGS.backup"
+        rm -f "$VENCORD_SETTINGS.backup"
 
         if [ -f "$SETTINGS" ] && [ ! -L "$SETTINGS" ]; then
           ${patchMinimizeToTray} "$SETTINGS"
