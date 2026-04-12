@@ -19,7 +19,6 @@
     home-manager.users.${config.myConfig.username} = {...}: {
       home.packages = with pkgs; [
         bat
-        throne
         inotify-tools
         fastfetch
         python3

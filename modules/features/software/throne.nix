@@ -1,10 +1,8 @@
 {...}: {
-  flake.nixosModules.throne = {pkgs, ...}: {
-    security.wrappers.throne = {
-      owner = "root";
-      group = "root";
-      capabilities = "cap_net_admin+ep";
-      source = "${pkgs.throne}/bin/Throne";
+  flake.nixosModules.throne = {...}: {
+    programs.throne = {
+      enable = true;
+      tunMode.enable = true;
     };
   };
 }
