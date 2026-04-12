@@ -18,7 +18,6 @@
 
     home-manager.users.${config.myConfig.username} = {...}: {
       home.packages = with pkgs; [
-        brave
         bat
         throne
         inotify-tools
