@@ -97,12 +97,14 @@
         if not isinstance(current, dict):
             current = {}
 
+
         def merge_missing(dst, src):
             for key, value in src.items():
                 if key not in dst:
                     dst[key] = value
                 elif isinstance(dst[key], dict) and isinstance(value, dict):
                     merge_missing(dst[key], value)
+
 
         merge_missing(current, defaults)
 
