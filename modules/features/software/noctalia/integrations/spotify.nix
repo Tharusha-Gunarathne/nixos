@@ -19,44 +19,44 @@
 
     spicetifyColorHook = pkgs.writeShellScriptBin "spicetify-noctalia-color-hook" ''
       set -euo pipefail
-      SPICE="${spicetifyBin}"
       PGREP="${pkgs.procps}/bin/pgrep"
-      SPICE_INI="$HOME/.config/spicetify/config-xpui.ini"
       NIRI="${pkgs.niri}/bin/niri"
       JQ="${pkgs.jq}/bin/jq"
       WTYPE="${pkgs.wtype}/bin/wtype"
+      RUNTIME_DIR="''${XDG_RUNTIME_DIR:-/tmp}"
+      LOCK_DIR="$RUNTIME_DIR/spicetify-noctalia-color-hook.lock"
+
+      # Do nothing unless Spotify is currently running.
+      if ! "$PGREP" -f 'spotify|\.spotify-wrapped' >/dev/null 2>&1; then
+        exit 0
+      fi
+
+      # Avoid overlapping key-injection runs.
+      if ! mkdir "$LOCK_DIR" 2>/dev/null; then
+        exit 0
+      fi
+      trap 'rmdir "$LOCK_DIR"' EXIT
 
       reload_spotify_window() {
         focused_id="$($NIRI msg -j focused-window 2>/dev/null | $JQ -r '.id // empty' || true)"
-        spotify_id="$($NIRI msg -j windows 2>/dev/null | $JQ -r 'map(select(.app_id == "spotify")) | first | .id // empty' || true)"
+        spotify_id="$($NIRI msg -j windows 2>/dev/null | $JQ -r 'map(select((((.app_id // "") | ascii_downcase | test("spotify")) or ((.title // "") | ascii_downcase | test("spotify")))) ) | first | .id // empty' || true)"
 
         if [ -n "$spotify_id" ]; then
-          if [ -n "$focused_id" ] && [ "$focused_id" != "$spotify_id" ]; then
+          if [ "$focused_id" != "$spotify_id" ]; then
             $NIRI msg action focus-window --id "$spotify_id" >/dev/null 2>&1 || true
           fi
+
+          # Tiny delay so key event lands after focus transition.
+          sleep 0.02
           $WTYPE -k F5 >/dev/null 2>&1 || true
-          $WTYPE -M ctrl -M shift r -m shift -m ctrl >/dev/null 2>&1 || true
+
           if [ -n "$focused_id" ] && [ "$focused_id" != "$spotify_id" ]; then
             $NIRI msg action focus-window --id "$focused_id" >/dev/null 2>&1 || true
           fi
         fi
       }
 
-      if [ -f "$SPICE_INI" ]; then
-        ${pkgs.gnused}/bin/sed -i -E \
-          's|^custom_apps\s*=.*$|custom_apps           = marketplace|' \
-          "$SPICE_INI"
-      fi
-
-      # Always do a full restore backup apply to ensure color.ini changes compile through
-      if "$PGREP" -f 'spotify|\.spotify-wrapped' >/dev/null 2>&1; then
-        "$SPICE" -n restore backup apply >/dev/null 2>&1 || \
-          "$SPICE" -n backup apply >/dev/null 2>&1 || true
-        reload_spotify_window
-      else
-        "$SPICE" -n restore backup apply >/dev/null 2>&1 || \
-          "$SPICE" -n backup apply >/dev/null 2>&1 || true
-      fi
+      reload_spotify_window
     '';
 
     comfySetupScript = pkgs.writeShellScript "spicetify-comfy-setup" ''
@@ -107,7 +107,7 @@
           pkgs.jq
         ];
 
-        home.activation.noctaliaSpotifySetup = lib.hm.dag.entryAfter ["writeBoundary" "spotifyCleanupShellTheme"] ''
+        home.activation.noctaliaSpotifySetup = lib.hm.dag.entryAfter ["writeBoundary"] ''
           ${comfySetupScript}
         '';
 
