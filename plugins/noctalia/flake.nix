@@ -46,6 +46,11 @@
       url = "github:noctalia-dev/noctalia-plugins?dir=screen-recorder";
       flake = false;
     };
+
+    network-manager-vpn = {
+      url = "github:noctalia-dev/noctalia-plugins?dir=network-manager-vpn";
+      flake = false;
+    };
   };
 
   outputs = inputs: {
@@ -61,6 +66,7 @@
         niri-auto-tile
         polkit-agent
         screen-recorder
+        network-manager-vpn
         ;
     };
   };
