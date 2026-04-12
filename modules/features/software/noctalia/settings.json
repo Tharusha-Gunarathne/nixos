@@ -449,7 +449,7 @@
   },
   "hooks": {
     "colorGeneration": "/etc/profiles/per-user/tharusha-gunarathne/bin/spicetify-noctalia-color-hook",
-    "darkModeChange": "",
+    "darkModeChange": "/etc/profiles/per-user/tharusha-gunarathne/bin/spicetify-noctalia-color-hook",
     "enabled": true,
     "performanceModeDisabled": "",
     "performanceModeEnabled": "",
@@ -457,7 +457,7 @@
     "screenUnlock": "",
     "session": "",
     "startup": "",
-    "wallpaperChange": ""
+    "wallpaperChange": "/etc/profiles/per-user/tharusha-gunarathne/bin/spicetify-noctalia-color-hook"
   },
   "idle": {
     "customCommands": "[]",
