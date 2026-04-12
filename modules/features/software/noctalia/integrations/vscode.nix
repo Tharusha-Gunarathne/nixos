@@ -1,4 +1,4 @@
-{inputs, ...}: {
+{...}: {
   flake.nixosModules.noctaliaVscode = {
     config,
     pkgs,

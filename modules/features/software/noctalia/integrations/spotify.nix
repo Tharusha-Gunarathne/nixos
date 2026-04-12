@@ -1,4 +1,4 @@
-{inputs, ...}: {
+{...}: {
   flake.nixosModules.noctaliaSpotify = {
     config,
     pkgs,
