@@ -6,6 +6,7 @@
     ...
   }: let
     username = config.myConfig.username;
+    shell = config.myConfig.shell;
     configPath = "${config.myConfig.repoRoot}/modules/features/software/niri/config.kdl";
   in {
     programs.niri.enable = true;
@@ -22,7 +23,7 @@
 
       home.activation.niriCleanupShellIncludes = lib.hm.dag.entryAfter ["writeBoundary"] ''
         NIRI_CONFIG="${configPath}"
-        if [ -f "$NIRI_CONFIG" ]; then
+        if [ -f "$NIRI_CONFIG" ] && [ "${shell}" != "noctalia" ]; then
           ${pkgs.gnused}/bin/sed -i '/include "\.\/noctalia\.kdl"/d' "$NIRI_CONFIG"
         fi
       '';
