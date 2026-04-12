@@ -8,6 +8,7 @@
     username = config.myConfig.username;
     shell = config.myConfig.shell;
 
+    # Keeps VS Code's Noctalia extension path correct after rebuilds.
     fixRegistryScript = pkgs.writers.writePython3 "fix-vscode-registry" {} ''
       import json
       import sys
@@ -38,13 +39,12 @@
         pkgs,
         ...
       }: {
-        home.activation.noctaliaVscodeSetup = lib.hm.dag.entryAfter ["writeBoundary"] ''
+        home.activation.noctaliaVscodeSetup = lib.hm.dag.entryAfter ["writeBoundary" "vscodeSetup"] ''
           EXT_DIR="$HOME/.vscode/extensions"
           EXT_SOURCE="$EXT_DIR/noctalia.noctaliatheme"
-          EXT_BACKUP="$EXT_DIR/noctalia.noctaliatheme.backup"
           REGISTRY="$EXT_DIR/extensions.json"
 
-          rm -rf "$EXT_BACKUP"
+          rm -rf "$EXT_DIR/noctalia.noctaliatheme.backup"
 
           STORE_EXT=$(readlink -f "$EXT_SOURCE" 2>/dev/null || echo "")
           if [ -n "$STORE_EXT" ]; then
