@@ -112,9 +112,6 @@
                     "useCustomFont": false
                 },
                 {
-                    "id": "plugin:kde-connect"
-                },
-                {
                     "defaultSettings": {
                         "autoHeight": true,
                         "cheatsheetData": [
