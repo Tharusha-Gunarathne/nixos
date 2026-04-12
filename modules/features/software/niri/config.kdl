@@ -670,9 +670,4 @@ binds {
     XF86MonBrightnessDown { spawn "noctalia-shell" "ipc" "call" "brightness" "decrease"; }
 }
 
-
-
-
-
-
 include "./noctalia.kdl"
