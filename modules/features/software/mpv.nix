@@ -35,6 +35,7 @@
         enable = true;
         config = {
           osc = "no";
+          "osd-bar" = "no";
           gpu-api = "vulkan";
           ao = "pipewire";
           hwdec = "auto";
