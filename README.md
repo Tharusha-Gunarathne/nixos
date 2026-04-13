@@ -77,11 +77,11 @@ atomically without modifying any application module.
 
 ## Key Options
 
-| Option | Type | Default | Description |
-|---|---|---|---|
-| `myConfig.username` | string | `"tharusha-gunarathne"` | Primary user account |
+| Option              | Type   | Default                          | Description                |
+| ------------------- | ------ | -------------------------------- | -------------------------- |
+| `myConfig.username` | string | `"tharusha-gunarathne"`          | Primary user account       |
 | `myConfig.repoRoot` | string | `/home/<username>/nixos-configs` | Absolute path to this repo |
-| `myConfig.shell` | enum | `"noctalia"` | Active desktop shell |
+| `myConfig.shell`    | enum   | `"noctalia"`                     | Active desktop shell       |
 
 ## Build and Apply
 
@@ -109,6 +109,51 @@ nix fmt
 nix flake show
 ```
 
+## Updating `fetchFromGitHub` Hashes
+
+When a pinned GitHub source gets a new release/tag, update both `rev` and `sha256`.
+This applies to any module that uses `pkgs.fetchFromGitHub`.
+
+### Method 1: Prefetch (quick)
+
+1. Build the archive URL for the tag/commit you want:
+
+```bash
+nix-prefetch-url --unpack https://github.com/<owner>/<repo>/archive/refs/tags/<tag>.tar.gz
+```
+
+2. Copy the last printed line (the hash) into `sha256`.
+3. Update `rev` to the same tag/commit.
+
+Example:
+
+```bash
+nix-prefetch-url --unpack https://github.com/HarkeshBhatia/ModernH/archive/refs/tags/v1.0.tar.gz
+```
+
+### Method 2: Let Nix tell you the hash (most reliable)
+
+1. Set a temporary fake hash:
+
+```nix
+sha256 = "0000000000000000000000000000000000000000000000000000";
+```
+
+2. Evaluate:
+
+```bash
+nix flake check --no-build
+```
+
+3. Copy the `got:` hash from the error output into `sha256`.
+4. Re-run `nix flake check --no-build` to confirm.
+
+### Rules of thumb
+
+1. Hash must match the exact source for the exact `rev`.
+2. Every `rev` change requires a new hash.
+3. Prefer tags over moving branches (`main`) for reproducible builds.
+
 ## Troubleshooting
 
 1. Run with `--show-trace` to get the full error location.
@@ -116,4 +161,7 @@ nix flake show
    values in outer `let` bindings before entering `home-manager.users` blocks.
 3. If the same file is managed by two modules, one will fail at activation.
 4. If evaluation passes but activation fails, check `journalctl --user -xe`.
+
+```
+
 ```
