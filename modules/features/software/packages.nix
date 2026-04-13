@@ -31,6 +31,7 @@
         libreoffice
         ferdium
         ffmpeg
+        ffmpegthumbnailer
         drawio
         localsend
         bleachbit
