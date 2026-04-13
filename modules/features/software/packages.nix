@@ -40,6 +40,8 @@
         microsoft-edge
         handbrake
         qt6Packages.qt6ct
+        sshfs
+        fuse3
       ];
     };
   };
