@@ -127,6 +127,8 @@
                     "id": "plugin:keybind-cheatsheet"
                 },
                 {
+                    "defaultSettings": {
+                    },
                     "id": "plugin:kde-connect"
                 }
             ],
