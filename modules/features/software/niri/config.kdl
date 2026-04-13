@@ -395,6 +395,10 @@ binds {
     Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
 
+    // External display profiles.
+    // Mod+F11 hotkey-overlay-title="TV only" { spawn "display-tv-only"; }
+    // Mod+F12 hotkey-overlay-title="Laptop only" { spawn "display-laptop-only"; }
+
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
     // For example, this is a standard bind to toggle the screen reader (orca).
@@ -661,6 +665,7 @@ binds {
     Mod+Space { spawn-sh "vicinae toggle"; }
     Mod+S { spawn-sh "noctalia-shell ipc call controlCenter toggle"; }
     Mod+Comma { spawn-sh "noctalia-shell ipc call settings toggle"; }
+    Mod+P { spawn-sh "noctalia-shell ipc call sessionMenu toggle"; }
 
     // Audio & Brightness
     XF86AudioRaiseVolume { spawn "noctalia-shell" "ipc" "call" "volume" "increase"; }
