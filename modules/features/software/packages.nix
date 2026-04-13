@@ -30,7 +30,6 @@
         btop
         libreoffice
         ferdium
-        mpv
         ffmpeg
         drawio
         localsend

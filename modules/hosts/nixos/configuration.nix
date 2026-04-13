@@ -23,6 +23,7 @@
       self.nixosModules.nautilus
       self.nixosModules.niri
       self.nixosModules.noctalia
+      self.nixosModules.mpv
       self.nixosModules.packages
       self.nixosModules.throne
       self.nixosModules.variables
