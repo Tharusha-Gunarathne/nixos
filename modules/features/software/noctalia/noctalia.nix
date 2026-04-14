@@ -13,6 +13,7 @@
     repoRoot = config.myConfig.repoRoot;
   in {
     imports = [
+      self.nixosModules.noctaliaPluginSettings
       self.nixosModules.noctaliaKitty
       self.nixosModules.noctaliaNiri
       self.nixosModules.noctaliaVscode
@@ -107,11 +108,6 @@
         imports = [inputs.noctalia.noctalia-main.homeModules.default];
 
         programs.noctalia-shell.enable = true;
-
-        xdg.configFile = builtins.listToAttrs (map (name: {
-          name = "noctalia/plugins/${name}";
-          value = {source = inputs.noctalia.plugins.${name};};
-        }) (builtins.attrNames inputs.noctalia.plugins));
 
         home.activation.noctaliaCleanupBackups = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
           rm -f \
