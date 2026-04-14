@@ -1,19 +1,19 @@
-{...}: {
+{inputs, ...}: {
   flake.nixosModules.lotion = {
     config,
     pkgs,
     lib,
     ...
   }: let
-    username = config.myConfig.username;
+    username = config.myConfig.primaryUser;
+    lotionAsset = inputs.sources.releaseAssets.lotion;
 
-    lotion-pkg = pkgs.stdenv.mkDerivation rec {
+    lotion = pkgs.stdenv.mkDerivation {
       pname = "lotion";
-      version = "1.5.0";
+      version = lotionAsset.version;
 
       src = pkgs.fetchurl {
-        url = "https://github.com/puneetsl/lotion/releases/download/v${version}/lotion_${version}_amd64.deb";
-        sha256 = "031bgqfgnxwc00pir8ipjpfkxc5g50739h104fzhsqanza02sag8";
+        inherit (lotionAsset) url sha256;
       };
 
       nativeBuildInputs = [
@@ -76,7 +76,7 @@
     };
   in {
     home-manager.users.${username} = {...}: {
-      home.packages = [lotion-pkg];
+      home.packages = [lotion];
     };
   };
 }

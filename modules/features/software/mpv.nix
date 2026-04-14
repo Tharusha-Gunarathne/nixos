@@ -1,16 +1,11 @@
-{...}: {
+{inputs, ...}: {
   flake.nixosModules.mpv = {
     config,
     pkgs,
     ...
   }: let
-    username = config.myConfig.username;
-    modernZSrc = pkgs.fetchFromGitHub {
-      owner = "Samillion";
-      repo = "ModernZ";
-      rev = "v0.3.1";
-      sha256 = "0711blyif7r2dfxxax9vsv0wp4rrwys8dk3jqay8c19arq9qly64";
-    };
+    username = config.myConfig.primaryUser;
+    modernZSrc = inputs.sources.sources.modernz;
 
     modernZOscConf = pkgs.runCommandLocal "modernz.conf" {} ''
       install -m 644 "${modernZSrc}/modernz.conf" "$out"

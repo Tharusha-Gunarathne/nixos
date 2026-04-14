@@ -5,7 +5,7 @@
     extra-substituters = ["https://vicinae.cachix.org"];
     extra-trusted-public-keys = ["vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc="];
   };
-  
+
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
@@ -19,6 +19,7 @@
 
     # Third Party Plugins
     noctalia.url = "path:./plugins/noctalia";
+    sources.url = "path:./plugins/sources";
     spicetify-nix = {
       url = "github:Gerg-L/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";

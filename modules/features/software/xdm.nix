@@ -1,11 +1,12 @@
-{...}: {
+{inputs, ...}: {
   flake.nixosModules.xdm = {
     pkgs,
     config,
     lib,
     ...
   }: let
-    username = config.myConfig.username;
+    username = config.myConfig.primaryUser;
+    xdmAsset = inputs.sources.releaseAssets.xdm;
 
     xdmanScript = pkgs.writeShellScript "xdman" ''
       pkill -f xdm-app 2>/dev/null
@@ -14,13 +15,12 @@
       exec @out@/opt/xdman/xdm-app "$@"
     '';
 
-    xdm = pkgs.stdenv.mkDerivation rec {
+    xdm = pkgs.stdenv.mkDerivation {
       pname = "xdm";
-      version = "8.0.29";
+      version = xdmAsset.version;
 
       src = pkgs.fetchurl {
-        url = "https://github.com/subhra74/xdm/releases/download/${version}/xdman_gtk_${version}_amd64.deb";
-        sha256 = "04cydd5i94qbnsi2535mswapng6hbwc567jhzbq8s715n0nvnn9n";
+        inherit (xdmAsset) url sha256;
       };
 
       nativeBuildInputs = with pkgs; [

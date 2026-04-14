@@ -1,21 +1,16 @@
-{...}: {
+{inputs, ...}: {
   flake.nixosModules.noctaliaSpotify = {
     config,
     pkgs,
     lib,
     ...
   }: let
-    username = config.myConfig.username;
+    username = config.myConfig.primaryUser;
     shell = config.myConfig.shell;
 
     spicetifyBin = "${pkgs.spicetify-cli}/bin/spicetify";
 
-    comfySrc = pkgs.fetchFromGitHub {
-      owner = "Comfy-Themes";
-      repo = "Spicetify";
-      rev = "32ff101e27cfd33d85b7cc587f7f95db6b2df8b0";
-      hash = "sha256-sqvmSXJMLE2in/cB8ZIJE/t4J5D0PKRddWECdYJjgX0=";
-    };
+    comfySrc = inputs.sources.sources.spicetify-comfy;
 
     spicetifyColorHook = pkgs.writeShellScriptBin "spicetify-noctalia-color-hook" ''
       set -euo pipefail
