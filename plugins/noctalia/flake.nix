@@ -10,11 +10,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # noctalia-qs = {
-    #   url = "github:noctalia-dev/noctalia-qs";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
-
     # NOCTALIA PLUGINS
     # Each plugin tracks its own version in its own lockfile entry
     fancy-audiovisualizer = {
