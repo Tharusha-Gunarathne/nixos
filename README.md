@@ -10,6 +10,7 @@ using flake-parts and import-tree.
 ├── flake.nix
 ├── flake.lock
 ├── plugins/
+│   ├── sources/
 │   └── noctalia/
 └── modules/
     ├── systems.nix
@@ -64,6 +65,13 @@ Host-specific wiring. Imports all feature modules and sets machine-level options
 A local flake that pins the Noctalia shell and its plugins as independent inputs,
 allowing them to be updated separately from the main flake.
 
+### `plugins/sources/`
+
+A local flake that centralizes pinned non-flake source trees consumed by modules
+(for example GitHub sources previously fetched via `fetchFromGitHub`).
+It also centralizes pinned binary release metadata (such as Lotion and XDM
+`.deb` URLs and hashes) under `releaseAssets`.
+
 ## Shell Toggle
 
 The active desktop shell is controlled by a single option:
@@ -77,11 +85,15 @@ atomically without modifying any application module.
 
 ## Key Options
 
-| Option              | Type   | Default                          | Description                |
-| ------------------- | ------ | -------------------------------- | -------------------------- |
-| `myConfig.username` | string | `"tharusha-gunarathne"`          | Primary user account       |
-| `myConfig.repoRoot` | string | `/home/<username>/nixos-configs` | Absolute path to this repo |
-| `myConfig.shell`    | enum   | `"noctalia"`                     | Active desktop shell       |
+| Option                        | Type   | Default                          | Description                |
+| ----------------------------- | ------ | -------------------------------- | -------------------------- |
+| `myConfig.primaryUser`        | string | `"tharusha-gunarathne"`          | Primary user account       |
+| `myConfig.primaryUid`         | int    | `1000`                           | Primary user UID           |
+| `myConfig.repoRoot`           | string | `/home/<username>/nixos-configs` | Absolute path to this repo |
+| `myConfig.storage.rootUuid`   | string | host-specific UUID               | Root filesystem UUID       |
+| `myConfig.storage.bootUuid`   | string | host-specific UUID               | Boot filesystem UUID       |
+| `myConfig.storage.dataDrives` | list   | host-specific UUID list          | Additional mounted drives  |
+| `myConfig.shell`              | enum   | `"noctalia"`                     | Active desktop shell       |
 
 ## Build and Apply
 
@@ -101,6 +113,9 @@ nix flake update
 
 # Update only Noctalia and its plugins
 nix flake update noctalia
+
+# Update only centralized source registry inputs
+nix flake update sources
 
 # Format all Nix files
 nix fmt
