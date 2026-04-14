@@ -5,11 +5,9 @@
     pkgs,
     ...
   }: {
-    myConfig.username = lib.mkDefault "tharusha-gunarathne";
-
-    users.users.${config.myConfig.username} = {
+    users.users.${config.myConfig.primaryUser} = {
       isNormalUser = true;
-      uid = 1000;
+      uid = config.myConfig.primaryUid;
       extraGroups = ["wheel" "networkmanager" "video" "audio" "seat"];
     };
   };

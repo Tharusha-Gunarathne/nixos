@@ -6,27 +6,17 @@
     modulesPath,
     ...
   }: let
-    username = config.myConfig.username;
+    username = config.myConfig.primaryUser;
     uid = toString config.users.users.${username}.uid;
 
-    # My Drives - UUID
-    root = "00000000-0000-0000-0000-000000000000";
-    boot = "6A90-3D23";
-    drives = [
-      {
-        name = "D_Drive";
-        uuid = "01DCC7D0F4666AF0";
-      }
-      {
-        name = "E_Drive";
-        uuid = "ACAE0ACAAE0A8D50";
-      }
-    ];
+    root = config.myConfig.storage.rootUuid;
+    boot = config.myConfig.storage.bootUuid;
+    drives = config.myConfig.storage.dataDrives;
 
     # Helper function to create NTFS data mounts with consistent options
     mkNtfsDataMount = {
       name,
-      uuid
+      uuid,
     }: {
       "/mnt/${name}" = {
         device = "/dev/disk/by-uuid/${uuid}";
@@ -52,19 +42,20 @@
     boot.extraModulePackages = [];
 
     fileSystems = lib.mkMerge ([
-      {
-        "/" = {
-          device = "/dev/disk/by-uuid/${root}";
-          fsType = "ext4";
-        };
+        {
+          "/" = {
+            device = "/dev/disk/by-uuid/${root}";
+            fsType = "ext4";
+          };
 
-        "/boot" = {
-          device = "/dev/disk/by-uuid/${boot}";
-          fsType = "vfat";
-          options = ["fmask=0022" "dmask=0022"];
-        };
-      }
-    ] ++ map mkNtfsDataMount drives);
+          "/boot" = {
+            device = "/dev/disk/by-uuid/${boot}";
+            fsType = "vfat";
+            options = ["fmask=0022" "dmask=0022"];
+          };
+        }
+      ]
+      ++ map mkNtfsDataMount drives);
 
     swapDevices = [];
 
