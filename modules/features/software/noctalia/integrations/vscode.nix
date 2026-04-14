@@ -5,7 +5,7 @@
     lib,
     ...
   }: let
-    username = config.myConfig.username;
+    username = config.myConfig.primaryUser;
     shell = config.myConfig.shell;
 
     # Keeps VS Code's Noctalia extension path correct after rebuilds.

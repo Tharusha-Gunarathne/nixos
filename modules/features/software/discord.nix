@@ -4,7 +4,7 @@
     pkgs,
     ...
   }: let
-    username = config.myConfig.username;
+    username = config.myConfig.primaryUser;
 
     vesktopSettingsFallback = pkgs.writeText "vesktop-settings.json" (builtins.toJSON {
       discordBranch = "stable";

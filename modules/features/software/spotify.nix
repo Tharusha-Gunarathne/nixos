@@ -4,7 +4,7 @@
     pkgs,
     ...
   }: let
-    username = config.myConfig.username;
+    username = config.myConfig.primaryUser;
 
     spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 

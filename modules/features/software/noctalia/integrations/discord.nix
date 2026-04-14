@@ -5,7 +5,7 @@
     pkgs,
     ...
   }: let
-    username = config.myConfig.username;
+    username = config.myConfig.primaryUser;
     shell = config.myConfig.shell;
   in {
     config = lib.mkMerge [

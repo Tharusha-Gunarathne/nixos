@@ -5,7 +5,7 @@
     lib,
     ...
   }: let
-    username = config.myConfig.username;
+    username = config.myConfig.primaryUser;
     braveArgs = [
       "--enable-features=TouchpadOverscrollHistoryNavigation,UseOzonePlatform"
       "--ozone-platform=wayland"

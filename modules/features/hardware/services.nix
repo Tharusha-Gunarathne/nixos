@@ -4,7 +4,7 @@
     lib,
     ...
   }: let
-    username = config.myConfig.username;
+    username = config.myConfig.primaryUser;
   in {
     services.power-profiles-daemon.enable = true;
     services.upower.enable = true;

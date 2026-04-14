@@ -9,7 +9,7 @@
     lib,
     ...
   }: let
-    username = config.myConfig.username;
+    username = config.myConfig.primaryUser;
     repoRoot = config.myConfig.repoRoot;
   in {
     imports = [

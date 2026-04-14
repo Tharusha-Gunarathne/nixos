@@ -4,7 +4,7 @@
     pkgs,
     ...
   }: let
-    username = config.myConfig.username;
+    username = config.myConfig.primaryUser;
   in {
     # enables vendor completions from nixpkgs packages
     programs.fish.enable = true;

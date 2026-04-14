@@ -1,6 +1,6 @@
 {inputs, ...}: {
   flake.nixosModules.vicinae = {config, ...}: let
-    username = config.myConfig.username;
+    username = config.myConfig.primaryUser;
     shell = config.myConfig.shell;
   in {
     home-manager.users.${username} = {...}: {

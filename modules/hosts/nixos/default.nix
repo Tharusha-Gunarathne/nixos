@@ -14,9 +14,9 @@
         home-manager.useUserPackages = true;
         home-manager.backupFileExtension = "backup";
 
-        home-manager.users."${config.myConfig.username}" = {
-          home.username = config.myConfig.username;
-          home.homeDirectory = "/home/${config.myConfig.username}";
+        home-manager.users."${config.myConfig.primaryUser}" = {
+          home.username = config.myConfig.primaryUser;
+          home.homeDirectory = "/home/${config.myConfig.primaryUser}";
           home.stateVersion = "25.11";
         };
       })

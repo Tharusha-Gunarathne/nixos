@@ -5,7 +5,7 @@
     config,
     ...
   }: let
-    username = config.myConfig.username;
+    username = config.myConfig.primaryUser;
     sourceDir = ./extensions;
     extensionFiles = builtins.attrNames (
       lib.filterAttrs (name: type: type == "regular" && lib.hasSuffix ".py" name)

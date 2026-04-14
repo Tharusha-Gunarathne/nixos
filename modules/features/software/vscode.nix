@@ -4,7 +4,7 @@
     pkgs,
     ...
   }: let
-    username = config.myConfig.username;
+    username = config.myConfig.primaryUser;
 
     extensions =
       pkgs.nix4vscode.forVscode [

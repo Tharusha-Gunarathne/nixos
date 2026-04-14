@@ -4,7 +4,7 @@
     pkgs,
     ...
   }: let
-    username = config.myConfig.username;
+    username = config.myConfig.primaryUser;
   in {
     home-manager.users.${username} = {...}: {
       xdg.userDirs = {

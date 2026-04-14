@@ -5,7 +5,7 @@
     pkgs,
     ...
   }: let
-    username = config.myConfig.username;
+    username = config.myConfig.primaryUser;
     shell = config.myConfig.shell;
     configPath = "${config.myConfig.repoRoot}/modules/features/software/niri/config.kdl";
   in {

@@ -16,7 +16,7 @@
       ripgrep
     ];
 
-    home-manager.users.${config.myConfig.username} = {...}: {
+    home-manager.users.${config.myConfig.primaryUser} = {...}: {
       home.packages = with pkgs; [
         bat
         inotify-tools

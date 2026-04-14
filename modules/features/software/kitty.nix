@@ -1,6 +1,6 @@
 {...}: {
   flake.nixosModules.kitty = {config, ...}: let
-    username = config.myConfig.username;
+    username = config.myConfig.primaryUser;
   in {
     home-manager.users.${username} = {
       pkgs,

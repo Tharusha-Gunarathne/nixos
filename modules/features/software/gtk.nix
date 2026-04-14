@@ -4,7 +4,7 @@
     config,
     ...
   }: let
-    username = config.myConfig.username;
+    username = config.myConfig.primaryUser;
     schemaDir = "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/gsettings-desktop-schemas-${pkgs.gsettings-desktop-schemas.version}/glib-2.0/schemas";
   in {
     environment.systemPackages = with pkgs; [
