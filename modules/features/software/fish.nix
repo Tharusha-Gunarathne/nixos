@@ -13,11 +13,6 @@
       programs.fish = {
         enable = true;
         interactiveShellInit = "set fish_greeting";
-        shellAliases = {
-          nix-switch = "sudo nixos-rebuild switch --flake .";
-          nix-update = "sudo nix flake update";
-          nix-clean = "sudo nix-collect-garbage -d";
-        };
       };
 
       programs.oh-my-posh = {

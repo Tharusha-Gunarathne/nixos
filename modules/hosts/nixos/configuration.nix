@@ -2,6 +2,7 @@
   flake.nixosModules.nixosConfiguration = {...}: {
     imports = [
       # core
+      self.nixosModules.commandShortcuts
       self.nixosModules.options
       self.nixosModules.users
       self.nixosModules.nixSettings
