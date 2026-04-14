@@ -30,6 +30,10 @@
     };
     vicinae.url = "github:vicinaehq/vicinae";
     nixcord.url = "github:FlameFlag/nixcord";
+    monique = {
+      url = "github:ToRvaLDz/monique";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs:

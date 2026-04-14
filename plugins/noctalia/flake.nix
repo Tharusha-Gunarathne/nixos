@@ -42,13 +42,23 @@
       flake = false;
     };
 
-    screen-recorder = {
-      url = "github:noctalia-dev/noctalia-plugins?dir=screen-recorder";
+    network-manager-vpn = {
+      url = "github:noctalia-dev/noctalia-plugins?dir=network-manager-vpn";
       flake = false;
     };
 
-    network-manager-vpn = {
-      url = "github:noctalia-dev/noctalia-plugins?dir=network-manager-vpn";
+    screen-toolkit = {
+      url = "github:noctalia-dev/noctalia-plugins?dir=screen-toolkit";
+      flake = false;
+    };
+
+    monique = {
+      url = "github:noctalia-dev/noctalia-plugins?dir=monique";
+      flake = false;
+    };
+
+    wallcards = {
+      url = "github:noctalia-dev/noctalia-plugins?dir=wallcards";
       flake = false;
     };
   };
@@ -65,8 +75,10 @@
         keybind-cheatsheet
         niri-auto-tile
         polkit-agent
-        screen-recorder
         network-manager-vpn
+        screen-toolkit
+        monique
+        wallcards
         ;
     };
   };

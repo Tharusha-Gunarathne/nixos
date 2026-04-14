@@ -1,4 +1,4 @@
-{...}: {
+{inputs, ...}: {
   flake.nixosModules.packages = {
     pkgs,
     config,
@@ -42,6 +42,19 @@
         qt6Packages.qt6ct
         sshfs
         fuse3
+        # Noctalia plugin runtime dependencies (wallcards, monique, screen-toolkit)
+        grim
+        slurp
+        tesseract
+        imagemagick
+        zbar
+        curl
+        jq
+        wl-screenrec
+        wf-recorder
+        translate-shell
+        gifski
+        inputs.monique.packages.${pkgs.system}.default
       ];
     };
   };
