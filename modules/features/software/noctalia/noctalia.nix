@@ -115,6 +115,16 @@
             "${configDir}/plugins.json.backup" \
             "${configDir}/settings.json.hmbackup" \
             "${configDir}/plugins.json.hmbackup"
+
+          # Remove stale plugin backup directories that can register duplicate manifests
+          # (e.g. wallcards.backup) and override expected plugin behavior.
+          if [ -d "${configDir}/plugins" ]; then
+            find "${configDir}/plugins" -maxdepth 1 -type d -name '*.backup' -exec rm -rf {} +
+          fi
+
+          # Clear stale QML/pipeline caches so plugin QML changes are picked up reliably.
+          rm -rf "$HOME/.cache/noctalia-qs/qmlcache" \
+                 "$HOME/.cache/noctalia-qs/qtpipelinecache-x86_64-little_endian-lp64"
         '';
 
         home.activation.noctaliaSettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
