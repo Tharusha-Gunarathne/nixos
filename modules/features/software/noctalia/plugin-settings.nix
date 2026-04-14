@@ -12,26 +12,18 @@
           cp -r "${inputs.noctalia.plugins.wallcards}" "$out"
           chmod -R u+w "$out"
 
-          ${pkgs.gnused}/bin/sed -i '/^import Qt5Compat\.GraphicalEffects$/d' "$out/WallcardsWindow.qml"
+      WALLCARDS="$out/WallcardsWindow.qml"
 
-          ${pkgs.gnused}/bin/sed -i '/^            Rectangle {$/,/^            }$/ {
-            /^            Rectangle {$/,/^            }$/ {
-              /^              id: mask$/,/^            }$/d
-            }
-          }' "$out/WallcardsWindow.qml"
+      ${pkgs.perl}/bin/perl -0777 -i -pe 's@import Qt5Compat\.GraphicalEffects\n@@g' "$WALLCARDS"
 
-          ${pkgs.gnused}/bin/sed -i '/^            OpacityMask {$/,/^            }$/d' "$out/WallcardsWindow.qml"
+      ${pkgs.perl}/bin/perl -0777 -i -pe 's@\n            Rectangle \{\n              id: mask\n\n              anchors.fill: parent\n              radius: cardRadius\n              visible: false\n            \}\n\n            OpacityMask \{\n              anchors.fill: parent\n              maskSource: mask\n\n              source: ShaderEffectSource \{\n                sourceItem: imgComposite\n                sourceRect: Qt\.rect\(-imgComposite\.x, 0, imageFrame\.width, imageFrame\.height\)\n              \}\n            \}\n@\n            ShaderEffectSource {\n              anchors.fill: parent\n              sourceItem: imgComposite\n              sourceRect: Qt.rect(-imgComposite.x, 0, imageFrame.width, imageFrame.height)\n            }\n@s' "$WALLCARDS"
 
-          ${pkgs.gnused}/bin/sed -i '/^                  layer\.effect: OpacityMask {$/,/^                  }$/c\
-                          layer.effect: null' "$out/WallcardsWindow.qml"
+      ${pkgs.perl}/bin/perl -0777 -i -pe 's@\n                  layer\.effect: OpacityMask \{\n                    maskSource: Rectangle \{\n                      width: videoContainer\.width\n                      height: videoContainer\.height\n                      radius: cardRadius\n                    \}\n                  \}\n@\n                  layer.effect: null\n@s' "$WALLCARDS"
 
-          ${pkgs.gnused}/bin/sed -i '/^            \/\/ ── Video type ──$/i\
-            ShaderEffectSource {\
-              anchors.fill: parent\
-              sourceItem: imgComposite\
-              sourceRect: Qt.rect(-imgComposite.x, 0, imageFrame.width, imageFrame.height)\
-            }\
-      ' "$out/WallcardsWindow.qml"
+      if ${pkgs.gnugrep}/bin/grep -qE 'Qt5Compat\.GraphicalEffects|OpacityMask' "$WALLCARDS"; then
+        echo "[wallcards-patched] patch did not fully apply" >&2
+        exit 1
+      fi
     '';
 
     pluginSettings =
