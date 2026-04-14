@@ -112,12 +112,35 @@
                     "useCustomFont": false
                 },
                 {
+                    "defaultSettings": {
+                        "activeColor": "primary",
+                        "refreshInterval": 3000,
+                        "showProfileLabel": false
+                    },
                     "id": "plugin:monique"
                 },
                 {
+                    "defaultSettings": {
+                        "colorHistory": [
+                        ],
+                        "detectedCompositor": "",
+                        "detectedRecorder": "",
+                        "filenameFormat": "",
+                        "installedLangs": [
+                            "eng"
+                        ],
+                        "paletteColors": [
+                        ],
+                        "screenshotPath": "",
+                        "selectedOcrLang": "eng",
+                        "transAvailable": false,
+                        "videoPath": ""
+                    },
                     "id": "plugin:screen-toolkit"
                 },
                 {
+                    "defaultSettings": {
+                    },
                     "id": "plugin:kde-connect"
                 }
             ],
