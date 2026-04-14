@@ -121,6 +121,18 @@
         {
           "defaultSettings": {},
           "id": "plugin:kde-connect"
+        },
+        {
+          "defaultSettings": {},
+          "id": "plugin:screen-toolkit"
+        },
+        {
+          "defaultSettings": {},
+          "id": "plugin:monique"
+        },
+        {
+          "defaultSettings": {},
+          "id": "plugin:wallcards"
         }
       ],
       "left": [
