@@ -99,31 +99,33 @@
       fi
     '';
   in {
-    config = lib.mkIf (shell == "noctalia") {
-      home-manager.users.${username} = {lib, ...}: {
-        home.packages = [
-          spicetifyColorHook
-          pkgs.wtype
-          pkgs.jq
-        ];
+    config = lib.mkMerge [
+      (lib.mkIf (shell == "noctalia") {
+        home-manager.users.${username} = {lib, ...}: {
+          home.packages = [
+            spicetifyColorHook
+            pkgs.wtype
+            pkgs.jq
+          ];
 
-        home.activation.noctaliaSpotifySetup = lib.hm.dag.entryAfter ["writeBoundary"] ''
-          ${comfySetupScript}
-        '';
+          home.activation.noctaliaSpotifySetup = lib.hm.dag.entryAfter ["writeBoundary"] ''
+            ${comfySetupScript}
+          '';
 
-        home.activation.noctaliaTemplateCleanup = lib.hm.dag.entryAfter ["writeBoundary"] ''
-          rm -f "$HOME/.config/noctalia/user-templates.toml"
-          rm -f "$HOME/.config/noctalia/templates/comfy-color.ini.tmpl"
-          if [ -f "$HOME/.config/systemd/user/spicetify-watch.service" ]; then
-            rm -f "$HOME/.config/systemd/user/spicetify-watch.service"
-            ${pkgs.systemd}/bin/systemctl --user daemon-reload || true
-          fi
+          home.activation.noctaliaTemplateCleanup = lib.hm.dag.entryAfter ["writeBoundary"] ''
+            rm -f "$HOME/.config/noctalia/user-templates.toml"
+            rm -f "$HOME/.config/noctalia/templates/comfy-color.ini.tmpl"
+          '';
+        };
+      })
 
-          if ${pkgs.systemd}/bin/systemctl --user list-unit-files --no-legend 'spicetify-watch.service' | ${pkgs.gnugrep}/bin/grep -q '^spicetify-watch\.service'; then
-            ${pkgs.systemd}/bin/systemctl --user disable --now spicetify-watch.service || true
-          fi
-        '';
-      };
-    };
+      (lib.mkIf (shell != "noctalia") {
+        home-manager.users.${username} = {lib, ...}: {
+          home.activation.noctaliaSpotifyCleanup = lib.hm.dag.entryAfter ["writeBoundary"] ''
+            rm -rf "$HOME/.config/spicetify/Themes/Comfy"
+          '';
+        };
+      })
+    ];
   };
 }

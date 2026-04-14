@@ -32,45 +32,87 @@
       with open(registry_path, "w") as f:
           json.dump(exts, f, indent=2)
     '';
+
+    # Removes Noctalia theme key only when it is currently selected.
+    cleanupThemeScript = pkgs.writers.writePython3 "cleanup-vscode-noctalia-theme" {} ''
+      import json
+      import sys
+
+      settings_path = sys.argv[1]
+
+      try:
+        with open(settings_path, "r", encoding="utf-8") as f:
+          data = json.load(f)
+      except Exception:
+        sys.exit(0)
+
+      if not isinstance(data, dict):
+        sys.exit(0)
+
+      if data.get("workbench.colorTheme") == "NoctaliaTheme":
+        data.pop("workbench.colorTheme", None)
+        with open(settings_path, "w", encoding="utf-8") as f:
+          json.dump(data, f, indent=2)
+          f.write("\n")
+    '';
   in {
-    config = lib.mkIf (shell == "noctalia") {
-      home-manager.users.${username} = {
-        lib,
-        pkgs,
-        ...
-      }: {
-        home.activation.noctaliaVscodeSetup = lib.hm.dag.entryAfter ["writeBoundary" "vscodeSetup"] ''
-          EXT_DIR="$HOME/.vscode/extensions"
-          EXT_SOURCE="$EXT_DIR/noctalia.noctaliatheme"
-          REGISTRY="$EXT_DIR/extensions.json"
+    config = lib.mkMerge [
+      (lib.mkIf (shell == "noctalia") {
+        home-manager.users.${username} = {
+          lib,
+          pkgs,
+          ...
+        }: {
+          home.activation.noctaliaVscodeSetup = lib.hm.dag.entryAfter ["writeBoundary" "vscodeSetup"] ''
+            EXT_DIR="$HOME/.vscode/extensions"
+            EXT_SOURCE="$EXT_DIR/noctalia.noctaliatheme"
+            REGISTRY="$EXT_DIR/extensions.json"
 
-          rm -rf "$EXT_DIR/noctalia.noctaliatheme.backup"
+            rm -rf "$EXT_DIR/noctalia.noctaliatheme.backup"
 
-          STORE_EXT=$(readlink -f "$EXT_SOURCE" 2>/dev/null || echo "")
-          if [ -n "$STORE_EXT" ]; then
-            EXT_VERSION=$(${pkgs.python3}/bin/python3 -c \
-              "import json; print(json.load(open('$STORE_EXT/package.json'))['version'])" \
-              2>/dev/null || echo "0.0.5")
-            EXT_VERSIONED="$EXT_DIR/noctalia.noctaliatheme-$EXT_VERSION"
+            STORE_EXT=$(readlink -f "$EXT_SOURCE" 2>/dev/null || echo "")
+            if [ -n "$STORE_EXT" ]; then
+              EXT_VERSION=$(${pkgs.python3}/bin/python3 -c \
+                "import json; print(json.load(open('$STORE_EXT/package.json'))['version'])" \
+                2>/dev/null || echo "0.0.5")
+              EXT_VERSIONED="$EXT_DIR/noctalia.noctaliatheme-$EXT_VERSION"
 
-            if [ ! -d "$EXT_VERSIONED" ] || [ -L "$EXT_VERSIONED" ]; then
-              rm -rf "$EXT_VERSIONED"
-              ${pkgs.coreutils}/bin/cp -r "$STORE_EXT" "$EXT_VERSIONED"
-              chmod -R u+w "$EXT_VERSIONED"
+              if [ ! -d "$EXT_VERSIONED" ] || [ -L "$EXT_VERSIONED" ]; then
+                rm -rf "$EXT_VERSIONED"
+                ${pkgs.coreutils}/bin/cp -r "$STORE_EXT" "$EXT_VERSIONED"
+                chmod -R u+w "$EXT_VERSIONED"
+              fi
+
+              if [ -f "$REGISTRY" ]; then
+                ${fixRegistryScript} "$REGISTRY" "$EXT_VERSIONED"
+              fi
             fi
+          '';
 
-            if [ -f "$REGISTRY" ]; then
-              ${fixRegistryScript} "$REGISTRY" "$EXT_VERSIONED"
+          programs.vscode.profiles.default.extensions = lib.mkAfter (
+            pkgs.nix4vscode.forVscode [
+              "noctalia.noctaliatheme"
+            ]
+          );
+        };
+      })
+
+      (lib.mkIf (shell != "noctalia") {
+        home-manager.users.${username} = {
+          lib,
+          pkgs,
+          ...
+        }: {
+          home.activation.noctaliaVscodeCleanup = lib.hm.dag.entryAfter ["writeBoundary"] ''
+            rm -rf "$HOME/.vscode/extensions/noctalia.noctaliatheme-"*
+
+            SETTINGS="$HOME/.config/Code/User/settings.json"
+            if [ -f "$SETTINGS" ]; then
+              ${cleanupThemeScript} "$SETTINGS"
             fi
-          fi
-        '';
-
-        programs.vscode.profiles.default.extensions = lib.mkAfter (
-          pkgs.nix4vscode.forVscode [
-            "noctalia.noctaliatheme"
-          ]
-        );
-      };
-    };
+          '';
+        };
+      })
+    ];
   };
 }
