@@ -36,12 +36,6 @@
       self.nixosModules.xdm
       self.nixosModules.brave
       self.nixosModules.discord
-      # noctalia app integrations — all guarded by myConfig.shell == "noctalia"
-      self.nixosModules.noctaliaKitty
-      self.nixosModules.noctaliaNiri
-      self.nixosModules.noctaliaVscode
-      self.nixosModules.noctaliaSpotify
-      self.nixosModules.noctaliaDiscord
     ];
   };
 }

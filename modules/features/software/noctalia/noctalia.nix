@@ -1,4 +1,4 @@
-{inputs, ...}: {
+{inputs, self, ...}: {
   flake.nixosModules.noctalia = {
     config,
     pkgs,
@@ -8,6 +8,14 @@
     username = config.myConfig.username;
     repoRoot = config.myConfig.repoRoot;
   in {
+    imports = [
+      self.nixosModules.noctaliaKitty
+      self.nixosModules.noctaliaNiri
+      self.nixosModules.noctaliaVscode
+      self.nixosModules.noctaliaSpotify
+      self.nixosModules.noctaliaDiscord
+    ];
+
     config = lib.mkIf (config.myConfig.shell == "noctalia") {
       home-manager.users.${username} = {
         config,
