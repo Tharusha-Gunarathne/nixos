@@ -10,6 +10,9 @@
       (pkgs.writeShellScriptBin "nix-clean" ''
         exec sudo nix-collect-garbage -d "$@"
       '')
+      (pkgs.writeShellScriptBin "qs" ''
+          exec noctalia-shell "$@"
+        '')
     ];
   };
 }
