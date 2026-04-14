@@ -15,9 +15,17 @@
         default = "/home/${config.myConfig.username}/nixos-configs";
       };
       shell = lib.mkOption {
-        type = lib.types.enum ["noctalia" "none"];
-        description = "Active desktop shell. Set to none to disable all shell-specific app integrations.";
-        default = "noctalia";
+        type = lib.types.submodule {
+          options = {
+            noctalia = lib.mkOption {
+              type = lib.types.bool;
+              default = true;
+              description = "Enable Noctalia shell integrations.";
+            };
+          };
+        };
+        description = "Feature flags for shell-specific integrations.";
+        default = {};
       };
     };
   };

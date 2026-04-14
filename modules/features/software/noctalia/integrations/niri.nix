@@ -10,7 +10,7 @@
     configPath = "${config.myConfig.repoRoot}/modules/features/software/niri/config.kdl";
   in {
     config = lib.mkMerge [
-      (lib.mkIf (shell == "noctalia") {
+      (lib.mkIf shell.noctalia {
         home-manager.users.${username} = {
           config,
           lib,
@@ -35,7 +35,7 @@
         };
       })
 
-      (lib.mkIf (shell != "noctalia") {
+      (lib.mkIf (!shell.noctalia) {
         home-manager.users.${username} = {
           config,
           lib,

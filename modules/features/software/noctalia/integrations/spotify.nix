@@ -100,7 +100,7 @@
     '';
   in {
     config = lib.mkMerge [
-      (lib.mkIf (shell == "noctalia") {
+      (lib.mkIf shell.noctalia {
         home-manager.users.${username} = {lib, ...}: {
           home.packages = [
             spicetifyColorHook
@@ -119,7 +119,7 @@
         };
       })
 
-      (lib.mkIf (shell != "noctalia") {
+      (lib.mkIf (!shell.noctalia) {
         home-manager.users.${username} = {lib, ...}: {
           home.activation.noctaliaSpotifyCleanup = lib.hm.dag.entryAfter ["writeBoundary"] ''
             rm -rf "$HOME/.config/spicetify/Themes/Comfy"

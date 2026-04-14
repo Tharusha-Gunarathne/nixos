@@ -57,7 +57,7 @@
     '';
   in {
     config = lib.mkMerge [
-      (lib.mkIf (shell == "noctalia") {
+      (lib.mkIf shell.noctalia {
         home-manager.users.${username} = {
           lib,
           pkgs,
@@ -97,7 +97,7 @@
         };
       })
 
-      (lib.mkIf (shell != "noctalia") {
+      (lib.mkIf (!shell.noctalia) {
         home-manager.users.${username} = {
           lib,
           pkgs,

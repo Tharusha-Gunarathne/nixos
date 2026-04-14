@@ -1,4 +1,8 @@
-{inputs, self, ...}: {
+{
+  inputs,
+  self,
+  ...
+}: {
   flake.nixosModules.noctalia = {
     config,
     pkgs,
@@ -16,7 +20,7 @@
       self.nixosModules.noctaliaDiscord
     ];
 
-    config = lib.mkIf (config.myConfig.shell == "noctalia") {
+    config = lib.mkIf config.myConfig.shell.noctalia {
       home-manager.users.${username} = {
         config,
         pkgs,

@@ -17,8 +17,14 @@
         };
         settings = {
           theme = {
-            dark.name = if shell == "noctalia" then "noctalia" else "dark";
-            light.name = if shell == "noctalia" then "noctalia" else "light";
+            dark.name =
+              if shell.noctalia
+              then "noctalia"
+              else "dark";
+            light.name =
+              if shell.noctalia
+              then "noctalia"
+              else "light";
           };
           font = {
             normal = {
