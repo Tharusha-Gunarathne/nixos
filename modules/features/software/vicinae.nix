@@ -16,6 +16,23 @@
           };
         };
         settings = {
+          close_on_focus_loss = true;
+          launcher_window = {
+            layer_shell = {
+              keyboard_interactivity = "on_demand";
+            };
+          };
+          providers = {
+            clipboard = {
+              entrypoints = {
+                history = {
+                  preferences = {
+                    defaultAction = "paste";
+                  };
+                };
+              };
+            };
+          };
           theme = {
             dark.name =
               if shell.noctalia
