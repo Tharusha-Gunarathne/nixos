@@ -112,19 +112,13 @@
                     "useCustomFont": false
                 },
                 {
-                    "defaultSettings": {
-                    },
-                    "id": "plugin:kde-connect"
+                    "id": "plugin:monique"
                 },
                 {
-                    "defaultSettings": {
-                    },
                     "id": "plugin:screen-toolkit"
                 },
                 {
-                    "defaultSettings": {
-                    },
-                    "id": "plugin:monique"
+                    "id": "plugin:kde-connect"
                 }
             ],
             "left": [
