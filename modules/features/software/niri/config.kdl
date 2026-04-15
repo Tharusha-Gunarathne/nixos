@@ -168,7 +168,7 @@ layout {
         // off
 
         // How many logical pixels the ring extends out from the windows.
-        width 1.5
+        width 1.0
 
         // Colors can be set in a variety of ways:
         // - CSS named colors: "red"
@@ -224,7 +224,7 @@ layout {
     // You can enable drop shadows for windows.
     shadow {
         // Uncomment the next line to enable shadows.
-        // on
+        on
 
         // By default, the shadow draws only around its window, and not behind it.
         // Uncomment this setting to make the shadow draw behind its window.
@@ -249,7 +249,7 @@ layout {
         softness 30
 
         // Spread expands the shadow.
-        spread 5
+        spread 10
 
         // Offset moves the shadow relative to the window.
         offset x=0 y=5
@@ -395,10 +395,6 @@ binds {
     Mod+T hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
-
-    // External display profiles.
-    // Mod+F11 hotkey-overlay-title="TV only" { spawn "display-tv-only"; }
-    // Mod+F12 hotkey-overlay-title="Laptop only" { spawn "display-laptop-only"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
