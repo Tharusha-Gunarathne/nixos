@@ -39,7 +39,7 @@
       fuse3
     ];
 
-    home-manager.users.${config.myConfig.primaryUser} = {...}: {
+    home-manager.users.${config.myConfig.primaryUser} = {pkgs, ...}: {
       home.packages = with pkgs; [
         # User CLI
         bat
@@ -57,7 +57,6 @@
         bitwarden-desktop
         btop
         libreoffice
-        ferdium
         drawio
         localsend
         bleachbit
