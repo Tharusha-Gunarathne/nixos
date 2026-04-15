@@ -62,7 +62,6 @@
         localsend
         bleachbit
         timeshift
-        obs-studio
         microsoft-edge
         handbrake
         qt6Packages.qt6ct

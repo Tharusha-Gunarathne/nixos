@@ -37,6 +37,7 @@
       self.nixosModules.xdm
       self.nixosModules.brave
       self.nixosModules.discord
+      self.nixosModules.obs
     ];
   };
 }
