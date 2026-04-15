@@ -199,7 +199,8 @@
             OnUnitActiveSec = "15min";
             Unit = "noctalia-commit.service";
           };
-          Install.WantedBy = ["timers.target"];
+          # Temporarily disabled: keep the timer definition, but do not auto-enable it.
+          # Install.WantedBy = ["timers.target"];
         };
       };
     };
