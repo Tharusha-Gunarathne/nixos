@@ -17,8 +17,8 @@
       services.kdeconnect.enable = true;
 
       # Start kdeconnectd automatically with the user systemd default target.
-      systemd.user.services.kdeconnect.Install.WantedBy =
-        lib.mkAfter ["default.target"];
+      # systemd.user.services.kdeconnect.Install.WantedBy =
+      #   lib.mkAfter ["default.target"];
     };
   };
 }
