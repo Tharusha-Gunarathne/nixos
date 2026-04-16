@@ -16,6 +16,9 @@
       tree
       ripgrep
 
+      # Hardware management
+      efibootmgr
+
       # Development tooling available system-wide
       nil
 
