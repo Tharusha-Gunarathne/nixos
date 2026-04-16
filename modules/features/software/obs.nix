@@ -6,8 +6,8 @@
   }: let
     username = config.myConfig.primaryUser;
 
-    displayX = 2560;
-    displayY = 1600;
+    displayX = toString 2560;
+    displayY = toString 1600;
   in {
     home-manager.users.${username} = {
       pkgs,
