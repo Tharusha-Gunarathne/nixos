@@ -1,5 +1,5 @@
 {...}: {
-  flake.nixosModules.commandShortcuts = {pkgs, ...}: {
+  flake.nixosModules.shellAliases = {pkgs, ...}: {
     environment.systemPackages = [
       (pkgs.writeShellScriptBin "nix-switch" ''
         exec sudo nixos-rebuild switch --flake . "$@"
