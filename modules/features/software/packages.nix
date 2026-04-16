@@ -19,6 +19,9 @@
       # Hardware management
       efibootmgr
 
+      # Desktop apps
+      loupe
+
       # Development tooling available system-wide
       nil
 
