@@ -5,7 +5,8 @@
     ...
   }: let
     username = config.myConfig.primaryUser;
-    modernZSrc = inputs.sources.sources.modernz;
+    modernZPin = inputs.sources.sourcePins.modernz;
+    modernZSrc = pkgs.fetchFromGitHub modernZPin;
 
     modernZOscConf = pkgs.runCommandLocal "modernz.conf" {} ''
       install -m 644 "${modernZSrc}/modernz.conf" "$out"

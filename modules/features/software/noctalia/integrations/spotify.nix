@@ -10,7 +10,8 @@
 
     spicetifyBin = "${pkgs.spicetify-cli}/bin/spicetify";
 
-    comfySrc = inputs.sources.sources.spicetify-comfy;
+    comfyPin = inputs.sources.sourcePins.spicetify-comfy;
+    comfySrc = pkgs.fetchFromGitHub comfyPin;
 
     spicetifyColorHook = pkgs.writeShellScriptBin "spicetify-noctalia-color-hook" ''
       set -euo pipefail
