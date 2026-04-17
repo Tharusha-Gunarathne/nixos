@@ -39,6 +39,7 @@
       self.nixosModules.ferdium
       self.nixosModules.discord
       self.nixosModules.obs
+      self.nixosModules.desktopEntries
     ];
   };
 }
