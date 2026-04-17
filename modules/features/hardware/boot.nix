@@ -1,11 +1,7 @@
-{...}: {
+{inputs, ...}: {
   flake.nixosModules.boot = {pkgs, ...}: let
-    regularDarkTheme = pkgs.fetchFromGitHub {
-      owner = "m3h3d1ha2an";
-      repo = "refind-regular-dark";
-      rev = "2683ab842c19bd334331276a48a2029f55267cd1";
-      hash = "sha256-GrTrFy+PmEh6M3hQgAJWJfnqjiwOgHGkvQatB9P1wds=";
-    };
+    refindPin = inputs.sources.sourcePins.refindRegularDark;
+    regularDarkTheme = pkgs.fetchFromGitHub refindPin;
 
     themeName = "rEFInd-Regular-Dark";
     nixosIcon = "${pkgs.nixos-icons}/share/icons/hicolor/256x256/apps/nix-snowflake.png";

@@ -1,25 +1,35 @@
 {
   description = "Pinned external source registry";
 
-  inputs = {
-    modernz = {
-      url = "github:Samillion/ModernZ/v0.3.1";
-      flake = false;
-    };
+  outputs = _: {
+    sourcePins = {
+      modernz = {
+        owner = "Samillion";
+        repo = "ModernZ";
+        rev = "ee54d5836c5618d0eae6458f7897fce415721d50";
+        hash = "sha256-xHiKE84qBYa8wnLMhrTnOZPLwdY7ddW7ayIfFz1dIRw=";
+      };
 
-    spicetify-comfy = {
-      url = "github:Comfy-Themes/Spicetify/32ff101e27cfd33d85b7cc587f7f95db6b2df8b0";
-      flake = false;
-    };
-  };
+      spicetify-comfy = {
+        owner = "Comfy-Themes";
+        repo = "Spicetify";
+        rev = "32ff101e27cfd33d85b7cc587f7f95db6b2df8b0";
+        hash = "sha256-sqvmSXJMLE2in/cB8ZIJE/t4J5D0PKRddWECdYJjgX0=";
+      };
 
-  outputs = inputs: {
-    sources = {
-      inherit
-        (inputs)
-        modernz
-        spicetify-comfy
-        ;
+      qylock = {
+        owner = "Darkkal44";
+        repo = "qylock";
+        rev = "6d676217daef421e1d4abdc99a9307c60ed0d49b";
+        hash = "sha256-Qq+0hvSMJOmOhzqZet0SOi3N3PMCGd+GvlMArF7t8n0=";
+      };
+
+      refindRegularDark = {
+        owner = "m3h3d1ha2an";
+        repo = "refind-regular-dark";
+        rev = "2683ab842c19bd334331276a48a2029f55267cd1";
+        hash = "sha256-GrTrFy+PmEh6M3hQgAJWJfnqjiwOgHGkvQatB9P1wds=";
+      };
     };
 
     releaseAssets = {

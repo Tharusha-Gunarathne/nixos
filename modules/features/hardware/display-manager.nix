@@ -1,12 +1,15 @@
-{...}: {
+{inputs, ...}: {
   flake.nixosModules.displayManager = {pkgs, ...}: let
-    qylockSrc = builtins.fetchGit {
-      url = "https://github.com/Darkkal44/qylock.git";
-      rev = "6d676217daef421e1d4abdc99a9307c60ed0d49b";
-    };
+    # Change this to any folder name under qylock/themes, e.g. "clockwork", "winter", "enfield".
+    themeName = "clockwork";
+    # Only applies when themeName = "clockwork".
+    clockworkMode = "light"; # or "light"
 
-    qylockClockworkTheme = pkgs.stdenvNoCC.mkDerivation {
-      pname = "sddm-theme-qylock-clockwork";
+    qylockPin = inputs.sources.sourcePins.qylock;
+    qylockSrc = pkgs.fetchFromGitHub qylockPin;
+
+    qylockSddmTheme = pkgs.stdenvNoCC.mkDerivation {
+      pname = "sddm-theme-qylock-${themeName}";
       version = "2026-04-17";
       src = qylockSrc;
       dontBuild = true;
@@ -14,13 +17,15 @@
       installPhase = ''
         runHook preInstall
 
-        themeDir="$out/share/sddm/themes/clockwork"
+        themeDir="$out/share/sddm/themes/${themeName}"
         mkdir -p "$themeDir"
-        cp -r "$src/themes/clockwork/." "$themeDir/"
+        cp -r "$src/themes/${themeName}/." "$themeDir/"
 
-        # Keep desired Clockwork defaults declarative.
-        ${pkgs.gnused}/bin/sed -i 's/^themeMode=.*/themeMode=dark/' "$themeDir/theme.conf"
-        ${pkgs.gnused}/bin/sed -i 's/^enableWindup=.*/enableWindup=true/' "$themeDir/theme.conf"
+        # Keep Clockwork-specific defaults declarative when that theme is selected.
+        if [ "${themeName}" = "clockwork" ] && [ -f "$themeDir/theme.conf" ]; then
+          ${pkgs.gnused}/bin/sed -i "s/^themeMode=.*/themeMode=${clockworkMode}/" "$themeDir/theme.conf"
+          ${pkgs.gnused}/bin/sed -i "s/^enableWindup=.*/enableWindup=true/" "$themeDir/theme.conf"
+        fi
 
         runHook postInstall
       '';
@@ -30,9 +35,17 @@
 
     services.displayManager.sddm = {
       enable = true;
-      wayland.enable = true;
-      # Absolute path is supported by nixpkgs' sddm module and avoids package override issues.
-      theme = "${qylockClockworkTheme}/share/sddm/themes/clockwork";
+      # X11 greeter is generally more reliable for pointer support across hardware.
+      wayland.enable = false;
+
+      theme = "${qylockSddmTheme}/share/sddm/themes/${themeName}";
+
+      settings = {
+        Theme = {
+          CursorTheme = "Bibata-Modern-Classic";
+          CursorSize = 24;
+        };
+      };
       extraPackages = with pkgs; [
         qt6.qtdeclarative
         qt6.qt5compat
@@ -46,7 +59,9 @@
       ];
     };
 
-    environment.systemPackages = [qylockClockworkTheme];
+    services.xserver.enable = true;
+
+    environment.systemPackages = [qylockSddmTheme];
 
     services.seatd.enable = true;
   };
