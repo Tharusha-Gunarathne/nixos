@@ -94,7 +94,7 @@ def get_video_metadata(path):
 
         bitrate = data.get("format", {}).get("bit_rate")
         if bitrate:
-            bitrate = f"{round(int(bitrate)/1000000,1)} Mbps"
+            bitrate = f"{round(int(bitrate)/1000)} Kbps"
         else:
             bitrate = ""
 
