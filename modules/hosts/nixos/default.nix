@@ -7,6 +7,7 @@
     system = "x86_64-linux";
     modules = [
       inputs.home-manager.nixosModules.home-manager
+      inputs.nix-flatpak.nixosModules.nix-flatpak
       self.nixosModules.nixosHardware
       self.nixosModules.nixosConfiguration
       ({config, ...}: {
