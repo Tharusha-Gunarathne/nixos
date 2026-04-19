@@ -18,6 +18,7 @@
       gvfs
       glib
       xdg-utils
+      gnome-terminal
     ];
 
     services.gvfs.enable = true;
