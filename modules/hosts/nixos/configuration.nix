@@ -14,7 +14,7 @@
       self.nixosModules.fonts
       self.nixosModules.locale
       self.nixosModules.network
-      self.nixosModules.nvidia
+      self.nixosModules.graphics
       self.nixosModules.services
       self.nixosModules.swap
       # software
@@ -40,6 +40,7 @@
       self.nixosModules.discord
       self.nixosModules.obs
       self.nixosModules.desktopEntries
+      self.nixosModules.flatpak
     ];
   };
 }
