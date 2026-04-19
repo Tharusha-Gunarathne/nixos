@@ -18,6 +18,7 @@
 
       # Hardware management
       efibootmgr
+      intel-undervolt
 
       # Desktop apps
       loupe
@@ -68,7 +69,7 @@
         bleachbit
         timeshift
         microsoft-edge
-        handbrake
+        # handbrake
         qt6Packages.qt6ct
 
         # App-specific packages
