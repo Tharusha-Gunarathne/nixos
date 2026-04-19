@@ -71,6 +71,12 @@
               default = true;
               description = "Enable Noctalia shell integrations.";
             };
+            # Add more shell-specific feature flags here as needed.
+            # shell = lib.mkOption {
+            #   type = lib.types.bool;
+            #   default = false;
+            #   description = "Enable features specific to <shell>.";
+            # };
           };
         };
         description = "Feature flags for shell-specific integrations.";
