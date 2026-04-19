@@ -30,6 +30,7 @@
         NIXOS_OZONE_WL = "1";
         GI_TYPELIB_PATH = "/run/current-system/sw/lib/girepository-1.0";
         QT_QPA_PLATFORMTHEME = "qt6ct";
+        XDG_CURRENT_DESKTOP = "GNOME";
       };
     };
   };
