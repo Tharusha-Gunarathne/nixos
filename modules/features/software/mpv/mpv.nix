@@ -5,8 +5,12 @@
     ...
   }: let
     username = config.myConfig.primaryUser;
+
     modernZPin = inputs.sources.sourcePins.modernz;
     modernZSrc = pkgs.fetchFromGitHub modernZPin;
+
+    eisaMpvPin = inputs.sources.sourcePins.mpv-scripts-eisa01;
+    eisaMpvSrc = pkgs.fetchFromGitHub eisaMpvPin;
 
     modernZOscConf = pkgs.runCommandLocal "modernz.conf" {} ''
       install -m 644 "${modernZSrc}/modernz.conf" "$out"
@@ -39,9 +43,18 @@
       };
 
       xdg.configFile = {
+        # ModernZ themes
         "mpv/scripts/modernz.lua".source = "${modernZSrc}/modernz.lua";
         "mpv/fonts/modernz-icons.ttf".source = "${modernZSrc}/modernz-icons.ttf";
         "mpv/script-opts/modernz.conf".source = modernZOscConf;
+
+        # Pause Indicator Lite
+        "mpv/scripts/pause_indicator_lite.lua".source = "${modernZSrc}/extras/pause-indicator-lite/pause_indicator_lite.lua";
+        "mpv/script-opts/pause_indicator_lite.conf".source = "${modernZSrc}/extras/pause-indicator-lite/pause_indicator_lite.conf";
+
+        # Simple History - Eisa01's MPV scripts
+        "mpv/scripts/SimpleHistory.lua".source = "${eisaMpvSrc}/scripts/SimpleHistory.lua";
+        "mpv/script-opts/SimpleHistory.conf".source = "${eisaMpvSrc}/script-opts/SimpleHistory.conf";
       };
     };
   };

@@ -17,6 +17,14 @@
         hash = "sha256-sqvmSXJMLE2in/cB8ZIJE/t4J5D0PKRddWECdYJjgX0=";
       };
 
+      mpv-scripts-eisa01 = {
+        owner = "Eisa01";
+        repo = "mpv-scripts";
+        rev = "b9e63743a858766c9cc7a801d77313b0cecdb049";
+        hash = "sha256-XuFvCBOIiLncgsDZJJjU/qSSJJ5SfNF16pIJjIWUJ+A=";
+      };
+
+      # SDDM themes - CRITICAL
       qylock = {
         owner = "Darkkal44";
         repo = "qylock";
@@ -24,6 +32,7 @@
         hash = "sha256-Qq+0hvSMJOmOhzqZet0SOi3N3PMCGd+GvlMArF7t8n0=";
       };
 
+      # rEFInd themes - CRITICAL
       refindRegularDark = {
         owner = "m3h3d1ha2an";
         repo = "refind-regular-dark";
