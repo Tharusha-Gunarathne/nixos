@@ -2,6 +2,7 @@
   flake.nixosModules.flatpak = {pkgs, lib, ...}: {
     services.flatpak = {
       enable = true;
+      uninstallUnmanaged = true;
 
       remotes = lib.mkOptionDefault [
         {
