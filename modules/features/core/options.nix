@@ -5,6 +5,7 @@
     ...
   }: {
     options.myConfig = {
+      # User settings
       primaryUser = lib.mkOption {
         type = lib.types.str;
         default = "tharusha-gunarathne";
@@ -15,11 +16,24 @@
         default = 1000;
         description = "UID of the primary user account";
       };
+
+      # Predefined root directory for repo
       repoRoot = lib.mkOption {
         type = lib.types.str;
         description = "Absolute path to the nixos-configs repo root";
         default = "/home/${config.myConfig.primaryUser}/nixos-configs";
       };
+
+      # Undervolt the CPU
+      # To undervolt disable "Undervolt Protection" in the BIOS/UEFI, then find stable undervolt values for your CPU and set them here.
+      # "Undervolt Protection" is shown when "Legion Optimization" is enabled in new Legion BIOS
+      isUnderVoltEnabled = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Enable CPU undervolting. Requires BIOS undervolt protection to be disabled.";
+      };
+
+      # Storage configuration for root, boot, and additional data drives
       storage = lib.mkOption {
         type = lib.types.submodule {
           options = {
@@ -63,6 +77,8 @@
         default = {};
         description = "System-specific storage identifiers and mounts.";
       };
+
+      # Shell Configurations with multiple shell support
       shell = lib.mkOption {
         type = lib.types.submodule {
           options = {
