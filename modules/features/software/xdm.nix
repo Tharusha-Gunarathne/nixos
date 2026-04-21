@@ -8,6 +8,19 @@
     username = config.myConfig.primaryUser;
     xdmAsset = inputs.sources.releaseAssets.xdm;
 
+    # Centralized file and directory paths for easier maintenance
+    xdmOptDir = "opt/xdman";
+    xdmOutOptDir = "$out/opt/xdman";
+    xdmLogoSvgSrc = "opt/xdman/xdm-logo.svg";
+    xdmLogoSvgDest = "$out/share/icons/hicolor/scalable/apps/xdm-app.svg";
+    xdmLogoPngSrc = "opt/xdman/xdm-logo-512.png";
+    xdmLogoPngDest = "$out/share/pixmaps/xdm.png";
+    xdmDesktopSrc = "opt/xdman/xdm-app.desktop";
+    xdmDesktopDest = "$out/share/applications/xdm-app.desktop";
+    xdmBin = "$out/bin/xdman";
+    xdmIconPath = "$out/share/icons/hicolor/scalable/apps/xdm-app.svg";
+    xdmMimeType = "MimeType=application/xdm-app;x-scheme-handler/xdm-app;x-scheme-handler/xdm+app;";
+
     xdmanScript = pkgs.writeShellScript "xdman" ''
       pkill -f xdm-app 2>/dev/null
       sleep 0.5
@@ -55,27 +68,27 @@
       installPhase = ''
         runHook preInstall
 
-        mkdir -p $out/opt/xdman $out/bin $out/share/applications $out/share/pixmaps
+        mkdir -p ${xdmOutOptDir} $out/bin $out/share/applications $out/share/pixmaps
         mkdir -p $out/share/icons/hicolor/scalable/apps
 
-        cp -r opt/xdman/. $out/opt/xdman/
+        cp -r ${xdmOptDir}/. ${xdmOutOptDir}/
 
-        cp opt/xdman/xdm-logo.svg $out/share/icons/hicolor/scalable/apps/xdm-app.svg
-        cp opt/xdman/xdm-logo-512.png $out/share/pixmaps/xdm.png
+        cp ${xdmLogoSvgSrc} ${xdmLogoSvgDest}
+        cp ${xdmLogoPngSrc} ${xdmLogoPngDest}
 
-        cp opt/xdman/xdm-app.desktop $out/share/applications/
+        cp ${xdmDesktopSrc} ${xdmDesktopDest}
 
-        sed -i "s|^Exec=.*|Exec=$out/bin/xdman %U|" \
-          $out/share/applications/xdm-app.desktop
+        sed -i "s|^Exec=.*|Exec=${xdmBin} %U|" \
+          ${xdmDesktopDest}
 
-        sed -i "s|^Icon=.*|Icon=$out/share/icons/hicolor/scalable/apps/xdm-app.svg|" \
-          $out/share/applications/xdm-app.desktop
+        sed -i "s|^Icon=.*|Icon=${xdmIconPath}|" \
+          ${xdmDesktopDest}
 
-        sed -i "s|^MimeType=.*|MimeType=application/xdm-app;x-scheme-handler/xdm-app;x-scheme-handler/xdm+app;|" \
-          $out/share/applications/xdm-app.desktop
+        sed -i "s|^MimeType=.*|${xdmMimeType}|" \
+          ${xdmDesktopDest}
 
-        sed "s|@out@|$out|g" ${xdmanScript} > $out/bin/xdman
-        chmod +x $out/bin/xdman
+        sed "s|@out@|$out|g" ${xdmanScript} > ${xdmBin}
+        chmod +x ${xdmBin}
 
         runHook postInstall
       '';
@@ -140,9 +153,14 @@
 
       # Register xdm+app:// URI scheme handler so the browser extension
       # can launch XDM when clicking download links
-      home.activation.xdmSchemeHandler = lib.hm.dag.entryAfter ["writeBoundary"] ''
-        ${pkgs.xdg-utils}/bin/xdg-mime default xdm-app.desktop x-scheme-handler/xdm+app
-      '';
+      xdg.mimeApps = {
+        enable = true;
+        defaultApplications = {
+          "x-scheme-handler/xdm+app" = "xdm-app.desktop";
+          "x-scheme-handler/xdm-app" = "xdm-app.desktop";
+          "application/xdm-app" = "xdm-app.desktop";
+        };
+      };
     };
   };
 }
