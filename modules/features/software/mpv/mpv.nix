@@ -39,6 +39,11 @@
           gpu-api = "vulkan";
           ao = "pipewire";
           hwdec = "auto";
+          sub-font-size = 60;
+          subscale = 1.0;
+          osd-font-size = 32;
+          osd-scale = 1.0;
+          sub-scale-by-window = "no";
         };
       };
 
