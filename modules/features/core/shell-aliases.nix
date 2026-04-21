@@ -11,8 +11,11 @@
         exec sudo nix-collect-garbage -d "$@"
       '')
       (pkgs.writeShellScriptBin "qs" ''
-          exec noctalia-shell "$@"
-        '')
+        exec noctalia-shell "$@"
+      '')
+      (pkgs.writeShellScriptBin "handbrake" ''
+        exec fr.handbrake.ghb "$@"
+      '')
     ];
   };
 }
