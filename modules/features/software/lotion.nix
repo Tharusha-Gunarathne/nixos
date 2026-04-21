@@ -8,6 +8,17 @@
     username = config.myConfig.primaryUser;
     lotionAsset = inputs.sources.releaseAssets.lotion;
 
+    # Centralized file and directory paths for easier maintenance
+    lotionLibDir = "usr/lib/lotion";
+    lotionOutLibDir = "$out/lib/lotion";
+    lotionDesktopSrc = "usr/share/applications/lotion.desktop";
+    lotionDesktopDest = "$out/share/applications/lotion.desktop";
+    lotionIconSrc = "usr/share/pixmaps/lotion.png";
+    lotionIconDest = "$out/share/pixmaps/lotion.png";
+    lotionBin = "$out/bin/lotion";
+    lotionWrappedBin = "$out/lib/lotion/lotion";
+    lotionIconPath = "$out/share/pixmaps/lotion.png";
+
     lotion = pkgs.stdenv.mkDerivation {
       pname = "lotion";
       version = lotionAsset.version;
@@ -55,23 +66,29 @@
         mkdir -p $out/lib $out/bin
         mkdir -p $out/share/applications
         mkdir -p $out/share/pixmaps
-        mkdir -p $out/share/icons/hicolor/256x256/apps
-        mkdir -p $out/share/icons/hicolor/128x128/apps
-        mkdir -p $out/share/icons/hicolor/48x48/apps
 
-        cp -r usr/lib/lotion $out/lib/lotion
-        cp usr/share/applications/lotion.desktop $out/share/applications/
-        cp usr/share/pixmaps/lotion.png $out/share/pixmaps/
-        cp usr/share/pixmaps/lotion.png $out/share/icons/hicolor/256x256/apps/lotion.png
-        cp usr/share/pixmaps/lotion.png $out/share/icons/hicolor/128x128/apps/lotion.png
-        cp usr/share/pixmaps/lotion.png $out/share/icons/hicolor/48x48/apps/lotion.png
+        # Copy main application
+        cp -r ${lotionLibDir} ${lotionOutLibDir}
 
-        # Use absolute icon path so launcher doesn't need to resolve by name
-        substituteInPlace $out/share/applications/lotion.desktop \
-          --replace "Icon=lotion" "Icon=$out/share/pixmaps/lotion.png"
+        # Copy desktop file and icon
+        cp ${lotionDesktopSrc} ${lotionDesktopDest}
+        cp ${lotionIconSrc} ${lotionIconDest}
 
-        makeWrapper $out/lib/lotion/lotion $out/bin/lotion \
-          --add-flags "--no-sandbox"
+        # Fix the Icon path
+        substituteInPlace ${lotionDesktopDest} \
+          --replace "Icon=lotion" "Icon=${lotionIconPath}"
+
+        # Fix the Exec path to point to the Nix store binary
+        # (This replaces whatever Exec=... is currently there with the correct one)
+        sed -i "s|^Exec=.*|Exec=${lotionBin} %U|" \
+          ${lotionDesktopDest}
+
+        # Wrap the binary with Wayland flags AND the sandbox fix
+        makeWrapper ${lotionWrappedBin} ${lotionBin} \
+          --add-flags "--no-sandbox" \
+          --add-flags "--ozone-platform-hint=auto" \
+          --add-flags "--enable-wayland-ime" \
+          --add-flags "--enable-features=WaylandWindowDecorations"
       '';
     };
   in {
