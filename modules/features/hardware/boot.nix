@@ -58,7 +58,6 @@
       install -d -m 0755 "$refindDir"
       install -d -m 0755 "$themeDir"
 
-      # Keep core rEFInd assets up-to-date for theme rendering and icon fallbacks.
       cp -f "$refindShare/refind_x64.efi" "$refindDir/refind_x64.efi"
       cp -f "$refindShare/refind_x64.efi" "$refindDir/BOOTX64.EFI"
       cp -r -f "$refindShare/fonts" "$refindDir/"
@@ -75,17 +74,53 @@
       cp -f "${nixosIcon}" "$themeDir/icons/os_nixos.png"
       cp -f "${nixosIcon}" "$themeDir/icons/os_nixos-alt.png"
 
-      # Override auto-detected Windows icon without hardcoding any Windows boot stanza.
       if [ -f "$themeDir/icons/${windowsIconSource}" ]; then
         cp -f "$themeDir/icons/${windowsIconSource}" "$themeDir/icons/os_win.png"
         cp -f "$themeDir/icons/${windowsIconSource}" "$themeDir/icons/os_win8.png"
       fi
 
-      # Reset persisted tool visibility state to avoid duplicated tool rows.
       install -d -m 0755 "$refindDir/vars"
-      ${pkgs.coreutils}/bin/rm -f "$refindDir/vars/ShowTools" "$refindDir/vars/HiddenTools"
+      ${pkgs.coreutils}/bin/rm -f "$refindDir/vars/ShowTools" "$refindDir/vars/HiddenTols"
 
       cp -f "${refindConf}" "$refindDir/refind.conf"
+
+      # Register rEFInd in UEFI boot entries if not already present.
+      if ! ${pkgs.efibootmgr}/bin/efibootmgr | grep -q "rEFInd"; then
+        DISK=$(${pkgs.util-linux}/bin/lsblk -no pkname $(${pkgs.util-linux}/bin/findmnt -n -o SOURCE /boot) | head -1)
+        PART=$(${pkgs.util-linux}/bin/lsblk -no MAJ:MIN $(${pkgs.util-linux}/bin/findmnt -n -o SOURCE /boot) | cut -d: -f2)
+        ${pkgs.efibootmgr}/bin/efibootmgr --create \
+          --disk "/dev/$DISK" \
+          --part "$PART" \
+          --label "rEFInd" \
+          --loader '\EFI\refind\refind_x64.efi' \
+          --quiet || true
+      fi
     '';
+
+    systemd.services.refind-efi-register = {
+      description = "Register rEFInd in UEFI boot entries";
+      wantedBy = ["multi-user.target"];
+      after = ["local-fs.target"];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        if ! ${pkgs.efibootmgr}/bin/efibootmgr | grep -q "rEFInd"; then
+          DISK=$(${pkgs.util-linux}/bin/lsblk -no pkname \
+            $(${pkgs.util-linux}/bin/findmnt -n -o SOURCE /boot) | head -1)
+          PART=$(${pkgs.util-linux}/bin/lsblk -no PARTN \
+            $(${pkgs.util-linux}/bin/findmnt -n -o SOURCE /boot))
+          ${pkgs.efibootmgr}/bin/efibootmgr --create \
+            --disk "/dev/$DISK" \
+            --part "$PART" \
+            --label "rEFInd" \
+            --loader '\EFI\refind\refind_x64.efi'
+          echo "rEFInd registered in UEFI."
+        else
+          echo "rEFInd already registered, skipping."
+        fi
+      '';
+    };
   };
 }
