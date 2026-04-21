@@ -44,7 +44,7 @@
             };
             bootUuid = lib.mkOption {
               type = lib.types.str;
-              default = "6A90-3D23";
+              default = "7F9D-3833";
               description = "Boot filesystem UUID.";
             };
             dataDrives = lib.mkOption {
@@ -63,11 +63,11 @@
               default = [
                 {
                   name = "D_Drive";
-                  uuid = "01DCC7D0F4666AF0";
+                  uuid = "ACAE0ACAAE0A8D50";
                 }
                 {
                   name = "E_Drive";
-                  uuid = "ACAE0ACAAE0A8D50";
+                  uuid = "01DCC7D0F4666AF0";
                 }
               ];
               description = "Additional data drives mounted under /mnt.";
