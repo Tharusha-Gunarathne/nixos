@@ -53,6 +53,13 @@
         url = "https://github.com/subhra74/xdm/releases/download/8.0.29/xdman_gtk_8.0.29_amd64.deb";
         sha256 = "04cydd5i94qbnsi2535mswapng6hbwc567jhzbq8s715n0nvnn9n";
       };
+
+      shutterEncoder = {
+        version = "20.0";
+        url = "https://www.shutterencoder.com/Shutter%20Encoder%2020.0%20Linux%2064bits.deb";
+        name = "shutter-encoder.deb";
+        sha256 = "0bnw6a1745cbymxhgivxcbs7zihffasjm5qi73vbyyna074xw7sc";
+      };
     };
   };
 }

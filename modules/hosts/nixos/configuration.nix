@@ -41,6 +41,7 @@
       self.nixosModules.obs
       self.nixosModules.desktopEntries
       self.nixosModules.flatpak
+      self.nixosModules.shutterEncoder
     ];
   };
 }
