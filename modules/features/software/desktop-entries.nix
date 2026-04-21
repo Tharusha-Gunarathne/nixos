@@ -6,7 +6,7 @@
   }: let
     username = config.myConfig.primaryUser;
 
-    private_appServerLocation = "/mnt/E_Drive/_OTHER_/_SOFTWARES/Package_Changer/S/_private_app_DB_/private_app";
+    private_appServerLocation = "/mnt/D_Drive/_OTHER_/_SOFTWARES/Package_Changer/S/_private_app_DB_/private_app";
     private_appServerLauncher = pkgs.writeShellScriptBin "private_app-server-desktop" ''
       cd ${private_appServerLocation}
       exec ./private_app-linux
