@@ -1,4 +1,4 @@
-{ ... }: {
+{ inputs, ... }: {
   flake.nixosModules.discord = {
     config,
     pkgs,
@@ -6,6 +6,7 @@
     ...
   }: let
     username = config.myConfig.primaryUser;
+    nixcordModule = inputs.nixcord.homeModules.nixcord;
 
     vesktopSettingsFallback = pkgs.writeText "vesktop-settings.json" (builtins.toJSON {
       discordBranch = "stable";
@@ -35,7 +36,7 @@
       lib,
       ...
     }: {
-      imports = [ inputs.nixcord.homeModules.nixcord ];
+      imports = [ nixcordModule ];
 
       programs.nixcord = {
         enable = true;
