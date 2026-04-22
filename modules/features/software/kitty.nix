@@ -17,6 +17,7 @@
           confirm_os_window_close = 0;
           shell = "${pkgs.fish}/bin/fish";
           cursor_trail = 1;
+          allow_remote_control = "socket-only";
         };
       };
     };
