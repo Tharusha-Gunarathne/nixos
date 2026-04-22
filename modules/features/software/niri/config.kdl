@@ -454,9 +454,14 @@ binds {
     Mod+L     { focus-column-right; }
 
     Mod+Ctrl+Left  { move-column-left; }
+    Mod+Ctrl+Z     { move-column-left; }
+
     Mod+Ctrl+Down  { move-window-down; }
     Mod+Ctrl+Up    { move-window-up; }
+    
     Mod+Ctrl+Right { move-column-right; }
+    Mod+Ctrl+X     { move-column-right; }
+
     Mod+Ctrl+H     { move-column-left; }
     Mod+Ctrl+J     { move-window-down; }
     Mod+Ctrl+K     { move-window-up; }
