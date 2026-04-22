@@ -69,7 +69,7 @@
           alsa-lib
           zlib
           fuse
-          xorg.xdpyinfo
+          xdpyinfo
         ];
 
       runScript = "${pkgs.writeShellScript "shutter-launch" ''
