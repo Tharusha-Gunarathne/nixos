@@ -81,20 +81,22 @@
         StartupWMClass=brave-browser
         EOF
 
-                # Keep only the two managed Brave launchers: main and profile-1.
-                if [ -d "$APPS_DIR" ]; then
-                  ${pkgs.findutils}/bin/find "$APPS_DIR" -maxdepth 1 -type f -name 'brave-*.desktop' \
-                    ! -name 'brave-browser.desktop' \
-                    ! -name 'brave-profile-1.desktop' \
-                    -delete
-                fi
+        # Keep only the two managed Brave launchers: main and profile-1.
+        if [ -d "$APPS_DIR" ]; then
+          ${pkgs.findutils}/bin/find "$APPS_DIR" -maxdepth 1 -type f -name 'brave-*.desktop' \
+          ! -name 'brave-browser.desktop' \
+          ! -name 'brave-profile-1.desktop' \
+          ! -name 'brave-*-Default.desktop' \
+          ! -name 'brave-*-Profile_*.desktop' \
+          -delete
+        fi
 
-                ${pkgs.xdg-utils}/bin/xdg-settings set default-web-browser brave-browser.desktop >/dev/null 2>&1 || true
-                ${pkgs.xdg-utils}/bin/xdg-mime default brave-browser.desktop x-scheme-handler/http >/dev/null 2>&1 || true
-                ${pkgs.xdg-utils}/bin/xdg-mime default brave-browser.desktop x-scheme-handler/https >/dev/null 2>&1 || true
-                ${pkgs.xdg-utils}/bin/xdg-mime default brave-browser.desktop text/html >/dev/null 2>&1 || true
+        ${pkgs.xdg-utils}/bin/xdg-settings set default-web-browser brave-browser.desktop >/dev/null 2>&1 || true
+        ${pkgs.xdg-utils}/bin/xdg-mime default brave-browser.desktop x-scheme-handler/http >/dev/null 2>&1 || true
+        ${pkgs.xdg-utils}/bin/xdg-mime default brave-browser.desktop x-scheme-handler/https >/dev/null 2>&1 || true
+        ${pkgs.xdg-utils}/bin/xdg-mime default brave-browser.desktop text/html >/dev/null 2>&1 || true
 
-                ${pkgs.desktop-file-utils}/bin/update-desktop-database "$APPS_DIR" >/dev/null 2>&1 || true
+        ${pkgs.desktop-file-utils}/bin/update-desktop-database "$APPS_DIR" >/dev/null 2>&1 || true
       '';
     };
 
