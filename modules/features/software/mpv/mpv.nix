@@ -61,6 +61,23 @@
         "mpv/scripts/SimpleHistory.lua".source = "${eisaMpvSrc}/scripts/SimpleHistory.lua";
         "mpv/script-opts/SimpleHistory.conf".source = "${eisaMpvSrc}/script-opts/SimpleHistory.conf";
       };
+
+      xdg.mimeApps = {
+        enable = true;
+        defaultApplications = {
+          "video/mp4" = ["mpv.desktop"];
+          "video/x-matroska" = ["mpv.desktop"]; # .mkv
+          "video/mp2t" = ["mpv.desktop"]; # .ts
+          "video/webm" = ["mpv.desktop"];
+          "video/x-msvideo" = ["mpv.desktop"]; # .avi
+          "video/quicktime" = ["mpv.desktop"]; # .mov
+          "video/x-flv" = ["mpv.desktop"];
+          "video/mpeg" = ["mpv.desktop"];
+          "video/3gpp" = ["mpv.desktop"];
+          "video/x-wmv" = ["mpv.desktop"];
+          "video/ogg" = ["mpv.desktop"];
+        };
+      };
     };
   };
 }
