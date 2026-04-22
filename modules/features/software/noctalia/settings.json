@@ -57,7 +57,7 @@
         "frameThickness": 8,
         "hideOnOverview": false,
         "marginHorizontal": 10,
-        "marginVertical": 8,
+        "marginVertical": 5,
         "middleClickAction": "none",
         "middleClickCommand": "",
         "middleClickFollowMouse": false,
@@ -396,9 +396,9 @@
         "backgroundOpacity": 1,
         "colorizeIcons": false,
         "deadOpacity": 0.6,
-        "displayMode": "auto_hide",
+        "displayMode": "exclusive",
         "dockType": "floating",
-        "enabled": false,
+        "enabled": true,
         "floatingRatio": 1,
         "groupApps": false,
         "groupClickAction": "cycle",
@@ -406,7 +406,7 @@
         "groupIndicatorStyle": "dots",
         "inactiveIndicators": true,
         "indicatorColor": "secondary",
-        "indicatorOpacity": 0.4,
+        "indicatorOpacity": 0.6,
         "indicatorThickness": 3,
         "launcherIcon": "",
         "launcherIconColor": "none",
@@ -417,14 +417,20 @@
         ],
         "onlySameOutput": true,
         "pinnedApps": [
-            "org.gnome.Nautilus"
+            "org.gnome.Nautilus",
+            "brave-browser",
+            "code",
+            "ferdium",
+            "kitty",
+            "bitwarden",
+            "spotify"
         ],
         "pinnedStatic": false,
         "position": "bottom",
         "showDockIndicator": true,
         "showLauncherIcon": false,
         "sitOnFrame": false,
-        "size": 1.1500000000000001
+        "size": 0.75
     },
     "general": {
         "allowPanelsOnScreenWithoutBar": true,
