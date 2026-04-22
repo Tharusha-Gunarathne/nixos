@@ -50,7 +50,16 @@
   in {
     config = lib.mkIf shell.noctalia {
       home-manager.users.${username} = {...}: {
-        xdg.configFile = pluginSettings;
+        xdg.configFile =
+          (builtins.listToAttrs (map (name: {
+            name = "noctalia/plugins/${name}";
+            value = {source = inputs.noctalia.plugins.${name};};
+          }) (builtins.attrNames inputs.noctalia.plugins)))
+          // {
+            "noctalia/plugins/wallcards" = {
+              source = wallcardsPatched;
+            };
+          };
       };
     };
   };
