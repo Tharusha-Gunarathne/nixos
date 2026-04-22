@@ -23,6 +23,11 @@
             };
           };
           providers = {
+            applications = {
+              preferences = {
+                defaultAction = "launch";
+              };
+            };
             clipboard = {
               entrypoints = {
                 history = {
