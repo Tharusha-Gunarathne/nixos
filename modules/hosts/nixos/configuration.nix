@@ -2,46 +2,47 @@
   flake.nixosModules.nixosConfiguration = {...}: {
     imports = [
       # core
-      self.nixosModules.shellAliases
-      self.nixosModules.options
-      self.nixosModules.users
       self.nixosModules.nixSettings
+      self.nixosModules.options
+      self.nixosModules.packages
+      self.nixosModules.shellAliases
+      self.nixosModules.users
       # hardware
       self.nixosModules.audio
       self.nixosModules.bluetooth
       self.nixosModules.boot
       self.nixosModules.displayManager
       self.nixosModules.fonts
+      self.nixosModules.graphics
       self.nixosModules.locale
       self.nixosModules.network
-      self.nixosModules.graphics
       self.nixosModules.services
       self.nixosModules.swap
       # software
-      self.nixosModules.git
-      self.nixosModules.gtk
-      self.nixosModules.kitty
+      self.nixosModules.mpv
       self.nixosModules.nautilus
       self.nixosModules.niri
       self.nixosModules.noctalia
-      self.nixosModules.mpv
-      self.nixosModules.packages
-      self.nixosModules.throne
-      self.nixosModules.variables
-      self.nixosModules.vicinae
-      self.nixosModules.neovim
-      self.nixosModules.spotify
-      self.nixosModules.fish
-      self.nixosModules.vscode
-      self.nixosModules.lotion
-      self.nixosModules.xdm
       self.nixosModules.brave
-      self.nixosModules.ferdium
       self.nixosModules.discord
-      self.nixosModules.obs
-      self.nixosModules.desktopEntries
+      self.nixosModules.ferdium
+      self.nixosModules.fish
       self.nixosModules.flatpak
+      self.nixosModules.git
+      self.nixosModules.kitty
+      self.nixosModules.lotion
+      self.nixosModules.neovim
+      self.nixosModules.obs
       self.nixosModules.shutterEncoder
+      self.nixosModules.spotify
+      self.nixosModules.throne
+      self.nixosModules.vicinae
+      self.nixosModules.vscode
+      self.nixosModules.xdm
+      # user
+      self.nixosModules.gtk
+      self.nixosModules.variables
+      self.nixosModules.desktopEntries
     ];
   };
 }
