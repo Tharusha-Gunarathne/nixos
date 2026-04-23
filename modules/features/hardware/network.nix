@@ -2,6 +2,7 @@
   flake.nixosModules.network = {...}: {
     networking.hostName = "nixos";
     networking.networkmanager.enable = true;
+    networking.enableIPv6 = false;
 
     services.resolved.enable = true;
 
