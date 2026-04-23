@@ -15,6 +15,10 @@
       brightnessctl
       tree
       ripgrep
+      rar
+
+      # Browser
+      firefox
 
       # Hardware management
       efibootmgr
@@ -70,6 +74,8 @@
         timeshift
         microsoft-edge
         qt6Packages.qt6ct
+        proton-vpn
+        kdePackages.ark
 
         # App-specific packages
         inputs.monique.packages.${pkgs.system}.default
