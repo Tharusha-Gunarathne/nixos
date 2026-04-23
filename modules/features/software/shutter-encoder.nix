@@ -7,7 +7,7 @@
   }: let
     username = config.myConfig.primaryUser;
     asset = inputs.sources.releaseAssets.shutterEncoder;
-    uiscale = 2.0; # Adjust as needed for high-DPI displays
+    uiscale = 1.0; # Adjust as needed for high-DPI displays
 
     src = pkgs.fetchurl {
       inherit (asset) url sha256 name;
