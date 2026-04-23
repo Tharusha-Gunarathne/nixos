@@ -1,5 +1,9 @@
 {...}: {
-  flake.nixosModules.flatpak = {pkgs, lib, ...}: {
+  flake.nixosModules.flatpak = {
+    pkgs,
+    lib,
+    ...
+  }: {
     services.flatpak = {
       enable = true;
       uninstallUnmanaged = true;
@@ -14,6 +18,10 @@
       packages = [
         {
           appId = "fr.handbrake.ghb";
+          origin = "flathub";
+        }
+        {
+          appId = "com.usebottles.bottles";
           origin = "flathub";
         }
       ];
