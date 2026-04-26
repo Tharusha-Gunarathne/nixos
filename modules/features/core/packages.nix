@@ -55,7 +55,6 @@
         # User CLI
         bat
         inotify-tools
-        fastfetch
 
         # User development stack
         python3

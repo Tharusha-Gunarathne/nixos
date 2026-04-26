@@ -39,6 +39,7 @@
       self.nixosModules.vicinae
       self.nixosModules.vscode
       self.nixosModules.xdm
+      self.nixosModules.fastfetch
       # user
       self.nixosModules.gtk
       self.nixosModules.variables
