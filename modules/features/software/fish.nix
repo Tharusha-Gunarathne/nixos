@@ -18,7 +18,7 @@
       programs.oh-my-posh = {
         enable = true;
         enableFishIntegration = true;
-        useTheme = "montys"; # or any theme you like
+        useTheme = "hul10"; # or any theme you like
       };
     };
   };
