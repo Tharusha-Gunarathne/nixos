@@ -1,4 +1,4 @@
-{...}: {
+{inputs, ...}: {
   flake.nixosModules.niri = {
     config,
     lib,
@@ -9,7 +9,13 @@
     shell = config.myConfig.shell;
     configPath = "${config.myConfig.repoRoot}/modules/features/software/niri/config.kdl";
   in {
-    programs.niri.enable = true;
+    # Apply the overlay so pkgs.niri-stable exists
+    nixpkgs.overlays = [ inputs.niri-flake.overlays.niri ];
+
+    programs.niri = {
+      enable = true;
+      package = pkgs.niri-unstable;  # v26.04 from niri-flake's cache, no compilation
+    };
 
     home-manager.users.${username} = {
       config,

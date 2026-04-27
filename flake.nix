@@ -2,8 +2,14 @@
   description = "Tharusha's NixOS Flake";
 
   nixConfig = {
-    extra-substituters = ["https://vicinae.cachix.org"];
-    extra-trusted-public-keys = ["vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc="];
+    extra-substituters = [
+      "https://vicinae.cachix.org"
+      "https://niri.cachix.org" 
+    ];
+    extra-trusted-public-keys = [
+      "vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc="
+      "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
+    ];
   };
 
   inputs = {
@@ -18,6 +24,7 @@
     };
 
     # Third Party Plugins
+    niri-flake.url = "github:sodiboo/niri-flake";
     noctalia.url = "path:./plugins/noctalia";
     sources.url = "path:./plugins/sources";
     spicetify-nix = {
