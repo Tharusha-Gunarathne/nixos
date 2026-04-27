@@ -47,7 +47,7 @@
         "backgroundOpacity": 0,
         "barType": "floating",
         "capsuleColorKey": "none",
-        "capsuleOpacity": 0.85,
+        "capsuleOpacity": 0.62,
         "contentPadding": 2,
         "density": "comfortable",
         "displayMode": "always_visible",
@@ -616,7 +616,7 @@
     "sessionMenu": {
         "countdownDuration": 5000,
         "enableCountdown": true,
-        "largeButtonsLayout": "single-row",
+        "largeButtonsLayout": "grid",
         "largeButtonsStyle": true,
         "position": "center",
         "powerOptions": [
