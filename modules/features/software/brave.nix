@@ -8,6 +8,7 @@
     username = config.myConfig.primaryUser;
     braveArgs = [
       "--enable-features=TouchpadOverscrollHistoryNavigation,UseOzonePlatform"
+      "--disable-features=WaylandLinuxDrmSyncobjKMS"
       "--ozone-platform=wayland"
     ];
     braveFlags = lib.concatStringsSep " " braveArgs;
@@ -77,7 +78,8 @@
         Terminal=false
         Icon=brave-browser
         Categories=Network;WebBrowser;
-        MimeType=application/pdf;application/rdf+xml;application/rss+xml;application/xhtml+xml;application/xhtml_xml;application/xml;image/gif;image/jpeg;image/png;image/webp;text/html;text/xml;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/chromium;x-scheme-handler/about;x-scheme-handler/unknown;
+        MimeType=application/pdf;application/rdf+xml;application/rss+xml;application/xhtml+xml;application/xhtml_xml;application/xml;text/html;text/xml;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/chromium;x-scheme-handler/about;x-scheme-handler/unknown;
+        x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/chromium;x-scheme-handler/about;x-scheme-handler/unknown;
         StartupWMClass=brave-browser
         EOF
 
