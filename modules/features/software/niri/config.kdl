@@ -332,11 +332,44 @@ window-rule {
 
 // Noctalia
 window-rule {
-  // Rounded corners for a modern look.
-  geometry-corner-radius 10
+    geometry-corner-radius 10
+    clip-to-geometry true
+    opacity 0.90
+    background-effect {
+        blur true
+        xray true
+    }
+}
 
-  // Clips window contents to the rounded corner boundaries.
-  clip-to-geometry true
+window-rule {
+    match app-id="code"
+    opacity 0.98
+}
+
+window-rule {
+    match app-id="org.gnome.Nautilus"
+    opacity 0.95
+}
+
+layer-rule {
+  match namespace="^noctalia-(background|launcher-overlay|dock)-.*$"
+  background-effect {
+    xray false
+  }
+}
+
+layer-rule {
+    match namespace="^noctalia-bar*"
+    background-effect {
+        blur false
+    }
+}
+
+blur {
+  passes 3        // more passes = stronger blur (default: 3)
+  offset 5.0      // sample distance per pass (default: 3.0)
+  noise 0.02      // grain overlay (default: 0.02)
+  saturation 2.0  // color saturation boost (default: 1.5)
 }
 
 window-rule {
@@ -689,7 +722,7 @@ binds {
 //     off
 // }
 
-include "./noctalia.kdl"
+include "noctalia.kdl"
 
 // Monique monitor configuration
 include "monitors.kdl"
