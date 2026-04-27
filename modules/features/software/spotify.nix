@@ -76,16 +76,49 @@
     '';
 
     spotifyWrapper = pkgs.writeShellScriptBin "spotify-noctalia" ''
-      if ! ${bootstrapScript}; then
-        echo "[spicetify] Bootstrap failed; falling back to stock Spotify."
+      MAX_RETRIES=2
+      attempt=0
+
+      bootstrap_and_launch() {
+        if ! ${bootstrapScript}; then
+          echo "[spicetify] Bootstrap failed; falling back to stock Spotify."
+          exec "${pkgs.spotify}/bin/spotify" "$@"
+        fi
+
+        if [ -x "${workDir}/spotify" ]; then
+          # Capture stderr to detect library errors
+          TMPLOG=$(mktemp)
+          "${workDir}/spotify" "$@" 2>"$TMPLOG"
+          EXIT_CODE=$?
+
+          if grep -qE "error while loading shared libraries|No such file or directory|libcef" "$TMPLOG"; then
+            cat "$TMPLOG" >&2
+            rm -f "$TMPLOG"
+            return 1  # signal recovery needed
+          fi
+
+          cat "$TMPLOG" >&2
+          rm -f "$TMPLOG"
+          return $EXIT_CODE
+        fi
+
+        echo "[spicetify] Writable launcher missing; falling back to stock Spotify."
         exec "${pkgs.spotify}/bin/spotify" "$@"
-      fi
+      }
 
-      if [ -x "${workDir}/spotify" ]; then
-        exec "${workDir}/spotify" "$@"
-      fi
+      while [ $attempt -lt $MAX_RETRIES ]; do
+        if bootstrap_and_launch "$@"; then
+          exit 0
+        fi
 
-      echo "[spicetify] Writable launcher missing; falling back to stock Spotify."
+        attempt=$((attempt + 1))
+        if [ $attempt -lt $MAX_RETRIES ]; then
+          echo "[spicetify] Library error detected, wiping and retrying (attempt $attempt)..."
+          ${pkgs.coreutils}/bin/rm -rf "${workDir}"
+        fi
+      done
+
+      echo "[spicetify] Recovery failed after $MAX_RETRIES attempts, falling back to stock Spotify."
       exec "${pkgs.spotify}/bin/spotify" "$@"
     '';
 
