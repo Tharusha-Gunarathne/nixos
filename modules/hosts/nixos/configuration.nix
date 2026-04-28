@@ -40,6 +40,7 @@
       self.nixosModules.vscode
       self.nixosModules.xdm
       self.nixosModules.fastfetch
+      self.nixosModules.loupe
       # user
       self.nixosModules.gtk
       self.nixosModules.variables
