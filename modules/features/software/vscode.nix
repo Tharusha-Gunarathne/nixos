@@ -38,13 +38,13 @@
       "files.autoSave" = "afterDelay";
       "files.autoSaveDelay" = 1000;
       "terminal.integrated.fontFamily" = "JetBrainsMono Nerd Font";
-      "editor.defaultFormatter" = "esbenp.prettier-vscode";
       "terminal.integrated.defaultProfile.linux" = "fish";
       "terminal.integrated.profiles.linux" = {
         "fish" = {
-          "path" = "${pkgs.fish}/bin/fish";
+          "path" = "/etc/profiles/per-user/${username}/bin/fish";
         };
       };
+      "editor.defaultFormatter" = "esbenp.prettier-vscode";
       "markdown-pdf.executablePath" = "${pkgs.brave}/bin/brave";
       "python.defaultInterpreterPath" = "${pkgs.python3}/bin/python";
       "php.validate.enable" = false;
@@ -68,11 +68,6 @@
       pkgs.writeText "vscode-settings.json"
       (builtins.toJSON vscodeSettings);
 
-    # Merges base settings into the existing settings file:
-    # - Adds any missing keys from defaults (never overwrites existing user values)
-    # - Always enforces nix-related keys so the language server stays working
-    # - Never touches workbench.colorTheme so user theme choice persists
-    # - Writes atomically via a temp file
     mergeSettingsScript =
       pkgs.writers.writePython3 "merge-vscode-settings" {
         libraries = [pkgs.python3Packages.json5];
@@ -108,14 +103,15 @@
 
         merge_missing(current, defaults)
 
-        # Always enforce nix tooling keys so the language server
-        # stays pointed at the correct store paths after every rebuild
+        # Always enforce these keys so they stay correct after every rebuild
         managed_keys = [
             "[nix]",
             "nix.formatterPath",
             "nix.enableLanguageServer",
             "nix.serverPath",
             "nix.serverSettings",
+            "terminal.integrated.defaultProfile.linux",
+            "terminal.integrated.profiles.linux",
         ]
         for key in managed_keys:
             current[key] = defaults[key]
@@ -135,8 +131,6 @@
       pkgs,
       ...
     }: {
-      # Prevent HM from managing settings.json as a store symlink
-      # so VSCode can write to it freely between rebuilds
       xdg.configFile."Code/User/settings.json".enable = false;
 
       home.activation.vscodeSetup = lib.hm.dag.entryAfter ["writeBoundary"] ''
@@ -153,7 +147,7 @@
         fi
 
         # Always merge base settings into the writable file.
-        # This preserves user values (including theme) while filling missing defaults.
+        # Preserves user values (including theme) while enforcing managed keys.
         ${mergeSettingsScript} "$SETTINGS" "${settingsJson}"
       '';
 
