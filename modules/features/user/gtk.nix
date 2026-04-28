@@ -10,8 +10,9 @@
     environment.systemPackages = with pkgs; [
       adwaita-icon-theme
       papirus-icon-theme
-      adw-gtk3                  # required by Noctalia for GTK theming
+      adw-gtk3 # required by Noctalia for GTK theming
       gsettings-desktop-schemas
+      bibata-cursors 
     ];
 
     programs.dconf.enable = true;
@@ -43,10 +44,19 @@
           package = pkgs.papirus-icon-theme;
         };
         cursorTheme = {
-          name = "Adwaita";
-          package = pkgs.adwaita-icon-theme;
+          name = "Bibata-Modern-Classic";
+          package = pkgs.bibata-cursors;
+          size = 24;
         };
         gtk4.theme = null;
+      };
+
+      home.pointerCursor = {
+        name = "Bibata-Modern-Classic";
+        package = pkgs.bibata-cursors;
+        size = 24;
+        gtk.enable = true;
+        x11.enable = true;
       };
 
       dconf.settings."org/gnome/desktop/interface" = {
@@ -56,6 +66,8 @@
         font-name = "Ubuntu Sans 11";
         document-font-name = "Ubuntu Sans 11";
         monospace-font-name = "JetBrainsMono Nerd Font 11";
+        cursor-theme = "Bibata-Modern-Classic"; 
+        cursor-size = 24;
       };
     };
   };
