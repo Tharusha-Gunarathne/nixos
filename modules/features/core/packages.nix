@@ -16,6 +16,7 @@
       tree
       ripgrep
       rar
+      ntfs3g
 
       # Browser
       firefox
@@ -23,9 +24,6 @@
       # Hardware management
       efibootmgr
       intel-undervolt
-
-      # Desktop apps
-      loupe
 
       # Development tooling available system-wide
       nil
@@ -55,12 +53,12 @@
         # User CLI
         bat
         inotify-tools
+        yazi
 
         # User development stack
         python3
         python3Packages.pip
         nodejs
-        gcc
 
         # Desktop apps
         ente-auth
