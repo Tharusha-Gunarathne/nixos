@@ -33,6 +33,8 @@
     home-manager.users.${username} = {...}: {
       programs.mpv = {
         enable = true;
+        # Avoid mpv-with-scripts to drop the yt-dlp -> deno -> rusty-v8 chain.
+        package = pkgs.mpv-unwrapped;
         config = {
           osc = "no";
           "osd-bar" = "no";
