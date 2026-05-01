@@ -5,6 +5,7 @@
       self.nixosModules.nixSettings
       self.nixosModules.options
       self.nixosModules.packages
+      self.nixosModules.performance
       self.nixosModules.shellAliases
       self.nixosModules.users
       # hardware
@@ -16,7 +17,8 @@
       self.nixosModules.graphics
       self.nixosModules.locale
       self.nixosModules.network
-      self.nixosModules.services
+      self.nixosModules.power
+      self.nixosModules.storage
       self.nixosModules.swap
       # software
       self.nixosModules.mpv
@@ -29,6 +31,7 @@
       self.nixosModules.fish
       self.nixosModules.flatpak
       self.nixosModules.git
+      self.nixosModules.kdeconnect
       self.nixosModules.kitty
       self.nixosModules.lotion
       self.nixosModules.neovim

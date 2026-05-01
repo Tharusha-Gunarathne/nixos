@@ -1,20 +1,20 @@
 {...}: {
-  flake.nixosModules.services = {
+  flake.nixosModules.power = {
     config,
     lib,
     pkgs,
     ...
-  }: let
-    username = config.myConfig.primaryUser;
-  in {
+  }: {
     services.power-profiles-daemon.enable = true;
     services.upower.enable = true;
     services.thermald.enable = true;
 
     # Undervolt the CPU
-    # To undervolt disable "Undervolt Protection" in the BIOS/UEFI, then find stable undervolt values for your CPU and set them here.
-    # "Undervolt Protection" is shown when "Legion Optimization" is enabled in new Legion BIOS
-    # =========================================================================================
+    # To undervolt disable "Undervolt Protection" in the BIOS/UEFI, then find
+    # stable undervolt values for your CPU and set them here.
+    # "Undervolt Protection" is shown when "Legion Optimization" is enabled
+    # in new Legion BIOS.
+    # ===========================================================================
     services.undervolt = lib.mkIf config.myConfig.isUnderVoltEnabled {
       enable = true;
       coreOffset = -170;
@@ -39,18 +39,6 @@
         '';
       };
     };
-    # =========================================================================================
-
-    # Needed by Noctalia's KDE Connect plugin and opens required firewall ports.
-    programs.kdeconnect.enable = true;
-
-    home-manager.users.${username} = {
-      # Ensure kdeconnectd runs in the user session on non-KDE desktops.
-      services.kdeconnect.enable = true;
-
-      # Start kdeconnectd automatically with the user systemd default target.
-      # systemd.user.services.kdeconnect.Install.WantedBy =
-      #   lib.mkAfter ["default.target"];
-    };
+    # ===========================================================================
   };
 }
