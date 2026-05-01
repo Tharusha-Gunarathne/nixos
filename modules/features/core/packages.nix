@@ -73,6 +73,7 @@
         qt6Packages.qt6ct
         proton-vpn
         kdePackages.ark
+        qbittorrent
 
         # System management
         mission-center
