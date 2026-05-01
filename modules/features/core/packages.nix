@@ -74,6 +74,9 @@
         proton-vpn
         kdePackages.ark
 
+        # System management
+        mission-center
+
         # App-specific packages
         inputs.monique.packages.${pkgs.system}.default
       ];

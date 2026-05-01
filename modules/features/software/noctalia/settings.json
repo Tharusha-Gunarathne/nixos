@@ -423,7 +423,8 @@
             "ferdium",
             "kitty",
             "bitwarden",
-            "spotify"
+            "spotify",
+            "io.missioncenter.MissionCenter"
         ],
         "pinnedStatic": false,
         "position": "bottom",
@@ -448,7 +449,7 @@
         "enableLockScreenCountdown": true,
         "enableLockScreenMediaControls": false,
         "enableShadows": true,
-        "forceBlackScreenCorners": false,
+        "forceBlackScreenCorners": true,
         "iRadiusRatio": 0.65,
         "keybinds": {
             "keyDown": [
