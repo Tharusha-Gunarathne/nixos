@@ -51,17 +51,17 @@
           package = pkgs.papirus-icon-theme;
         };
         cursorTheme = {
-          name = "Bibata-Modern-Classic";
+          name = "Bibata-Modern-Ice";
           package = pkgs.bibata-cursors;
-          size = 24;
+          size = 20;
         };
         gtk4.theme = null;
       };
 
       home.pointerCursor = {
-        name = "Bibata-Modern-Classic";
+        name = "Bibata-Modern-Ice";
         package = pkgs.bibata-cursors;
-        size = 24;
+        size = 20;
         gtk.enable = true;
         x11.enable = true;
       };
@@ -73,8 +73,8 @@
         font-name = "Ubuntu Sans 11";
         document-font-name = "Ubuntu Sans 11";
         monospace-font-name = "JetBrainsMono Nerd Font 11";
-        cursor-theme = "Bibata-Modern-Classic";
-        cursor-size = 24;
+        cursor-theme = "Bibata-Modern-Ice";
+        cursor-size = 20;
       };
 
       home.activation.papirusFolderColor = lib.hm.dag.entryAfter ["writeBoundary"] ''
@@ -82,7 +82,7 @@
         STORE_DARK="${pkgs.papirus-icon-theme}/share/icons/Papirus-Dark"
         LOCAL_BASE="$HOME/.local/share/icons/Papirus"
         LOCAL_THEME="$HOME/.local/share/icons/Papirus-Dark"
-        STATE_FILE="$HOME/.local/share/icons/.papirus-black-state"
+        STATE_FILE="$HOME/.local/share/icons/.papirus-${folderColor}-state"
         TARGET_COLOR="${folderColor}"
 
         if [ ! -f "$STATE_FILE" ] || ! grep -qx "$STORE_DARK:$TARGET_COLOR" "$STATE_FILE"; then
