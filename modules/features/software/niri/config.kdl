@@ -708,7 +708,7 @@ binds {
     // Core Noctalia binds
     // Mod+Space { spawn-sh "noctalia-shell ipc call launcher toggle"; }
     Mod+Space { spawn-sh "vicinae toggle"; }
-    Mod+Shift+A { spawn "vicinae" "deeplink" "vicinae://extensions/vicinae/clipboard/history"; }
+    Mod+Shift+A { spawn-sh "vicinae deeplink vicinae://launch/clipboard/history"; }
     Mod+S { spawn-sh "noctalia-shell ipc call controlCenter toggle"; }
     Mod+Comma { spawn-sh "noctalia-shell ipc call settings toggle"; }
     Mod+P { spawn-sh "noctalia-shell ipc call sessionMenu toggle"; }
