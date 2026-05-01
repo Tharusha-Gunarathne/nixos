@@ -44,7 +44,7 @@
             };
             bootUuid = lib.mkOption {
               type = lib.types.str;
-              default = "7F9D-3833";
+              default = "FC18-9855";
               description = "Boot filesystem UUID.";
             };
             dataDrives = lib.mkOption {
