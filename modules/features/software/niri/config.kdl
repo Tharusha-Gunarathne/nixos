@@ -720,13 +720,6 @@ binds {
     XF86MonBrightnessDown { spawn "noctalia-shell" "ipc" "call" "brightness" "decrease"; }
 }
 
-// output "eDP-1" {
-//     off
-// }
-
-include "noctalia.kdl"
-
 // Monique monitor configuration
-include "monitors.kdl"
 
 include "./noctalia.kdl"
