@@ -168,11 +168,19 @@
                     "usePadding": false
                 },
                 {
+                    "defaultSettings": {
+                        "hideSystemPorts": false,
+                        "hideWhenEmpty": false,
+                        "refreshInterval": 5
+                    },
+                    "id": "plugin:port-monitor"
+                },
+                {
                     "colorizeIcons": false,
                     "hideMode": "hidden",
                     "id": "ActiveWindow",
                     "maxWidth": 145,
-                    "scrollingMode": "hover",
+                    "scrollingMode": "always",
                     "showIcon": true,
                     "showText": true,
                     "textColor": "none",
@@ -193,14 +201,6 @@
                     "textColor": "none",
                     "useFixedWidth": false,
                     "visualizerType": "linear"
-                },
-                {
-                    "defaultSettings": {
-                        "hideSystemPorts": false,
-                        "hideWhenEmpty": false,
-                        "refreshInterval": 5
-                    },
-                    "id": "plugin:port-monitor"
                 }
             ],
             "right": [
@@ -228,7 +228,7 @@
                     "id": "plugin:usb-drive-manager"
                 },
                 {
-                    "hideWhenZero": false,
+                    "hideWhenZero": true,
                     "hideWhenZeroUnread": false,
                     "iconColor": "none",
                     "id": "NotificationHistory",
@@ -444,7 +444,8 @@
             "kitty",
             "bitwarden",
             "spotify",
-            "io.missioncenter.MissionCenter"
+            "io.missioncenter.MissionCenter",
+            "org.qbittorrent.qBittorrent"
         ],
         "pinnedStatic": false,
         "position": "bottom",
