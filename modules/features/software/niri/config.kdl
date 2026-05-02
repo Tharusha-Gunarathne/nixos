@@ -383,6 +383,11 @@ window-rule {
     open-floating false
 }
 
+window-rule {
+    match app-id=r#"^brave-[a-z0-9]+-Profile_[0-9]+$"#
+    opacity 1.0
+}
+
 debug {
   // Allows notification actions and window activation from Noctalia.
   honor-xdg-activation-with-invalid-serial
