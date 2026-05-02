@@ -193,6 +193,14 @@
                     "textColor": "none",
                     "useFixedWidth": false,
                     "visualizerType": "linear"
+                },
+                {
+                    "defaultSettings": {
+                        "hideSystemPorts": false,
+                        "hideWhenEmpty": false,
+                        "refreshInterval": 5
+                    },
+                    "id": "plugin:port-monitor"
                 }
             ],
             "right": [
@@ -206,6 +214,18 @@
                     "id": "Tray",
                     "pinned": [
                     ]
+                },
+                {
+                    "defaultSettings": {
+                        "autoMount": false,
+                        "fileBrowser": "yazi",
+                        "hideWhenEmpty": false,
+                        "iconColor": "none",
+                        "showBadge": false,
+                        "showNotifications": true,
+                        "terminalCommand": "kitty"
+                    },
+                    "id": "plugin:usb-drive-manager"
                 },
                 {
                     "hideWhenZero": false,
