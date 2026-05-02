@@ -56,6 +56,16 @@
       url = "github:noctalia-dev/noctalia-plugins?dir=wallcards";
       flake = false;
     };
+
+    usb-drive-manager = {
+      url = "github:noctalia-dev/noctalia-plugins?dir=usb-drive-manager";
+      flake = false;
+    };
+
+    port-monitor = {
+      url = "github:noctalia-dev/noctalia-plugins?dir=port-monitor";
+      flake = false;
+    };
   };
 
   outputs = inputs: {
@@ -74,6 +84,8 @@
         screen-toolkit
         monique
         wallcards
+        usb-drive-manager
+        port-monitor
         ;
     };
   };
