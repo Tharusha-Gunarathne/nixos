@@ -12,41 +12,37 @@
           cp -r "${inputs.noctalia.plugins.wallcards}" "$out"
           chmod -R u+w "$out"
 
-      WALLCARDS="$out/WallcardsWindow.qml"
+      if [ -f "$out/Wallcards.qml" ]; then
+        WALLCARDS="$out/Wallcards.qml"
+      elif [ -f "$out/WallcardsWindow.qml" ]; then
+        WALLCARDS="$out/WallcardsWindow.qml"
+      else
+        echo "[wallcards-patched] could not find Wallcards.qml or WallcardsWindow.qml" >&2
+        exit 1
+      fi
+      CARD_QML="$out/src/Card.qml"
+      if [ ! -f "$CARD_QML" ] && [ -f "$out/Card.qml" ]; then
+        CARD_QML="$out/Card.qml"
+      fi
+      if [ ! -f "$CARD_QML" ]; then
+        echo "[wallcards-patched] could not find Card.qml" >&2
+        exit 1
+      fi
       WALLCARDS_MANIFEST="$out/manifest.json"
 
-      ${pkgs.perl}/bin/perl -0777 -i -pe 's@import Qt5Compat\.GraphicalEffects\n@@g' "$WALLCARDS"
+      ${pkgs.perl}/bin/perl -0777 -i -pe 's@import Qt5Compat\.GraphicalEffects\n@@g' "$WALLCARDS" "$CARD_QML"
 
-      ${pkgs.perl}/bin/perl -0777 -i -pe 's@\n            Rectangle \{\n              id: mask\n\n              anchors.fill: parent\n              radius: cardRadius\n              visible: false\n            \}\n\n            OpacityMask \{\n              anchors.fill: parent\n              maskSource: mask\n\n              source: ShaderEffectSource \{\n                sourceItem: imgComposite\n                sourceRect: Qt\.rect\(-imgComposite\.x, 0, imageFrame\.width, imageFrame\.height\)\n              \}\n            \}\n@\n            ShaderEffectSource {\n              anchors.fill: parent\n              sourceItem: imgComposite\n              sourceRect: Qt.rect(-imgComposite.x, 0, imageFrame.width, imageFrame.height)\n            }\n@s' "$WALLCARDS"
+      ${pkgs.perl}/bin/perl -0777 -i -pe 's@\n  Rectangle \{\n    id: mask\n\n    anchors.fill: parent\n    radius: cardContent.radius\n    visible: false\n  \}\n\n  OpacityMask \{\n    anchors.fill: parent\n    maskSource: mask\n\n    source: ShaderEffectSource \{\n      sourceItem: imgComposite\n      sourceRect: Qt\.rect\(-imgComposite\.x, 0, cardContent\.width, cardContent\.height\)\n    \}\n  \}\n@\n  ShaderEffectSource {\n    anchors.fill: parent\n    sourceItem: imgComposite\n    sourceRect: Qt.rect(-imgComposite.x, 0, cardContent.width, cardContent.height)\n  }\n@s' "$CARD_QML"
 
-      ${pkgs.perl}/bin/perl -0777 -i -pe 's@\n                  layer\.effect: OpacityMask \{\n                    maskSource: Rectangle \{\n                      width: videoContainer\.width\n                      height: videoContainer\.height\n                      radius: cardRadius\n                    \}\n                  \}\n@\n                  layer.effect: null\n@s' "$WALLCARDS"
+      ${pkgs.perl}/bin/perl -0777 -i -pe 's@\n        layer\.effect: OpacityMask \{\n          maskSource: Rectangle \{\n            height: videoContainer\.height\n            radius: cardContent\.radius\n            width: videoContainer\.width\n          \}\n        \}\n@\n        layer.effect: null\n@s' "$CARD_QML"
 
-      # Hide filename/extension badges on cards.
-      ${pkgs.gnused}/bin/sed -i '/visible: cardDelegate.currentFileName !== ""/s@.*@              visible: false@' "$WALLCARDS"
-      ${pkgs.gnused}/bin/sed -i '/text: cardDelegate.currentFileName.split/s@.*@              text: ""@' "$WALLCARDS"
-      ${pkgs.gnused}/bin/sed -i 's@visible: isCenter@visible: false@' "$WALLCARDS"
-      ${pkgs.gnused}/bin/sed -i '/text: cardDelegate.currentFileName.substring/s@.*@              text: ""@' "$WALLCARDS"
+      ${pkgs.perl}/bin/perl -0777 -i -pe 's/"card_height"\s*:\s*(?:500|350)/"card_height": 390/g; s/"card_strip_width"\s*:\s*(?:80|90)/"card_strip_width": 102/g; s/"card_radius"\s*:\s*10/"card_radius": 0/g; s/"background_opacity"\s*:\s*null/"background_opacity": 0.3/g' "$WALLCARDS_MANIFEST"
 
-      # Adjust wallcards defaults: slightly larger than stock, more centered, no radius mismatch,
-      # and a subtle background dim.
-      ${pkgs.perl}/bin/perl -0777 -i -pe 's/"card_height"\s*:\s*500/"card_height": 540/g; s/"card_strip_width"\s*:\s*80/"card_strip_width": 92/g; s/"card_radius"\s*:\s*10/"card_radius": 0/g; s/"background_opacity"\s*:\s*null/"background_opacity": 0.3/g' "$WALLCARDS_MANIFEST"
-
-      if ${pkgs.gnugrep}/bin/grep -qE 'Qt5Compat\.GraphicalEffects|OpacityMask' "$WALLCARDS"; then
+      if ${pkgs.gnugrep}/bin/grep -qE 'Qt5Compat\.GraphicalEffects|OpacityMask' "$WALLCARDS" "$CARD_QML"; then
         echo "[wallcards-patched] patch did not fully apply" >&2
         exit 1
       fi
     '';
-
-    pluginSettings =
-      (builtins.listToAttrs (map (name: {
-        name = "noctalia/plugins/${name}";
-        value = {source = inputs.noctalia.plugins.${name};};
-      }) (builtins.attrNames inputs.noctalia.plugins)))
-      // {
-        "noctalia/plugins/wallcards" = {
-          source = wallcardsPatched;
-        };
-      };
   in {
     config = lib.mkIf shell.noctalia {
       home-manager.users.${username} = {...}: {
