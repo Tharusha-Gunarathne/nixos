@@ -712,6 +712,21 @@ binds {
     // NOCTALIA KEYBINDS
     // Core Noctalia binds
     // Mod+Space { spawn-sh "noctalia-shell ipc call launcher toggle"; }
+    
+    // ==========================
+    // Urgent Situation Key Binds
+    // ==========================
+
+    // Open Brave to YouTube in a new workspace
+
+    Ctrl+grave hotkey-overlay-title="Open YouTube in Brave (new workspace)" { spawn-sh "ws_count=$(niri msg -j workspaces 2>/dev/null | jq length || echo 0); target=$((ws_count + 1)); niri msg action focus-workspace \"$target\" >/dev/null 2>&1 || true; brave-default-launcher --new-window 'https://www.youtube.com' >/dev/null 2>&1 & sleep 0.3; niri msg action move-workspace-to-index \"$target\" >/dev/null 2>&1 || true"; }
+
+    Mod+grave hotkey-overlay-title="Open YouTube in Brave (new workspace)" { spawn-sh "ws_count=$(niri msg -j workspaces 2>/dev/null | jq length || echo 0); target=$((ws_count + 1)); niri msg action focus-workspace \"$target\" >/dev/null 2>&1 || true; brave-default-launcher --new-window 'https://www.youtube.com' >/dev/null 2>&1 & sleep 0.3; niri msg action move-workspace-to-index \"$target\" >/dev/null 2>&1 || true"; }
+
+    Ctrl+Shift+grave hotkey-overlay-title="Open YouTube in Brave (new workspace)" { spawn-sh "ws_count=$(niri msg -j workspaces 2>/dev/null | jq length || echo 0); target=$((ws_count + 1)); niri msg action focus-workspace \"$target\" >/dev/null 2>&1 || true; brave-default-launcher --new-window 'https://www.youtube.com' >/dev/null 2>&1 & sleep 0.3; niri msg action move-workspace-to-index \"$target\" >/dev/null 2>&1 || true"; }
+
+    // ============================
+
     Mod+Space { spawn-sh "vicinae toggle"; }
     Mod+Shift+A { spawn-sh "vicinae deeplink vicinae://launch/clipboard/history"; }
     Mod+S { spawn-sh "noctalia-shell ipc call controlCenter toggle"; }
