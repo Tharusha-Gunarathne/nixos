@@ -54,6 +54,7 @@
         bat
         inotify-tools
         yazi
+        fzf
 
         # User development stack
         python3
@@ -74,6 +75,7 @@
         proton-vpn
         kdePackages.ark
         qbittorrent
+        obsidian
 
         # System management
         mission-center
