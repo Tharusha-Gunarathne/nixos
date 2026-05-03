@@ -445,7 +445,8 @@
             "bitwarden",
             "spotify",
             "io.missioncenter.MissionCenter",
-            "org.qbittorrent.qBittorrent"
+            "org.qbittorrent.qBittorrent",
+            "lotion"
         ],
         "pinnedStatic": false,
         "position": "bottom",
