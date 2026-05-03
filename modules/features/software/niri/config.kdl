@@ -388,6 +388,11 @@ window-rule {
     opacity 1.0
 }
 
+window-rule {
+    match app-id="Lotion"
+    opacity 1.0
+}
+
 debug {
   // Allows notification actions and window activation from Noctalia.
   honor-xdg-activation-with-invalid-serial
