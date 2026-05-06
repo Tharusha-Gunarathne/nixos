@@ -76,6 +76,7 @@
         kdePackages.ark
         qbittorrent
         obsidian
+        qalculate-gtk
 
         # System management
         mission-center
