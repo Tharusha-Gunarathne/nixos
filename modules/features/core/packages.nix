@@ -60,6 +60,7 @@
         python3
         python3Packages.pip
         nodejs
+        lmstudio
 
         # Desktop apps
         ente-auth
