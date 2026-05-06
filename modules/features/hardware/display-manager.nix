@@ -3,7 +3,7 @@
     # Change this to any folder name under qylock/themes, e.g. "clockwork", "winter", "enfield".
     themeName = "clockwork";
     # Only applies when themeName = "clockwork".
-    clockworkMode = "light"; # or "light"
+    clockworkMode = "dark"; # or "light"
 
     qylockPin = inputs.sources.sourcePins.qylock;
     qylockSrc = pkgs.fetchFromGitHub qylockPin;
