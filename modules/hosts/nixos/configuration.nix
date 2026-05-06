@@ -44,6 +44,9 @@
       self.nixosModules.xdm
       self.nixosModules.fastfetch
       self.nixosModules.loupe
+      #services
+      self.nixosModules.lamp
+      self.nixosModules.cockpit
       # user
       self.nixosModules.gtk
       self.nixosModules.variables
