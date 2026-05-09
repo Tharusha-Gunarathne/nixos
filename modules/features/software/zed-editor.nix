@@ -15,12 +15,12 @@
         enable = true;
 
         # Extensions to auto-install (use the repo name from github.com/zed-industries/extensions)
-        extensions = ["nix" "toml" "rust" "jetbrains-new-ui-icons" "java" "sql" "latex" "php" "rainbow-csv" "git-firefly" "emmet" "emoji-completions"];
+        extensions = ["nix" "toml" "rust" "jetbrains-new-ui-icons" "java" "sql" "latex" "php" "rainbow-csv" "git-firefly" "emmet" "emoji-completions" "github-copilot-cli"];
 
         # Extra binaries Zed can find (LSPs, formatters, etc.)
         extraPackages = with pkgs; [
           nixd # Nix LSP
-          nixfmt-rfc-style
+          nixfmt # Nix formatter
           rust-analyzer
         ];
 
@@ -34,6 +34,10 @@
             mode = "system";
             light = "jetbrains-new-ui-icons";
             dark = "jetbrains-new-ui-icons";
+          };
+
+          features = {
+            edit_prediction_provider = "copilot";
           };
 
           cursor_blink = true;
