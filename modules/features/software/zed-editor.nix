@@ -13,7 +13,7 @@
         enable = true;
 
         # Extensions to auto-install (use the repo name from github.com/zed-industries/extensions)
-        extensions = ["nix" "toml" "rust" "jetbrains-new-ui-icons" "java" "sql" "latex" "php" "rainbow-csv" "git-firefly" "emmet" "emoji-completions" "github-copilot-cli"];
+        extensions = ["nix" "toml" "rust" "jetbrains-new-ui-icons" "java" "sql" "latex" "php" "rainbow-csv" "git-firefly" "emmet" "emoji-completions" "github-copilot-cli" "live-server"];
 
         # Extra binaries Zed can find (LSPs, formatters, etc.)
         extraPackages = with pkgs; [
