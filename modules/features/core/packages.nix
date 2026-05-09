@@ -61,6 +61,7 @@
         python3Packages.pip
         nodejs
         lmstudio
+        claude-code
 
         # Desktop apps
         ente-auth
