@@ -57,8 +57,9 @@
         fzf
 
         # User development stack
-        python3
-        python3Packages.pip
+        python314
+        uv
+        python314Packages.pip
         nodejs
         lmstudio
         claude-code
