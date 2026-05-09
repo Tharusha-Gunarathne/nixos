@@ -8,7 +8,6 @@
   in {
     home-manager.users.${username} = {
       pkgs,
-      lib,
       ...
     }: {
       programs.zed-editor = {
@@ -32,17 +31,16 @@
           };
           icon_theme = {
             mode = "system";
-            light = "jetbrains-new-ui-icons";
-            dark = "jetbrains-new-ui-icons";
+            light = "JetBrains New UI Icons (Light)";
+            dark = "JetBrains New UI Icons (Dark)";
           };
 
-          features = {
-            edit_prediction_provider = "copilot";
+          edit_predictions = {
+              mode = "eager"; # "eager" | "subtle" | "disabled"
           };
 
           cursor_blink = true;
           cursor_shape = "bar"; # "bar" | "block" | "underline" | "hollow"
-          cursor_trail_length = 12;
 
           terminal = {
             shell = {
@@ -52,9 +50,8 @@
 
           ui_font_size = 14;
           buffer_font_size = 14;
-          buffer_font_family = "JetBrains Mono";
+          buffer_font_family = "JetBrainsMono Nerd Font";
           vim_mode = true;
-          hour_format = "hour24";
           format_on_save = "on";
 
           languages = {
