@@ -45,6 +45,7 @@
       self.nixosModules.fastfetch
       self.nixosModules.loupe
       self.nixosModules.zed-editor
+      self.nixosModules.freeClaudeCode
       #services
       self.nixosModules.lamp
       self.nixosModules.cockpit

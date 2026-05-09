@@ -3,6 +3,13 @@
 
   outputs = _: {
     sourcePins = {
+      freeClaudeCode = {
+        owner = "Alishahryar1";
+        repo = "free-claude-code";
+        rev = "main";
+        hash = "sha256-c0IDIJ5Di20WI2PXzq1AL5VWo7pykPXOwBha5iVz1lo=";
+      };
+      
       modernz = {
         owner = "Samillion";
         repo = "ModernZ";
