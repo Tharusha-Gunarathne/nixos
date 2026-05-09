@@ -27,7 +27,7 @@
 
       # Optional per-tier routing (blank = fall back to MODEL):
       MODEL_OPUS="nvidia_nim/z-ai/glm-5.1"
-      MODEL_SONNET="nvidia_nim/minimaxai/minimax-m2.7"
+      MODEL_SONNET="nvidia_nim/deepseek-ai/deepseek-v4-pro"
       MODEL_HAIKU="nvidia_nim/deepseek-ai/deepseek-v4-flash"
 
       # Rate limiting (free NIM tier: ~40 req/min)
