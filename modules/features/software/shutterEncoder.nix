@@ -2,7 +2,6 @@
   flake.nixosModules.shutterEncoder = {
     config,
     pkgs,
-    lib,
     ...
   }: let
     username = config.myConfig.primaryUser;

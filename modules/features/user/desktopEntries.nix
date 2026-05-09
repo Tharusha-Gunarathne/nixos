@@ -12,7 +12,9 @@
       exec ./private_app-linux
     '';
   in {
-    home-manager.users.${username} = {lib, ...}: {
+    home-manager.users.${username} = {...}: {
+      xdg.enable = true;
+
       xdg.desktopEntries = {
         private_app-Server-Desktop = {
           name = "private_app Server - Desktop";

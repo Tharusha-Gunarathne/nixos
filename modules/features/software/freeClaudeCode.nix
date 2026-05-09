@@ -169,7 +169,8 @@
           StandardOutput = "journal";
           StandardError = "journal";
         };
-        Install.WantedBy = ["default.target"];
+        # To start the service immediately and on login, enable it in the user session:
+        # Install.WantedBy = ["default.target"];
       };
     };
   };

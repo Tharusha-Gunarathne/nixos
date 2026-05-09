@@ -1,5 +1,5 @@
 {...}: {
-  flake.nixosModules.zed-editor = {
+  flake.nixosModules.zedEditor = {
     config,
     ...
   }: let
