@@ -44,6 +44,7 @@
       self.nixosModules.xdm
       self.nixosModules.fastfetch
       self.nixosModules.loupe
+      self.nixosModules.zed-editor
       #services
       self.nixosModules.lamp
       self.nixosModules.cockpit
