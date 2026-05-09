@@ -63,7 +63,6 @@
         nodejs
         lmstudio
         claude-code
-        figma-linux
         
         # Desktop apps
         ente-auth
