@@ -1,7 +1,6 @@
 {...}: {
   flake.nixosModules.zed-editor = {
     config,
-    pkgs,
     ...
   }: let
     username = config.myConfig.primaryUser;
