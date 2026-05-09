@@ -342,13 +342,20 @@ window-rule {
 }
 
 window-rule {
+    match app-id="org.gnome.Nautilus"
+    opacity 0.95
+}
+
+window-rule {
     match app-id="code"
     opacity 0.98
 }
 
 window-rule {
-    match app-id="org.gnome.Nautilus"
-    opacity 0.95
+    match app-id=r#"^brave-[a-z0-9]+-Profile_[0-9]+$"#
+    match app-id="Lotion"
+    match app-id="dev.zed.Zed"
+    opacity 1.0
 }
 
 layer-rule {
@@ -383,15 +390,6 @@ window-rule {
     open-floating false
 }
 
-window-rule {
-    match app-id=r#"^brave-[a-z0-9]+-Profile_[0-9]+$"#
-    opacity 1.0
-}
-
-window-rule {
-    match app-id="Lotion"
-    opacity 1.0
-}
 
 debug {
   // Allows notification actions and window activation from Noctalia.
