@@ -3,6 +3,7 @@
     imports = [
       # core
       self.nixosModules.nixSettings
+      self.nixosModules.nixLd
       self.nixosModules.options
       self.nixosModules.packages
       self.nixosModules.performance
