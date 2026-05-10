@@ -1,34 +1,35 @@
-{inputs, ...}: {
+{inputs, localConfig, ...}: {
   flake.nixosModules.freeClaudeCode = {
     config,
     pkgs,
     ...
   }: let
-    username = config.myConfig.primaryUser;
-    fccPin = inputs.sources.sourcePins.freeClaudeCode;
-    fccSrc = pkgs.fetchFromGitHub fccPin;
-    proxyPort = 8082;
+    username   = config.myConfig.primaryUser;
+    fccPin     = inputs.sources.sourcePins.freeClaudeCode;
+    fccSrc     = pkgs.fetchFromGitHub fccPin;
+    nim        = localConfig.nvidia_nim;
+    proxyPort  = nim.fcc_proxy_port;
 
+    # Env template is now generated from localConfig values so defaults are
+    # pre-populated on a fresh install; the user can still edit ~/.config/free-claude-code/.env
     defaultEnvTemplate = pkgs.writeText "free-claude-code-env-template" ''
       # ──────────────────────────────────────────────────────────
       #  Free Claude Code — proxy config
       #  Get your key: https://build.nvidia.com/settings/api-keys
       # ──────────────────────────────────────────────────────────
 
-      NVIDIA_NIM_API_KEY=""
+      NVIDIA_NIM_API_KEY="${nim.api_key}"
 
       # Browse models: https://build.nvidia.com/explore/discover
-      # Get the model name by going to the model's page and looking for the get code field.
-      MODEL="nvidia_nim/deepseek-ai/deepseek-v4-pro"
+      MODEL="${nim.fcc_model_default}"
 
       # Local secret used by Claude Code to authenticate to this proxy.
-      # Can be anything — it never leaves your machine.
-      ANTHROPIC_AUTH_TOKEN="freecc"
+      ANTHROPIC_AUTH_TOKEN="${nim.fcc_auth_token}"
 
       # Optional per-tier routing (blank = fall back to MODEL):
-      MODEL_OPUS="nvidia_nim/z-ai/glm-5.1"
-      MODEL_SONNET="nvidia_nim/deepseek-ai/deepseek-v4-pro"
-      MODEL_HAIKU="nvidia_nim/deepseek-ai/deepseek-v4-flash"
+      MODEL_OPUS="${nim.fcc_model_opus}"
+      MODEL_SONNET="${nim.fcc_model_sonnet}"
+      MODEL_HAIKU="${nim.fcc_model_haiku}"
 
       # Rate limiting (free NIM tier: ~40 req/min)
       PROVIDER_RATE_LIMIT=1
@@ -59,20 +60,16 @@
       chmod -R u+w "$WORK_DIR/src"
 
       # ── Patch upstream bug: forward-reference in validator return type ──
-      # settings.py has `-> Settings:` inside the Settings class body,
-      # which fails at class definition time. Quoting it defers resolution.
       ${pkgs.gnused}/bin/sed -i \
         's/def check_nvidia_nim_api_key(self) -> Settings:/def check_nvidia_nim_api_key(self) -> "Settings":/' \
         "$WORK_DIR/src/config/settings.py"
 
-      # Remove stale venv so uv doesn't fail with "already exists"
       rm -rf "$WORK_DIR/.venv"
 
       "$UV" venv \
         --python "${pkgs.python314}/bin/python3" \
         "$WORK_DIR/.venv"
 
-      # Install runtime deps
       "$UV" pip install \
         --python "$WORK_DIR/.venv/bin/python" \
         --no-cache-dir \
@@ -80,13 +77,11 @@
         "pydantic-settings" openai loguru "markdown-it-py" "discord.py" \
         "python-telegram-bot"
 
-      # Install build backend so --no-build-isolation works
       "$UV" pip install \
         --python "$WORK_DIR/.venv/bin/python" \
         --no-cache-dir \
         hatchling
 
-      # Install the proxy package itself
       "$UV" pip install \
         --python "$WORK_DIR/.venv/bin/python" \
         --no-cache-dir \
@@ -120,7 +115,7 @@
 
     claudeFreeBin = pkgs.writeShellScriptBin "claude-free" ''
       CONFIG_FILE="$HOME/.config/free-claude-code/.env"
-      AUTH_TOKEN="freecc"
+      AUTH_TOKEN="${nim.fcc_auth_token}"
 
       if [ -f "$CONFIG_FILE" ]; then
         _token=$(${pkgs.gnugrep}/bin/grep -E '^ANTHROPIC_AUTH_TOKEN=' "$CONFIG_FILE" \
@@ -151,25 +146,24 @@
             "${defaultEnvTemplate}" \
             "$CONFIG_FILE"
           echo "[fcc] Created config at $CONFIG_FILE"
-          echo "[fcc] Add your NVIDIA_NIM_API_KEY before starting the proxy."
+          echo "[fcc] Edit NVIDIA_NIM_API_KEY in $CONFIG_FILE if needed."
         fi
       '';
 
       systemd.user.services.free-claude-code = {
         Unit = {
           Description = "Free Claude Code — NVIDIA NIM proxy for Claude Code";
-          After = ["network-online.target"];
-          Wants = ["network-online.target"];
+          After        = ["network-online.target"];
+          Wants        = ["network-online.target"];
         };
         Service = {
-          Type = "simple";
-          ExecStart = "${proxyBin}/bin/free-claude-code-proxy";
-          Restart = "on-failure";
-          RestartSec = "5s";
+          Type           = "simple";
+          ExecStart      = "${proxyBin}/bin/free-claude-code-proxy";
+          Restart        = "on-failure";
+          RestartSec     = "5s";
           StandardOutput = "journal";
-          StandardError = "journal";
+          StandardError  = "journal";
         };
-        # To start the service immediately and on login, enable it in the user session:
         # Install.WantedBy = ["default.target"];
       };
     };

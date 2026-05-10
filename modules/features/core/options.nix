@@ -1,19 +1,22 @@
-{...}: {
+{localConfig, ...}: {
   flake.nixosModules.options = {
     lib,
     config,
     ...
-  }: {
+  }: let
+    lUser = localConfig.user;
+    lStorage = localConfig.storage;
+  in {
     options.myConfig = {
       # User settings
       primaryUser = lib.mkOption {
         type = lib.types.str;
-        default = "tharusha-gunarathne";
+        default = lUser.username;
         description = "Primary user account name";
       };
       primaryUid = lib.mkOption {
         type = lib.types.int;
-        default = 1000;
+        default = lUser.uid;
         description = "UID of the primary user account";
       };
 
@@ -25,8 +28,8 @@
       };
 
       # Undervolt the CPU
-      # To undervolt disable "Undervolt Protection" in the BIOS/UEFI, then find stable undervolt values for your CPU and set them here.
-      # "Undervolt Protection" is shown when "Legion Optimization" is enabled in new Legion BIOS
+      # To undervolt disable "Undervolt Protection" in the BIOS/UEFI, then find
+      # stable undervolt values for your CPU and set them here.
       isUnderVoltEnabled = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -39,12 +42,12 @@
           options = {
             rootUuid = lib.mkOption {
               type = lib.types.str;
-              default = "00000000-0000-0000-0000-000000000000";
+              default = lStorage.root_uuid;
               description = "Root filesystem UUID.";
             };
             bootUuid = lib.mkOption {
               type = lib.types.str;
-              default = "FC18-9855";
+              default = lStorage.boot_uuid;
               description = "Boot filesystem UUID.";
             };
             dataDrives = lib.mkOption {
@@ -60,16 +63,8 @@
                   };
                 };
               });
-              default = [
-                {
-                  name = "D_Drive";
-                  uuid = "ACAE0ACAAE0A8D50";
-                }
-                {
-                  name = "E_Drive";
-                  uuid = "01DCC7D0F4666AF0";
-                }
-              ];
+              # Map TOML array-of-tables to the expected list format
+              default = map (d: {inherit (d) name uuid;}) lStorage.data_drives;
               description = "Additional data drives mounted under /mnt.";
             };
           };
@@ -87,12 +82,6 @@
               default = true;
               description = "Enable Noctalia shell integrations.";
             };
-            # Add more shell-specific feature flags here as needed.
-            # shell = lib.mkOption {
-            #   type = lib.types.bool;
-            #   default = false;
-            #   description = "Enable features specific to <shell>.";
-            # };
           };
         };
         description = "Feature flags for shell-specific integrations.";

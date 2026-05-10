@@ -1,16 +1,18 @@
 {
   inputs,
   self,
+  localConfig,
   ...
 }: {
   flake.nixosModules.noctalia = {
     config,
-    pkgs,
     lib,
     ...
   }: let
     username = config.myConfig.primaryUser;
     repoRoot = config.myConfig.repoRoot;
+    nocPaths = localConfig.paths;
+    nocCfg = localConfig.noctalia;
   in {
     imports = [
       self.nixosModules.noctaliaPluginSettings
@@ -30,6 +32,59 @@
       }: let
         configDir = "${config.xdg.configHome}/noctalia";
         repoDir = "${repoRoot}/modules/features/software/noctalia";
+
+        # Patch machine-specific values into settings.json after seeding.
+        # This keeps the committed settings.json free of personal paths.
+        patchSettingsScript = pkgs.writers.writePython3 "noctalia-patch-settings" {} ''
+          import json
+          import sys
+
+          settings_path = sys.argv[1]
+          wallpaper_dir = sys.argv[2]
+          avatar_image = sys.argv[3]
+          bar_monitor = sys.argv[4]
+          dock_monitor = sys.argv[5]
+          location_name = sys.argv[6]
+          username = sys.argv[7]
+
+          with open(settings_path) as f:
+              data = json.load(f)
+
+          # Wallpaper directory
+          data.setdefault("wallpaper", {})
+          data["wallpaper"]["directory"] = wallpaper_dir
+          for m in data["wallpaper"].get("monitorDirectories", []):
+              m["directory"] = wallpaper_dir
+
+          # Avatar
+          data.setdefault("general", {})
+          data["general"]["avatarImage"] = avatar_image
+
+          # Bar monitors list
+          data.setdefault("bar", {})
+          data["bar"]["monitors"] = [bar_monitor]
+
+          # Dock monitors list
+          data.setdefault("dock", {})
+          data["dock"]["monitors"] = [dock_monitor]
+
+          # Location name (weather / calendar)
+          data.setdefault("location", {})
+          data["location"]["name"] = location_name
+
+          # Hook binary paths (use per-user profile bin)
+          profile_bin = f"/etc/profiles/per-user/{username}/bin"
+          data.setdefault("hooks", {})
+          color_hook = f"{profile_bin}/spicetify-noctalia-color-hook"
+          mpv_hook = f"{profile_bin}/noctalia-mpv-modernz-sync"
+          combined = f"{color_hook} && {mpv_hook}"
+          data["hooks"]["colorGeneration"] = combined
+          data["hooks"]["darkModeChange"] = color_hook
+          data["hooks"]["wallpaperChange"] = combined
+
+          with open(settings_path, "w") as f:
+              json.dump(data, f, indent=4)
+        '';
 
         syncScript = pkgs.writeShellScript "noctalia-sync" ''
           set -euo pipefail
@@ -116,13 +171,10 @@
             "${configDir}/settings.json.hmbackup" \
             "${configDir}/plugins.json.hmbackup"
 
-          # Remove stale plugin backup directories that can register duplicate manifests
-          # (e.g. wallcards.backup) and override expected plugin behavior.
           if [ -d "${configDir}/plugins" ]; then
             find "${configDir}/plugins" -maxdepth 1 -type d -name '*.backup' -exec rm -rf {} +
           fi
 
-          # Clear stale QML/pipeline caches so plugin QML changes are picked up reliably.
           rm -rf "$HOME/.cache/noctalia-qs/qmlcache" \
                  "$HOME/.cache/noctalia-qs/qtpipelinecache-x86_64-little_endian-lp64"
         '';
@@ -146,6 +198,17 @@
             ${pkgs.coreutils}/bin/install -m 644 "$SETTINGS" "${repoDir}/settings.json"
             echo "[noctalia] Seeded settings.json from store (fresh system)"
           fi
+
+          # Patch machine-specific values that must not be committed
+          ${patchSettingsScript} \
+            "$SETTINGS" \
+            "${nocPaths.wallpaper_dir}" \
+            "${nocPaths.avatar_image}" \
+            "${nocCfg.bar_monitor}" \
+            "${nocCfg.dock_monitor}" \
+            "${nocCfg.location_name}" \
+            "${username}"
+          echo "[noctalia] Patched machine-specific values into settings.json"
         '';
 
         home.activation.noctaliaPlugins = lib.hm.dag.entryAfter ["writeBoundary"] ''
@@ -179,9 +242,7 @@
             Restart = "always";
             RestartSec = "3s";
           };
-          Install = {
-            WantedBy = ["default.target"];
-          };
+          Install.WantedBy = ["default.target"];
         };
 
         systemd.user.services.noctalia-commit = {
@@ -199,7 +260,6 @@
             OnUnitActiveSec = "15min";
             Unit = "noctalia-commit.service";
           };
-          # Temporarily disabled: keep the timer definition, but do not auto-enable it.
           # Install.WantedBy = ["timers.target"];
         };
       };

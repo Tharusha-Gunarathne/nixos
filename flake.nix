@@ -4,7 +4,7 @@
   nixConfig = {
     extra-substituters = [
       "https://vicinae.cachix.org"
-      "https://niri.cachix.org" 
+      "https://niri.cachix.org"
     ];
     extra-trusted-public-keys = [
       "vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc="
@@ -44,7 +44,35 @@
     nix-flatpak.url = "github:gmodena/nix-flatpak";
   };
 
-  outputs = inputs:
-    inputs.flake-parts.lib.mkFlake {inherit inputs;}
-    (inputs.import-tree ./modules);
+  outputs = inputs: let
+    # ── Load machine-specific config from .env.local (gitignored, TOML) ────────
+    # Copy .env.local.example → .env.local and fill in your values.
+    # The abort gives a clear error on fresh clones before the file exists.
+    localConfig =
+      if builtins.pathExists ./.env.local
+      then fromTOML (builtins.readFile ./.env.local)
+      else
+        abort ''
+
+          .env.local not found!
+
+          This file holds machine-specific values (UUIDs, API keys, paths).
+          Create it from the template before building:
+
+            cp .env.local.example .env.local
+            # then edit .env.local and fill in your values
+
+        '';
+  in
+    inputs.flake-parts.lib.mkFlake {inherit inputs;} ({...}: {
+      # Import every module discovered by import-tree under ./modules.
+      imports = [(inputs.import-tree ./modules)];
+
+      # _module.args injects localConfig into the argument set of every
+      # flake-parts module, so modules can declare:
+      #   { localConfig, ... }: { flake.nixosModules.foo = ...; }
+      # This is the correct flake-parts mechanism — not flake.specialArgs,
+      # which is not a valid option.
+      _module.args.localConfig = localConfig;
+    });
 }

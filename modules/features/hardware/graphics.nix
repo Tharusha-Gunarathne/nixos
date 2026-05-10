@@ -1,4 +1,4 @@
-{...}: {
+{localConfig, ...}: {
   flake.nixosModules.graphics = {
     config,
     pkgs,
@@ -19,14 +19,14 @@
         nvidiaSettings = true;
         package = config.boot.kernelPackages.nvidiaPackages.stable;
 
-        powerManagement.enable = false; # this is the main culprit
+        powerManagement.enable = false; # main culprit of shutdown hangs
         powerManagement.finegrained = false;
 
         prime = {
           offload.enable = true;
           offload.enableOffloadCmd = true;
-          intelBusId = "PCI:0:2:0";
-          nvidiaBusId = "PCI:1:0:0";
+          intelBusId = localConfig.hardware.intel_bus_id;
+          nvidiaBusId = localConfig.hardware.nvidia_bus_id;
         };
       };
 

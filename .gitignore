@@ -11,3 +11,6 @@ result-*
 # Logs and temp
 *.log
 *.tmp
+
+# Machine-specific secrets — copy from .env.local.example
+.env.local

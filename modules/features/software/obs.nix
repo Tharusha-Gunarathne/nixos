@@ -1,13 +1,8 @@
-{...}: {
-  flake.nixosModules.obs = {
-    config,
-    lib,
-    ...
-  }: let
+{localConfig, ...}: {
+  flake.nixosModules.obs = {config, ...}: let
     username = config.myConfig.primaryUser;
-
-    displayX = toString 2560;
-    displayY = toString 1600;
+    displayX = toString localConfig.hardware.display_width;
+    displayY = toString localConfig.hardware.display_height;
   in {
     home-manager.users.${username} = {
       pkgs,
@@ -22,7 +17,12 @@
       home.activation.obsCanvasSize = lib.hm.dag.entryAfter ["writeBoundary"] ''
         for ini in "$HOME/.config/obs-studio/basic/profiles/"*/basic.ini; do
           [ -f "$ini" ] || continue
-          ${pkgs.gnused}/bin/sed -i -e 's/^BaseCX=.*/BaseCX=${displayX}/' -e 's/^BaseCY=.*/BaseCY=${displayY}/' -e 's/^OutputCX=.*/OutputCX=${displayX}/' -e 's/^OutputCY=.*/OutputCY=${displayY}/' "$ini"
+          ${pkgs.gnused}/bin/sed -i \
+            -e 's/^BaseCX=.*/BaseCX=${displayX}/' \
+            -e 's/^BaseCY=.*/BaseCY=${displayY}/' \
+            -e 's/^OutputCX=.*/OutputCX=${displayX}/' \
+            -e 's/^OutputCY=.*/OutputCY=${displayY}/' \
+            "$ini"
         done
       '';
     };

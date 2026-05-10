@@ -1,4 +1,4 @@
-{...}: {
+{localConfig, ...}: {
   flake.nixosModules.git = {config, ...}: let
     username = config.myConfig.primaryUser;
   in {
@@ -6,8 +6,8 @@
       programs.git = {
         enable = true;
         settings.user = {
-          name = "Tharush2002";
-          email = "172119123+Tharusha-Gunarathne@users.noreply.github.com";
+          name = localConfig.user.git_name;
+          email = localConfig.user.git_email;
         };
       };
     };
