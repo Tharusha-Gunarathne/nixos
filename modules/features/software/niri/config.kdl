@@ -365,13 +365,6 @@ layer-rule {
   }
 }
 
-layer-rule {
-    match namespace="^noctalia-bar*"
-    background-effect {
-        blur false
-    }
-}
-
 blur {
   passes 3        // more passes = stronger blur (default: 3)
   offset 5.0      // sample distance per pass (default: 3.0)
