@@ -30,7 +30,8 @@
         "viewMode": "list"
     },
     "audio": {
-        "mprisBlacklist": [],
+        "mprisBlacklist": [
+        ],
         "preferredPlayer": "",
         "spectrumFrameRate": 30,
         "spectrumMirrored": true,
@@ -46,7 +47,7 @@
         "backgroundOpacity": 0,
         "barType": "floating",
         "capsuleColorKey": "none",
-        "capsuleOpacity": 0.62,
+        "capsuleOpacity": 0.35000000000000003,
         "contentPadding": 2,
         "density": "comfortable",
         "displayMode": "always_visible",
@@ -71,7 +72,8 @@
         "rightClickAction": "controlCenter",
         "rightClickCommand": "",
         "rightClickFollowMouse": true,
-        "screenOverrides": [],
+        "screenOverrides": [
+        ],
         "showCapsule": true,
         "showOnWorkspaceSwitch": true,
         "showOutline": false,
@@ -119,14 +121,16 @@
                 },
                 {
                     "defaultSettings": {
-                        "colorHistory": [],
+                        "colorHistory": [
+                        ],
                         "detectedCompositor": "",
                         "detectedRecorder": "",
                         "filenameFormat": "",
                         "installedLangs": [
                             "eng"
                         ],
-                        "paletteColors": [],
+                        "paletteColors": [
+                        ],
                         "screenshotPath": "",
                         "selectedOcrLang": "eng",
                         "transAvailable": false,
@@ -135,7 +139,8 @@
                     "id": "plugin:screen-toolkit"
                 },
                 {
-                    "defaultSettings": {},
+                    "defaultSettings": {
+                    },
                     "id": "plugin:kde-connect"
                 }
             ],
@@ -200,13 +205,15 @@
             ],
             "right": [
                 {
-                    "blacklist": [],
+                    "blacklist": [
+                    ],
                     "chevronColor": "none",
                     "colorizeIcons": false,
                     "drawerEnabled": true,
                     "hidePassive": false,
                     "id": "Tray",
-                    "pinned": []
+                    "pinned": [
+                    ]
                 },
                 {
                     "defaultSettings": {
@@ -271,7 +278,8 @@
         }
     },
     "brightness": {
-        "backlightDeviceMappings": [],
+        "backlightDeviceMappings": [
+        ],
         "brightnessStep": 5,
         "enableDdcSupport": false,
         "enforceMinimum": true
@@ -405,13 +413,13 @@
     },
     "dock": {
         "animationSpeed": 0.25,
-        "backgroundOpacity": 1,
+        "backgroundOpacity": 0.42,
         "colorizeIcons": false,
         "deadOpacity": 0.6,
         "displayMode": "exclusive",
         "dockType": "floating",
         "enabled": true,
-        "floatingRatio": 0.4,
+        "floatingRatio": 0.41000000000000003,
         "groupApps": true,
         "groupClickAction": "cycle",
         "groupContextMenuMode": "extended",
@@ -427,7 +435,7 @@
         "monitors": [
             "eDP-1"
         ],
-        "onlySameOutput": true,
+        "onlySameOutput": false,
         "pinnedApps": [
             "org.gnome.Nautilus",
             "brave-browser",
@@ -452,14 +460,14 @@
         "allowPanelsOnScreenWithoutBar": true,
         "allowPasswordWithFprintd": false,
         "animationDisabled": false,
-        "animationSpeed": 0.85,
+        "animationSpeed": 0.60,
         "autoStartAuth": false,
         "avatarImage": "REDACTED-HOME/.face",
         "boxRadiusRatio": 1,
         "clockFormat": "hh\\nmm",
         "clockStyle": "custom",
         "compactLockScreen": false,
-        "dimmerOpacity": 0.21,
+        "dimmerOpacity": 0.35000000000000003,
         "enableBlurBehind": true,
         "enableLockScreenCountdown": true,
         "enableLockScreenMediaControls": false,
@@ -495,7 +503,8 @@
         "lockScreenAnimations": false,
         "lockScreenBlur": 0,
         "lockScreenCountdownDuration": 10000,
-        "lockScreenMonitors": [],
+        "lockScreenMonitors": [
+        ],
         "lockScreenTint": 0,
         "passwordChars": false,
         "radiusRatio": 0.5,
@@ -589,7 +598,8 @@
         "enabled": true,
         "location": "top_right",
         "lowUrgencyDuration": 2,
-        "monitors": [],
+        "monitors": [
+        ],
         "normalUrgencyDuration": 5,
         "overlayLayer": true,
         "respectExpireTimeout": true,
@@ -618,7 +628,8 @@
             2
         ],
         "location": "top_right",
-        "monitors": [],
+        "monitors": [
+        ],
         "overlayLayer": true
     },
     "plugins": {
@@ -763,11 +774,11 @@
         "fontDefaultScale": 1,
         "fontFixed": "JetBrainsMono Nerd Font",
         "fontFixedScale": 1,
-        "panelBackgroundOpacity": 0.93,
+        "panelBackgroundOpacity": 0.65,
         "panelsAttachedToBar": false,
-        "scrollbarAlwaysVisible": true,
+        "scrollbarAlwaysVisible": false,
         "settingsPanelMode": "centered",
-        "settingsPanelSideBarCardStyle": true,
+        "settingsPanelSideBarCardStyle": false,
         "tooltipsEnabled": true,
         "translucentWidgets": false
     },
@@ -776,7 +787,8 @@
         "directory": "REDACTED-HOME/Pictures/Wallpapers",
         "enableMultiMonitorDirectories": false,
         "enabled": true,
-        "favorites": [],
+        "favorites": [
+        ],
         "fillColor": "#000000",
         "fillMode": "crop",
         "hideWallpaperFilenames": false,
