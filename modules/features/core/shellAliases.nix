@@ -1,21 +1,31 @@
 {...}: {
-  flake.nixosModules.shellAliases = {pkgs, ...}: {
+  flake.nixosModules.shellAliases = {
+    pkgs,
+    config,
+    ...
+  }: {
     environment.systemPackages = [
-      # Nix management shortcuts
+      # Nix management shortcuts (always operate from repo root)
       (pkgs.writeShellScriptBin "nix-switch" ''
-        exec sudo nixos-rebuild switch --flake . "$@"
+        REPO_ROOT="${config.myConfig.repoRoot}"
+        cd "$REPO_ROOT"
+        exec sudo nixos-rebuild switch --flake "path:.#nixos" "$@"
       '')
       (pkgs.writeShellScriptBin "nix-update" ''
-        exec sudo nix flake update "$@"
+        REPO_ROOT="${config.myConfig.repoRoot}"
+        cd "$REPO_ROOT"
+        exec nix flake update "$@"
       '')
       (pkgs.writeShellScriptBin "nix-clean" ''
+        REPO_ROOT="${config.myConfig.repoRoot}"
+        cd "$REPO_ROOT"
         exec sudo nix-collect-garbage -d "$@"
       '')
       (pkgs.writeShellScriptBin "qs" ''
         exec noctalia-shell "$@"
       '')
       # ----------------------------
-      
+
       (pkgs.writeShellScriptBin "handbrake" ''
         exec fr.handbrake.ghb "$@"
       '')
