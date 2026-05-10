@@ -5,15 +5,22 @@
     pkgs,
     ...
   }: {
-    nix.settings.trusted-users = ["root" config.myConfig.primaryUser];
+    nix.settings = {
+      trusted-users = ["root" config.myConfig.primaryUser];
+      experimental-features = ["nix-command" "flakes"];
+      auto-optimise-store = true;
+    };
     nixpkgs.config.allowUnfree = true;
-    nix.settings.experimental-features = ["nix-command" "flakes"];
-
-    # Optional secret file for API tokens (kept out of git).
-    # Expected format, for example:
-    #   access-tokens = github.com=ghp_xxx
+    nix.gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 30d";
+    };
     nix.extraOptions = ''
       !include /etc/nix/access-tokens.conf
+      warn-dirty = false
+      keep-going = true
+      log-lines = 20
     '';
 
     # If a GitHub access token is present in ${config.myConfig.repoRoot}/.env.local
