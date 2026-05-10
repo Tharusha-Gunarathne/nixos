@@ -1,10 +1,11 @@
 {...}: {
   flake.nixosModules.cockpit = {
-    config,
     pkgs,
     lib,
     ...
-  }: {
+  }: let
+    nixosIcon = "${pkgs.nixos-icons}/share/icons/hicolor/256x256/apps/nix-snowflake.png";
+  in {
     environment.systemPackages = with pkgs; [
       cockpit
     ];
@@ -20,5 +21,18 @@
         };
       };
     };
+
+    home-manager.sharedModules = [
+      {
+        xdg.desktopEntries.cockpit = {
+          name = "Cockpit";
+          comment = "Web-based server administration";
+          exec = "xdg-open http://localhost:9090";
+          icon = nixosIcon;
+          terminal = false;
+          categories = ["System"];
+        };
+      }
+    ];
   };
 }
