@@ -375,37 +375,13 @@
         }
     },
     "desktopWidgets": {
-        "enabled": false,
-        "gridSnap": false,
-        "gridSnapScale": false,
+        "enabled": true,
+        "gridSnap": true,
+        "gridSnapScale": true,
         "monitorWidgets": [
             {
                 "name": "eDP-1",
                 "widgets": [
-                    {
-                        "clockColor": "secondary",
-                        "clockStyle": "minimal",
-                        "customFont": "JetBrainsMono Nerd Font",
-                        "format": "HH:mm\\nd MMMM yyyy",
-                        "id": "Clock",
-                        "roundedCorners": true,
-                        "scale": 3.075450473977984,
-                        "showBackground": true,
-                        "useCustomFont": true,
-                        "x": 1310,
-                        "y": 823
-                    },
-                    {
-                        "diskPath": "/",
-                        "id": "SystemStat",
-                        "layout": "side",
-                        "roundedCorners": true,
-                        "scale": 1.1538141391471675,
-                        "showBackground": true,
-                        "statType": "CPU",
-                        "x": 1462,
-                        "y": 626
-                    }
                 ]
             }
         ],
@@ -413,7 +389,7 @@
     },
     "dock": {
         "animationSpeed": 0.25,
-        "backgroundOpacity": 0.42,
+        "backgroundOpacity": 0.51,
         "colorizeIcons": false,
         "deadOpacity": 0.6,
         "displayMode": "exclusive",
@@ -433,7 +409,6 @@
         "launcherPosition": "end",
         "launcherUseDistroLogo": false,
         "monitors": [
-            "eDP-1"
         ],
         "onlySameOutput": false,
         "pinnedApps": [
@@ -451,7 +426,7 @@
         ],
         "pinnedStatic": false,
         "position": "bottom",
-        "showDockIndicator": true,
+        "showDockIndicator": false,
         "showLauncherIcon": false,
         "sitOnFrame": false,
         "size": 0.75
@@ -460,7 +435,7 @@
         "allowPanelsOnScreenWithoutBar": true,
         "allowPasswordWithFprintd": false,
         "animationDisabled": false,
-        "animationSpeed": 0.60,
+        "animationSpeed": 0.6,
         "autoStartAuth": false,
         "avatarImage": "REDACTED-HOME/.face",
         "boxRadiusRatio": 1,
