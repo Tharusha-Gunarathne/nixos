@@ -28,6 +28,9 @@
         };
       };
 
+      # Remove the automatic startup of Open WebUI from systemd services, as it can be started manually when needed.
+      systemd.services.open-webui.wantedBy = pkgs.lib.mkForce [];
+
       home-manager.sharedModules = [
         {
           xdg.desktopEntries.open-webui = {
