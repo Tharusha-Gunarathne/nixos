@@ -30,8 +30,7 @@
         "viewMode": "list"
     },
     "audio": {
-        "mprisBlacklist": [
-        ],
+        "mprisBlacklist": [],
         "preferredPlayer": "",
         "spectrumFrameRate": 30,
         "spectrumMirrored": true,
@@ -72,8 +71,7 @@
         "rightClickAction": "controlCenter",
         "rightClickCommand": "",
         "rightClickFollowMouse": true,
-        "screenOverrides": [
-        ],
+        "screenOverrides": [],
         "showCapsule": true,
         "showOnWorkspaceSwitch": true,
         "showOutline": false,
@@ -121,16 +119,14 @@
                 },
                 {
                     "defaultSettings": {
-                        "colorHistory": [
-                        ],
+                        "colorHistory": [],
                         "detectedCompositor": "",
                         "detectedRecorder": "",
                         "filenameFormat": "",
                         "installedLangs": [
                             "eng"
                         ],
-                        "paletteColors": [
-                        ],
+                        "paletteColors": [],
                         "screenshotPath": "",
                         "selectedOcrLang": "eng",
                         "transAvailable": false,
@@ -139,8 +135,7 @@
                     "id": "plugin:screen-toolkit"
                 },
                 {
-                    "defaultSettings": {
-                    },
+                    "defaultSettings": {},
                     "id": "plugin:kde-connect"
                 }
             ],
@@ -205,15 +200,13 @@
             ],
             "right": [
                 {
-                    "blacklist": [
-                    ],
+                    "blacklist": [],
                     "chevronColor": "none",
                     "colorizeIcons": false,
                     "drawerEnabled": true,
                     "hidePassive": false,
                     "id": "Tray",
-                    "pinned": [
-                    ]
+                    "pinned": []
                 },
                 {
                     "defaultSettings": {
@@ -278,8 +271,7 @@
         }
     },
     "brightness": {
-        "backlightDeviceMappings": [
-        ],
+        "backlightDeviceMappings": [],
         "brightnessStep": 5,
         "enableDdcSupport": false,
         "enforceMinimum": true
@@ -503,8 +495,7 @@
         "lockScreenAnimations": false,
         "lockScreenBlur": 0,
         "lockScreenCountdownDuration": 10000,
-        "lockScreenMonitors": [
-        ],
+        "lockScreenMonitors": [],
         "lockScreenTint": 0,
         "passwordChars": false,
         "radiusRatio": 0.5,
@@ -598,8 +589,7 @@
         "enabled": true,
         "location": "top_right",
         "lowUrgencyDuration": 2,
-        "monitors": [
-        ],
+        "monitors": [],
         "normalUrgencyDuration": 5,
         "overlayLayer": true,
         "respectExpireTimeout": true,
@@ -628,8 +618,7 @@
             2
         ],
         "location": "top_right",
-        "monitors": [
-        ],
+        "monitors": [],
         "overlayLayer": true
     },
     "plugins": {
@@ -787,8 +776,7 @@
         "directory": "REDACTED-HOME/Pictures/Wallpapers",
         "enableMultiMonitorDirectories": false,
         "enabled": true,
-        "favorites": [
-        ],
+        "favorites": [],
         "fillColor": "#000000",
         "fillMode": "crop",
         "hideWallpaperFilenames": false,
