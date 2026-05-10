@@ -21,6 +21,7 @@
       self.nixosModules.power
       self.nixosModules.storage
       self.nixosModules.swap
+      self.nixosModules.firmware
       # software
       self.nixosModules.mpv
       self.nixosModules.nautilus
