@@ -18,7 +18,7 @@
         # Extra binaries Zed can find (LSPs, formatters, etc.)
         extraPackages = with pkgs; [
           nixd # Nix LSP
-          nixfmt # Nix formatter
+          alejandra # Nix formatter
           rust-analyzer
         ];
 
@@ -58,7 +58,7 @@
               language_servers = ["nixd" "!nil"];
               formatter = {
                 external = {
-                  command = "nixfmt";
+                  command = "${pkgs.alejandra}/bin/alejandra";
                 };
               };
             };
