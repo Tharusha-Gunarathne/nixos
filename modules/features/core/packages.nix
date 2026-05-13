@@ -55,6 +55,7 @@
         inotify-tools
         yazi
         fzf
+        brotab
 
         # User development stack
         python314
