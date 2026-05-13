@@ -31,16 +31,15 @@
 
     home-manager.users.${username} = {
       pkgs,
-      config,
       lib,
       ...
     }: {
       gtk = {
         enable = true;
         font = {
-          name = "Ubuntu Sans";
-          size = 11;
-          package = pkgs.ubuntu-sans;
+          name = "JetBrains Mono Nerd Font";
+          size = 10;
+          package = pkgs.nerd-fonts.jetbrains-mono;
         };
         theme = {
           name = "adw-gtk3-dark";
@@ -70,9 +69,9 @@
         color-scheme = "prefer-dark";
         gtk-theme = "adw-gtk3-dark";
         icon-theme = "Papirus-Dark";
-        font-name = "Ubuntu Sans 11";
-        document-font-name = "Ubuntu Sans 11";
-        monospace-font-name = "JetBrainsMono Nerd Font 11";
+        font-name = lib.mkForce "JetBrains Mono Nerd Font 10";
+        document-font-name = "JetBrains Mono Nerd Font 10";
+        monospace-font-name = "JetBrainsMono Nerd Font 10";
         cursor-theme = "Bibata-Modern-Ice";
         cursor-size = 20;
       };
