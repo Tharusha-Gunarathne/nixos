@@ -134,7 +134,7 @@
       startupWMClass = "spotify";
     };
   in {
-    home-manager.users.${username} = {lib, ...}: {
+    home-manager.users.${username} = {...}: {
       home.packages = [
         spotifyWrapper
         pkgs.spicetify-cli
