@@ -4,8 +4,6 @@
   in {
     home-manager.users.${username} = {
       pkgs,
-      lib,
-      config,
       ...
     }: {
       programs.kitty = {
