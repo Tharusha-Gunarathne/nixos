@@ -47,7 +47,7 @@
         "backgroundOpacity": 0,
         "barType": "floating",
         "capsuleColorKey": "none",
-        "capsuleOpacity": 0.17,
+        "capsuleOpacity": 0.15,
         "contentPadding": 5,
         "density": "default",
         "displayMode": "always_visible",
@@ -563,7 +563,7 @@
         "disableWallpaper": true
     },
     "notifications": {
-        "backgroundOpacity": 0.74,
+        "backgroundOpacity": 0.97,
         "clearDismissed": true,
         "criticalUrgencyDuration": 8,
         "density": "compact",
@@ -747,7 +747,7 @@
     "ui": {
         "boxBorderEnabled": false,
         "fontDefault": "Ubuntu Sans",
-        "fontDefaultScale": 1,
+        "fontDefaultScale": 0.95,
         "fontFixed": "JetBrainsMono Nerd Font",
         "fontFixedScale": 1,
         "panelBackgroundOpacity": 0.65,
