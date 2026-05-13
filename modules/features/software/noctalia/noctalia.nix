@@ -241,6 +241,8 @@
             ExecStart = "${syncScript}";
             Restart = "always";
             RestartSec = "3s";
+            TimeoutStopSec = "5s";
+            KillMode = "process";
           };
           Install.WantedBy = ["default.target"];
         };

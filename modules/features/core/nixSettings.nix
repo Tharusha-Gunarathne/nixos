@@ -10,18 +10,25 @@
       experimental-features = ["nix-command" "flakes"];
       auto-optimise-store = true;
     };
+    
     nixpkgs.config.allowUnfree = true;
+    
     nix.gc = {
       automatic = true;
       dates = "weekly";
       options = "--delete-older-than 30d";
     };
+    
     nix.extraOptions = ''
       !include /etc/nix/access-tokens.conf
       warn-dirty = false
       keep-going = true
       log-lines = 20
     '';
+
+    systemd.settings.Manager = {
+      DefaultTimeoutStopSec = "15s";
+    };
 
     # If a GitHub access token is present in ${config.myConfig.repoRoot}/.env.local
     # (TOML), write /etc/nix/access-tokens.conf so Nix can use it for fetching.

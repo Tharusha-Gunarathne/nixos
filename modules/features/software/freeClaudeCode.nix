@@ -163,6 +163,8 @@
           RestartSec     = "5s";
           StandardOutput = "journal";
           StandardError  = "journal";
+          TimeoutStopSec = "10s";
+          KillMode = "mixed";
         };
         # Install.WantedBy = ["default.target"];
       };
