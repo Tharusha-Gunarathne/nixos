@@ -58,8 +58,8 @@
           };
           font = {
             normal = {
-              family = "JetBrainsMono Nerd Font";
-              size = 10.5;
+              family = "Ubuntu Sans";
+              size = 10;
             };
           };
           extensions = let
