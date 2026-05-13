@@ -26,6 +26,7 @@
     # Third Party Plugins
     niri-flake.url = "github:sodiboo/niri-flake";
     noctalia.url = "path:./plugins/noctalia";
+    vicinae.url = "path:./plugins/vicinae";
     sources.url = "path:./plugins/sources";
     spicetify-nix = {
       url = "github:Gerg-L/spicetify-nix";
@@ -35,7 +36,6 @@
       url = "github:nix-community/nix4vscode";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    vicinae.url = "github:vicinaehq/vicinae";
     nixcord.url = "github:FlameFlag/nixcord";
     monique = {
       url = "github:ToRvaLDz/monique";
