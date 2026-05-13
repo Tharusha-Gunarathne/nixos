@@ -2,7 +2,6 @@
   flake.nixosModules.gtk = {
     pkgs,
     config,
-    lib,
     ...
   }: let
     username = config.myConfig.primaryUser;
