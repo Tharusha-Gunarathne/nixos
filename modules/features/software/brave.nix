@@ -106,6 +106,7 @@
       ExtensionInstallForcelist = [
         "ddkjiahejlhfcafbddmgiahcphecmpfh" # uBlock Origin Lite
         "nngceckbapebfimnlniiiahkandclblb" # Bitwarden
+        "mhpeahbikehnfkfnmopaigggliclhmnc" # BroTab
       ];
     };
   };
