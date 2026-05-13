@@ -17,7 +17,9 @@
         };
         settings = {
           close_on_focus_loss = true;
+          activate_on_single_click = true;
           launcher_window = {
+            opacity = 0.95; 
             layer_shell = {
               keyboard_interactivity = "on_demand";
             };
@@ -39,14 +41,14 @@
             };
           };
           theme = {
-            dark.name =
-              if shell.noctalia
-              then "noctalia"
-              else "dark";
-            light.name =
-              if shell.noctalia
-              then "noctalia"
-              else "light";
+            dark = {
+              name = if shell.noctalia then "noctalia" else "dark";
+              icon_theme = "Papirus-Dark";
+            };
+            light = {
+              name = if shell.noctalia then "noctalia" else "light";
+              icon_theme = "Papirus-Light";
+            };
           };
           font = {
             normal = {
