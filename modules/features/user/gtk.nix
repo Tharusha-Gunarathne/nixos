@@ -37,7 +37,7 @@
         enable = true;
         font = {
           name = "Ubuntu Sans";
-          size = 10;
+          size = 11;
           package = pkgs.ubuntu-sans;
         };
         theme = {
@@ -68,8 +68,8 @@
         color-scheme = "prefer-dark";
         gtk-theme = "adw-gtk3-dark";
         icon-theme = "Papirus-Dark";
-        font-name = lib.mkForce "Ubuntu Sans 10";
-        document-font-name = "Ubuntu Sans 10";
+        font-name = lib.mkForce "Ubuntu Sans 11";
+        document-font-name = "Ubuntu Sans 11";
         monospace-font-name = "JetBrains Mono Nerd Font 10";
         cursor-theme = "Bibata-Modern-Ice";
         cursor-size = 20;

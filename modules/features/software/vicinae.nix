@@ -59,7 +59,7 @@
           font = {
             normal = {
               family = "Ubuntu Sans";
-              size = 10;
+              size = 10.5;
             };
           };
           extensions = let
