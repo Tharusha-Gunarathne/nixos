@@ -9,6 +9,7 @@
       self.nixosModules.performance
       self.nixosModules.shellAliases
       self.nixosModules.users
+      self.nixosModules.polkit
       # hardware
       self.nixosModules.audio
       self.nixosModules.bluetooth
