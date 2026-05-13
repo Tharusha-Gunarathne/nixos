@@ -9,7 +9,7 @@
 
     # Change this to any color from: papirus-folders -l --theme Papirus-Dark
     # e.g. adwaita, black, blue, bluegrey, breeze, brown, carmine, cyan, darkcyan, deeporange, green, grey, indigo, magenta, nordic, orange, palebrown, paleorange, pink, red, teal, violet, white, yellow, yaru ...
-    folderColor = "grey";
+    folderColor = "nordic";
   in {
     environment.systemPackages = with pkgs; [
       adwaita-icon-theme
@@ -36,9 +36,9 @@
       gtk = {
         enable = true;
         font = {
-          name = "JetBrains Mono Nerd Font";
+          name = "Ubuntu Sans";
           size = 10;
-          package = pkgs.nerd-fonts.jetbrains-mono;
+          package = pkgs.ubuntu-sans;
         };
         theme = {
           name = "adw-gtk3-dark";
@@ -68,9 +68,9 @@
         color-scheme = "prefer-dark";
         gtk-theme = "adw-gtk3-dark";
         icon-theme = "Papirus-Dark";
-        font-name = lib.mkForce "JetBrains Mono Nerd Font 10";
-        document-font-name = "JetBrains Mono Nerd Font 10";
-        monospace-font-name = "JetBrainsMono Nerd Font 10";
+        font-name = lib.mkForce "Ubuntu Sans 10";
+        document-font-name = "Ubuntu Sans 10";
+        monospace-font-name = "JetBrains Mono Nerd Font 10";
         cursor-theme = "Bibata-Modern-Ice";
         cursor-size = 20;
       };
