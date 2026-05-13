@@ -17,8 +17,6 @@
         exec nix flake update "$@"
       '')
       (pkgs.writeShellScriptBin "nix-clean" ''
-        REPO_ROOT="${config.myConfig.repoRoot}"
-        cd "$REPO_ROOT"
         exec sudo nix-collect-garbage -d "$@"
       '')
       (pkgs.writeShellScriptBin "qs" ''
