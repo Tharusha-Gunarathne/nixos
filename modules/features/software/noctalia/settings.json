@@ -14,7 +14,7 @@
         "enableSessionSearch": true,
         "enableSettingsSearch": true,
         "enableWindowsSearch": true,
-        "iconMode": "tabler",
+        "iconMode": "system",
         "ignoreMouseInput": false,
         "overviewLayer": false,
         "pinnedApps": [
@@ -391,7 +391,7 @@
         "animationSpeed": 0.25,
         "backgroundOpacity": 0.51,
         "colorizeIcons": false,
-        "deadOpacity": 0.6,
+        "deadOpacity": 0.76,
         "displayMode": "exclusive",
         "dockType": "floating",
         "enabled": true,
@@ -747,7 +747,7 @@
     "ui": {
         "boxBorderEnabled": false,
         "fontDefault": "Ubuntu Sans",
-        "fontDefaultScale": 0.9,
+        "fontDefaultScale": 0.9299999999999999,
         "fontFixed": "JetBrainsMono Nerd Font",
         "fontFixedScale": 1,
         "panelBackgroundOpacity": 0.65,
