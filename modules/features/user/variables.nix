@@ -1,7 +1,6 @@
 {...}: {
   flake.nixosModules.variables = {
     config,
-    pkgs,
     ...
   }: let
     username = config.myConfig.primaryUser;
@@ -31,6 +30,13 @@
         GI_TYPELIB_PATH = "/run/current-system/sw/lib/girepository-1.0";
         QT_QPA_PLATFORMTHEME = "qt6ct";
         XDG_CURRENT_DESKTOP = "GNOME";
+      };
+
+      systemd.user.sessionVariables = {
+        QT_QPA_PLATFORMTHEME = "qt6ct";
+        XDG_DATA_DIRS = "/home/${username}/.local/share:/run/current-system/sw/share:/etc/profiles/per-user/${username}/share";
+        XDG_CURRENT_DESKTOP = "GNOME";
+        ICON_THEME = "Papirus-Dark";
       };
     };
   };

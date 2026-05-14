@@ -75,6 +75,29 @@
         cursor-size = 20;
       };
 
+      xdg.configFile."qt6ct/qt6ct.conf".text = ''
+        [Appearance]
+        icon_theme=Papirus-Dark
+        style=adwaita-dark
+        standard_dialogs=default
+      
+        [Fonts]
+        fixed="JetBrainsMono Nerd Font,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1"
+        general="Ubuntu Sans,11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1"
+      
+        [Interface]
+        activate_item_on_single_click=1
+        buttonbox_layout=0
+        cursor_flash_time=1000
+        dialog_buttons_have_icons=1
+        double_click_interval=400
+        keyboard_scheme=2
+        menus_have_icons=true
+        show_shortcuts_in_context_menus=true
+        toolbutton_style=4
+        wheel_scroll_lines=3
+      '';
+
       home.activation.papirusFolderColor = lib.hm.dag.entryAfter ["writeBoundary"] ''
         STORE_BASE="${pkgs.papirus-icon-theme}/share/icons/Papirus"
         STORE_DARK="${pkgs.papirus-icon-theme}/share/icons/Papirus-Dark"
