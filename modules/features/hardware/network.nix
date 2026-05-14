@@ -24,21 +24,34 @@
 
     networking.firewall.allowedTCPPorts = [80 443 9090];
 
-    # Fix: restart NetworkManager if wlan0 device appears after NM already started.
-    # This resolves the intermittent "No Wi-Fi networks found" race condition on boot.
+    # Fix: recover wifi if it comes up greyed out after boot.
+    # Uses `after` only (no bindsTo) so it never blocks multi-user.target.
     systemd.services.networkmanager-wifi-recover = {
-      description = "Restart NetworkManager when wlan0 appears late";
-      bindsTo = ["sys-subsystem-net-devices-wlan0.device"];
+      description = "Recover WiFi if NetworkManager missed wlan0 on boot";
       after = [
         "sys-subsystem-net-devices-wlan0.device"
         "NetworkManager.service"
       ];
+      wants = ["sys-subsystem-net-devices-wlan0.device"];
       wantedBy = ["multi-user.target"];
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${pkgs.systemd}/bin/systemctl try-restart NetworkManager.service";
-        # Give NM a moment to settle before checking
-        ExecStartPre = "${pkgs.coreutils}/bin/sleep 2";
+        RemainAfterExit = true;
+        ExecStart = pkgs.writeShellScript "wifi-recover" ''
+          # Wait for NM to be fully settled
+          sleep 3
+          # If wifi radio shows as disabled or no devices, reload NM's wifi plugin
+          WIFI_STATE=$(${pkgs.networkmanager}/bin/nmcli radio wifi 2>/dev/null || echo "unknown")
+          if [ "$WIFI_STATE" = "disabled" ] || [ "$WIFI_STATE" = "unknown" ]; then
+            ${pkgs.networkmanager}/bin/nmcli radio wifi on
+            sleep 1
+          fi
+          # Check if NM can see the wifi device at all
+          WIFI_DEV=$(${pkgs.networkmanager}/bin/nmcli -t -f DEVICE,TYPE dev 2>/dev/null | grep ":wifi" | cut -d: -f1)
+          if [ -z "$WIFI_DEV" ]; then
+            ${pkgs.systemd}/bin/systemctl try-restart NetworkManager.service
+          fi
+        '';
       };
     };
   };
