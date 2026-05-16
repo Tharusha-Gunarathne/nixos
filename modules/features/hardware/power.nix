@@ -9,6 +9,20 @@
     services.upower.enable = true;
     services.thermald.enable = true;
 
+    # Configure lid switch behavior
+    #   ignore = do nothing. 
+    #   suspend = sleep the system.
+    #   hibernate = hibernate the system, 
+    #   poweroff = shut down the system.
+    #   suspend-then-hibernate = Suspends first, then hibernates after a delay.
+    #   reboot = reboot the system.
+    #   kexec = Reboots into a new kernel without full reboot.
+    services.logind = {
+      lidSwitch = "suspend-then-hibernate"; # when battery powered
+      lidSwitchExternalPower = "ignore";  # when plugged in
+      lidSwitchDocked = "ignore";         # when docked/external monitor
+    };
+
     # Undervolt the CPU
     # To undervolt disable "Undervolt Protection" in the BIOS/UEFI, then find
     # stable undervolt values for your CPU and set them here.
