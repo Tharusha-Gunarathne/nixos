@@ -330,6 +330,11 @@ window-rule {
     open-floating true
 }
 
+window-rule {
+    match app-id="com-maxrave-simpmusic-MainKt"
+    max-width 1676 // your screen width
+}
+
 // Noctalia
 window-rule {
     geometry-corner-radius 10
