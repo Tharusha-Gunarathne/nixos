@@ -22,7 +22,12 @@
       }
     ];
 
-    networking.firewall.allowedTCPPorts = [80 443 9090];
+    networking.firewall.allowedTCPPorts = [
+      80 # HTTP
+      443 # HTTPS
+      9090 # Cockpit
+      9999 # private_app Server
+    ];
 
     # Fix: recover wifi if it comes up greyed out after boot.
     # Uses `after` only (no bindsTo) so it never blocks multi-user.target.
