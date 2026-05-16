@@ -67,6 +67,13 @@
         name = "shutter-encoder.deb";
         sha256 = "0bnw6a1745cbymxhgivxcbs7zihffasjm5qi73vbyyna074xw7sc";
       };
+
+      simpMusic = {
+        version = "1.2.1";
+        url = "https://github.com/maxrave-dev/SimpMusic/releases/download/v1.2.1/SimpMusic-x86_64.AppImage";
+        name = "SimpMusic.AppImage";
+        sha256 = "9a67c5b36354507b7864576113ee9498894b9055f725ea06ddf1a331d3b8fbc1";
+      };
     };
   };
 }

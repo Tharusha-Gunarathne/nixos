@@ -50,6 +50,7 @@
       self.nixosModules.zedEditor
       self.nixosModules.freeClaudeCode
       self.nixosModules.openWebUI
+      self.nixosModules.simpMusic
       #services
       self.nixosModules.lamp
       self.nixosModules.cockpit
