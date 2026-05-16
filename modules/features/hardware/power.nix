@@ -10,17 +10,17 @@
     services.thermald.enable = true;
 
     # Configure lid switch behavior
-    #   ignore = do nothing. 
+    #   ignore = do nothing.
     #   suspend = sleep the system.
-    #   hibernate = hibernate the system, 
+    #   hibernate = hibernate the system,
     #   poweroff = shut down the system.
     #   suspend-then-hibernate = Suspends first, then hibernates after a delay.
     #   reboot = reboot the system.
     #   kexec = Reboots into a new kernel without full reboot.
-    services.logind = {
-      lidSwitch = "suspend-then-hibernate"; # when battery powered
-      lidSwitchExternalPower = "ignore";  # when plugged in
-      lidSwitchDocked = "ignore";         # when docked/external monitor
+    services.logind.settings.Login = {
+      HandleLidSwitch = "suspend-then-hibernate"; # when battery powered
+      HandleLidSwitchDocked = "ignore"; # when docked/external monitor
+      HandleLidSwitchExternalPower = "ignore"; # when plugged in
     };
 
     # Undervolt the CPU
