@@ -23,6 +23,7 @@
       self.nixosModules.storage
       self.nixosModules.swap
       self.nixosModules.firmware
+      self.nixosModules.keyboardLeds
       # software
       self.nixosModules.mpv
       self.nixosModules.nautilus
