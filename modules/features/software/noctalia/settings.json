@@ -47,7 +47,7 @@
         "backgroundOpacity": 0,
         "barType": "floating",
         "capsuleColorKey": "none",
-        "capsuleOpacity": 0.15,
+        "capsuleOpacity": 0.50,
         "contentPadding": 5,
         "density": "default",
         "displayMode": "always_visible",
