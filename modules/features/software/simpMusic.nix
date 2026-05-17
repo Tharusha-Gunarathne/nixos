@@ -7,6 +7,8 @@
     username = config.myConfig.primaryUser;
     asset = inputs.sources.releaseAssets.simpMusic;
 
+    uiscale = 2.0; # Adjust as needed for high-DPI displays
+
     appimageContents = pkgs.appimageTools.extractType2 {
       pname = "simpmusic";
       version = asset.version;
@@ -38,21 +40,6 @@
         else
           find ${appimageContents} -name "*.png" | head -1 | xargs -I{} cp {} $out/share/icons/hicolor/256x256/apps/simpmusic.png || true
         fi
-
-        # Custom desktop entry with correct WMClass, scaling, and runtime paths
-        cat > $out/share/applications/simpmusic.desktop << EOF
-        [Desktop Entry]
-        Type=Application
-        Name=SimpMusic
-        GenericName=Music Player
-        Comment=YouTube Music client
-        Exec=env _JAVA_OPTIONS="-Dsun.java2d.uiScale=2.0" VLC_PLUGIN_PATH=/home/${username}/.local/share/simpmusic-vlc-plugins YT_DLP_PATH=/run/current-system/sw/bin/yt-dlp simpmusic %U
-        Icon=simpmusic
-        Categories=Audio;Music;Player;AudioVideo;
-        MimeType=x-scheme-handler/simpmusic;
-        StartupWMClass=com-maxrave-simpmusic-MainKt
-        Terminal=false
-        EOF
       '';
     };
   in {
@@ -64,6 +51,20 @@
     home-manager.users.${username} = {lib, ...}: {
       home.packages = [simpMusic];
 
+      xdg.desktopEntries.simpmusic = {
+        name = "SimpMusic";
+        genericName = "Music Player";
+        comment = "YouTube Music client";
+        exec = "env _JAVA_OPTIONS=\"-Dsun.java2d.uiScale=${toString uiscale}\" VLC_PLUGIN_PATH=/home/${username}/.local/share/simpmusic-vlc-plugins YT_DLP_PATH=/run/current-system/sw/bin/yt-dlp simpmusic %U";
+        icon = "simpmusic";
+        terminal = false;
+        categories = ["Audio" "Music" "Player" "AudioVideo"];
+        mimeType = ["x-scheme-handler/simpmusic"];
+        settings = {
+          StartupWMClass = "com-maxrave-simpmusic-MainKt";
+        };
+      };
+
       home.activation.simpMusicSetup = lib.hm.dag.entryAfter ["writeBoundary"] ''
         # Block AppImage from auto-registering its own desktop entry
         BLOCKED="$HOME/.local/share/applications/com-maxrave-simpmusic-MainKt.desktop"
@@ -71,7 +72,7 @@
         rm -f "$BLOCKED"
         touch "$BLOCKED"
         chmod 444 "$BLOCKED"
-      
+
         # Copy icon into user icon cache so launchers can find it
         ICON_SRC="${simpMusic}/share/icons/hicolor/256x256/apps/simpmusic.png"
         ICON_DEST="$HOME/.local/share/icons/hicolor/256x256/apps/simpmusic.png"
@@ -80,7 +81,7 @@
           ${pkgs.coreutils}/bin/cp -f "$ICON_SRC" "$ICON_DEST"
           ${pkgs.gtk3}/bin/gtk-update-icon-cache -f -t "$HOME/.local/share/icons/hicolor" 2>/dev/null || true
         fi
-      
+
         # Copy system VLC plugins so SimpMusic can play WebM/Opus audio from YouTube
         VLC_DEST="$HOME/.local/share/simpmusic-vlc-plugins"
         # Make writable before removing so rebuild doesn't fail
@@ -91,14 +92,6 @@
         # Make writable so future rebuilds can clean it up
         chmod -R u+w "$VLC_DEST"
       '';
-
-      home.sessionVariables = {
-        _JAVA_OPTIONS = "-Dsun.java2d.uiScale=2.0";
-        SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-        NIX_SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-        YT_DLP_PATH = "/run/current-system/sw/bin/yt-dlp";
-        VLC_PLUGIN_PATH = "$HOME/.local/share/simpmusic-vlc-plugins";
-      };
     };
   };
 }
