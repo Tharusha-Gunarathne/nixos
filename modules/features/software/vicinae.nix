@@ -1,8 +1,29 @@
 {inputs, ...}: {
-  flake.nixosModules.vicinae = {config, ...}: let
+  flake.nixosModules.vicinae = {
+    config,
+    pkgs,
+    ...
+  }: let
     username = config.myConfig.primaryUser;
     shell = config.myConfig.shell;
+    vicinaePackage = inputs.vicinae.vicinae-main.packages.${pkgs.stdenv.hostPlatform.system}.default;
   in {
+    environment.systemPackages = with pkgs; [
+      cliphist  # clipboard history backend used by Noctalia and Vicinae
+    ];
+
+    # Vicinae v0.20.3+ uses uinput for paste support instead of wtype.
+    # It hardcodes /run/wrappers/bin/vicinae-input-server as the binary path,
+    # so a setuid wrapper must be created at exactly that location.
+    security.wrappers.vicinae-input-server = {
+      source = "${vicinaePackage}/libexec/vicinae/vicinae-input-server";
+      owner = "root";
+      group = "root";
+      permissions = "a+rx";
+      setuid = false;
+      setgid = false;
+    };
+
     home-manager.users.${username} = {pkgs, ...}: {
       imports = [inputs.vicinae.vicinae-main.homeManagerModules.default];
 
