@@ -55,6 +55,7 @@
       #services
       self.nixosModules.lamp
       self.nixosModules.cockpit
+      self.nixosModules.hotspot
       # user
       self.nixosModules.gtk
       self.nixosModules.variables
