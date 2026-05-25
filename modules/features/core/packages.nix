@@ -64,6 +64,7 @@
         nodejs
         lmstudio
         claude-code
+        octaveFull
         
         # Desktop apps
         ente-auth
