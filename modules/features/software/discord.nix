@@ -31,8 +31,6 @@
     '';
   in {
     home-manager.users.${username} = {
-      inputs,
-      pkgs,
       lib,
       ...
     }: {
