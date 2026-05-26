@@ -1,8 +1,6 @@
 {...}: {
   flake.nixosModules.keyboardLeds = {
-    config,
     pkgs,
-    lib,
     ...
   }: let
     # Loops over /sys/class/leds/, finds scroll-lock inputs, and writes
