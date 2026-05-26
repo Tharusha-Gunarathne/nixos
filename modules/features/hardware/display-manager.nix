@@ -42,7 +42,7 @@
 
       settings = {
         Theme = {
-          CursorTheme = "Bibata-Modern-Classic";
+          CursorTheme = "Bibata-Modern-Ice";
           CursorSize = 24;
         };
       };
@@ -62,7 +62,5 @@
     services.xserver.enable = true;
 
     environment.systemPackages = [qylockSddmTheme];
-
-    services.seatd.enable = true;
   };
 }

@@ -44,18 +44,18 @@
       # ----------------------------
 
       # Open-Web-UI
-      (pkgs.writeShellScriptBin "start-open-web-ui" ''
-        exec systemctl --user start open-webui "$@"
-      '')
-      (pkgs.writeShellScriptBin "stop-open-web-ui" ''
-        exec systemctl --user stop open-webui "$@"
-      '')
-      (pkgs.writeShellScriptBin "restart-open-web-ui" ''
-        exec systemctl --user restart open-webui "$@"
-      '')
-      (pkgs.writeShellScriptBin "status-open-web-ui" ''
-        exec systemctl --user status open-webui "$@"
-      '')
+      # (pkgs.writeShellScriptBin "start-open-web-ui" ''
+      #   exec systemctl --user start open-webui "$@"
+      # '')
+      # (pkgs.writeShellScriptBin "stop-open-web-ui" ''
+      #   exec systemctl --user stop open-webui "$@"
+      # '')
+      # (pkgs.writeShellScriptBin "restart-open-web-ui" ''
+      #   exec systemctl --user restart open-webui "$@"
+      # '')
+      # (pkgs.writeShellScriptBin "status-open-web-ui" ''
+      #   exec systemctl --user status open-webui "$@"
+      # '')
       # ----------------------------
     ];
   };
