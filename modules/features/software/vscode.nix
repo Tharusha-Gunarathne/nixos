@@ -20,8 +20,8 @@
       ++ (with pkgs.vscode-extensions; [
         github.copilot
         github.copilot-chat
-        ms-python.python
-        ms-python.debugpy
+        # ms-python.python
+        # ms-python.debugpy
         ms-vscode.cpptools
         ms-vscode.cpptools-extension-pack
         bmewburn.vscode-intelephense-client
