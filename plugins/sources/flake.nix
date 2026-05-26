@@ -9,7 +9,7 @@
         rev = "main";
         hash = "sha256-c0IDIJ5Di20WI2PXzq1AL5VWo7pykPXOwBha5iVz1lo=";
       };
-      
+
       modernz = {
         owner = "Samillion";
         repo = "ModernZ";
@@ -62,10 +62,10 @@
       };
 
       shutterEncoder = {
-        version = "20.0";
-        url = "https://www.shutterencoder.com/Shutter%20Encoder%2020.0%20Linux%2064bits.deb";
+        version = "20.1";
+        url = "https://www.shutterencoder.com/Shutter%20Encoder%2020.1%20Linux%2064bits.deb";
         name = "shutter-encoder.deb";
-        sha256 = "0bnw6a1745cbymxhgivxcbs7zihffasjm5qi73vbyyna074xw7sc";
+        sha256 = "gh4G7qkAuRKIZZ7WDdwT+QXyUQCvGeC5OPBQH6VWAaw=";
       };
 
       simpMusic = {
