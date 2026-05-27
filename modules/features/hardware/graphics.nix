@@ -12,6 +12,13 @@
       "kernel.hung_task_timeout_secs" = 15; # don't hang forever
     };
 
+    boot.kernelParams = [
+      "nvidia.NVreg_PreserveVideoMemoryAllocations=0"
+      "nvidia.NVreg_EnableGPUFirmware=0"
+    ];
+
+    systemd.services.display-manager.serviceConfig.TimeoutStopSec = "10s";
+
     hardware = {
       nvidia = {
         modesetting.enable = true;
