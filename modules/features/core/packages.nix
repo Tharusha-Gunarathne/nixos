@@ -65,6 +65,7 @@
         lmstudio
         claude-code
         octaveFull
+        postman
         
         # Desktop apps
         ente-auth
