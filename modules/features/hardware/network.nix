@@ -27,6 +27,8 @@
       443 # HTTPS
       9090 # Cockpit
       9999 # private_app Server
+      8081
+      3000
     ];
 
     # Fix: recover wifi if it comes up greyed out after boot.
