@@ -4,6 +4,10 @@
     config,
     ...
   }: {
+    nixpkgs.config.permittedInsecurePackages = [
+      "electron-39.8.10"
+    ];
+    
     environment.systemPackages = with pkgs; [
       # Core CLI
       vim
@@ -66,7 +70,8 @@
         claude-code
         octaveFull
         postman
-        
+        firebase-tools
+
         # Desktop apps
         ente-auth
         bitwarden-desktop
@@ -83,6 +88,7 @@
         qbittorrent
         obsidian
         qalculate-gtk
+        rquickshare
 
         # System management
         mission-center
