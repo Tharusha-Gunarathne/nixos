@@ -1,7 +1,7 @@
 {
   inputs,
-  self,
-  localConfig,
+  # self,
+  # localConfig,
   ...
 }: {
   flake.nixosModules.noctalia = {
@@ -10,260 +10,260 @@
     ...
   }: let
     username = config.myConfig.primaryUser;
-    repoRoot = config.myConfig.repoRoot;
-    nocPaths = localConfig.paths;
-    nocCfg = localConfig.noctalia;
+    # repoRoot = config.myConfig.repoRoot;
+    # nocPaths = localConfig.paths;
+    # nocCfg = localConfig.noctalia;
   in {
-    imports = [
-      self.nixosModules.noctaliaPluginSettings
-      self.nixosModules.noctaliaKitty
-      self.nixosModules.noctaliaNiri
-      self.nixosModules.noctaliaVscode
-      self.nixosModules.noctaliaSpotify
-      self.nixosModules.noctaliaDiscord
-    ];
+    # imports = [
+    #   self.nixosModules.noctaliaPluginSettings
+    #   self.nixosModules.noctaliaKitty
+    #   self.nixosModules.noctaliaNiri
+    #   self.nixosModules.noctaliaVscode
+    #   self.nixosModules.noctaliaSpotify
+    #   self.nixosModules.noctaliaDiscord
+    # ];
 
     config = lib.mkIf config.myConfig.shell.noctalia {
       home-manager.users.${username} = {
-        config,
-        pkgs,
-        lib,
+        # config,
+        # pkgs,
+        # lib,
         ...
       }: let
-        configDir = "${config.xdg.configHome}/noctalia";
-        repoDir = "${repoRoot}/modules/features/software/noctalia";
+        # configDir = "${config.xdg.configHome}/noctalia";
+        # repoDir = "${repoRoot}/modules/features/software/noctalia";
 
         # Patch machine-specific values into settings.json after seeding.
         # This keeps the committed settings.json free of personal paths.
-        patchSettingsScript = pkgs.writers.writePython3 "noctalia-patch-settings" {} ''
-          import json
-          import sys
+        # patchSettingsScript = pkgs.writers.writePython3 "noctalia-patch-settings" {} ''
+        #   import json
+        #   import sys
 
-          settings_path = sys.argv[1]
-          wallpaper_dir = sys.argv[2]
-          avatar_image = sys.argv[3]
-          bar_monitor = sys.argv[4]
-          dock_monitor = sys.argv[5]
-          location_name = sys.argv[6]
-          username = sys.argv[7]
+        #   settings_path = sys.argv[1]
+        #   wallpaper_dir = sys.argv[2]
+        #   avatar_image = sys.argv[3]
+        #   bar_monitor = sys.argv[4]
+        #   dock_monitor = sys.argv[5]
+        #   location_name = sys.argv[6]
+        #   username = sys.argv[7]
 
-          with open(settings_path) as f:
-              data = json.load(f)
+        #   with open(settings_path) as f:
+        #       data = json.load(f)
 
-          # Wallpaper directory
-          data.setdefault("wallpaper", {})
-          data["wallpaper"]["directory"] = wallpaper_dir
-          for m in data["wallpaper"].get("monitorDirectories", []):
-              m["directory"] = wallpaper_dir
+        #   # Wallpaper directory
+        #   data.setdefault("wallpaper", {})
+        #   data["wallpaper"]["directory"] = wallpaper_dir
+        #   for m in data["wallpaper"].get("monitorDirectories", []):
+        #       m["directory"] = wallpaper_dir
 
-          # Avatar
-          data.setdefault("general", {})
-          data["general"]["avatarImage"] = avatar_image
+        #   # Avatar
+        #   data.setdefault("general", {})
+        #   data["general"]["avatarImage"] = avatar_image
 
-          # Bar monitors list
-          data.setdefault("bar", {})
-          data["bar"]["monitors"] = [bar_monitor]
+        #   # Bar monitors list
+        #   data.setdefault("bar", {})
+        #   data["bar"]["monitors"] = [bar_monitor]
 
-          # Dock monitors list
-          data.setdefault("dock", {})
-          data["dock"]["monitors"] = [dock_monitor]
+        #   # Dock monitors list
+        #   data.setdefault("dock", {})
+        #   data["dock"]["monitors"] = [dock_monitor]
 
-          # Location name (weather / calendar)
-          data.setdefault("location", {})
-          data["location"]["name"] = location_name
+        #   # Location name (weather / calendar)
+        #   data.setdefault("location", {})
+        #   data["location"]["name"] = location_name
 
-          # Hook binary paths (use per-user profile bin)
-          profile_bin = f"/etc/profiles/per-user/{username}/bin"
-          data.setdefault("hooks", {})
-          color_hook = f"{profile_bin}/spicetify-noctalia-color-hook"
-          mpv_hook = f"{profile_bin}/noctalia-mpv-modernz-sync"
-          combined = f"{color_hook} && {mpv_hook}"
-          data["hooks"]["colorGeneration"] = combined
-          data["hooks"]["darkModeChange"] = color_hook
-          data["hooks"]["wallpaperChange"] = combined
+        #   # Hook binary paths (use per-user profile bin)
+        #   profile_bin = f"/etc/profiles/per-user/{username}/bin"
+        #   data.setdefault("hooks", {})
+        #   color_hook = f"{profile_bin}/spicetify-noctalia-color-hook"
+        #   mpv_hook = f"{profile_bin}/noctalia-mpv-modernz-sync"
+        #   combined = f"{color_hook} && {mpv_hook}"
+        #   data["hooks"]["colorGeneration"] = combined
+        #   data["hooks"]["darkModeChange"] = color_hook
+        #   data["hooks"]["wallpaperChange"] = combined
 
-          with open(settings_path, "w") as f:
-              json.dump(data, f, indent=4)
-        '';
+        #   with open(settings_path, "w") as f:
+        #       json.dump(data, f, indent=4)
+        # '';
 
-        syncScript = pkgs.writeShellScript "noctalia-sync" ''
-          set -euo pipefail
-          CONFIG_DIR="${configDir}"
-          REPO_DIR="${repoDir}"
-          CP="${pkgs.coreutils}/bin/cp"
-          INOTIFY="${pkgs.inotify-tools}/bin/inotifywait"
-          LOCK_DIR="/tmp/noctalia-sync-lock"
+        # syncScript = pkgs.writeShellScript "noctalia-sync" ''
+        #   set -euo pipefail
+        #   CONFIG_DIR="${configDir}"
+        #   REPO_DIR="${repoDir}"
+        #   CP="${pkgs.coreutils}/bin/cp"
+        #   INOTIFY="${pkgs.inotify-tools}/bin/inotifywait"
+        #   LOCK_DIR="/tmp/noctalia-sync-lock"
 
-          mkdir -p "$CONFIG_DIR" "$REPO_DIR" "$LOCK_DIR"
+        #   mkdir -p "$CONFIG_DIR" "$REPO_DIR" "$LOCK_DIR"
 
-          acquire_lock() {
-            local file="$1"
-            local lockfile="$LOCK_DIR/$file.lock"
-            if [ -f "$lockfile" ]; then
-              return 1
-            fi
-            touch "$lockfile"
-            ( sleep 4; rm -f "$lockfile" ) &
-            return 0
-          }
+        #   acquire_lock() {
+        #     local file="$1"
+        #     local lockfile="$LOCK_DIR/$file.lock"
+        #     if [ -f "$lockfile" ]; then
+        #       return 1
+        #     fi
+        #     touch "$lockfile"
+        #     ( sleep 4; rm -f "$lockfile" ) &
+        #     return 0
+        #   }
 
-          (
-            "$INOTIFY" -m -e close_write,moved_to "$CONFIG_DIR" 2>/dev/null |
-            while read -r _dir _event file; do
-              if [[ "$file" == "settings.json" || "$file" == "plugins.json" ]]; then
-                if acquire_lock "config-to-repo-$file"; then
-                  echo "[noctalia-sync] config→repo: $file"
-                  "$CP" "$CONFIG_DIR/$file" "$REPO_DIR/$file"
-                fi
-              fi
-            done
-          ) &
+        #   (
+        #     "$INOTIFY" -m -e close_write,moved_to "$CONFIG_DIR" 2>/dev/null |
+        #     while read -r _dir _event file; do
+        #       if [[ "$file" == "settings.json" || "$file" == "plugins.json" ]]; then
+        #         if acquire_lock "config-to-repo-$file"; then
+        #           echo "[noctalia-sync] config→repo: $file"
+        #           "$CP" "$CONFIG_DIR/$file" "$REPO_DIR/$file"
+        #         fi
+        #       fi
+        #     done
+        #   ) &
 
-          (
-            "$INOTIFY" -m -e close_write,moved_to "$REPO_DIR" 2>/dev/null |
-            while read -r _dir _event file; do
-              if [[ "$file" == "settings.json" || "$file" == "plugins.json" ]]; then
-                if acquire_lock "repo-to-config-$file"; then
-                  echo "[noctalia-sync] repo→config: $file"
-                  "$CP" "$REPO_DIR/$file" "$CONFIG_DIR/$file"
-                fi
-              fi
-            done
-          ) &
+        #   (
+        #     "$INOTIFY" -m -e close_write,moved_to "$REPO_DIR" 2>/dev/null |
+        #     while read -r _dir _event file; do
+        #       if [[ "$file" == "settings.json" || "$file" == "plugins.json" ]]; then
+        #         if acquire_lock "repo-to-config-$file"; then
+        #           echo "[noctalia-sync] repo→config: $file"
+        #           "$CP" "$REPO_DIR/$file" "$CONFIG_DIR/$file"
+        #         fi
+        #       fi
+        #     done
+        #   ) &
 
-          wait
-        '';
+        #   wait
+        # '';
 
-        commitScript = pkgs.writeShellScript "noctalia-commit" ''
-          REPO_ROOT="${repoRoot}"
-          GIT="${pkgs.git}/bin/git"
+        # commitScript = pkgs.writeShellScript "noctalia-commit" ''
+        #   REPO_ROOT="${repoRoot}"
+        #   GIT="${pkgs.git}/bin/git"
 
-          cd "$REPO_ROOT"
+        #   cd "$REPO_ROOT"
 
-          TMP_INDEX=$(mktemp)
-          cleanup() { rm -f "$TMP_INDEX"; }
-          trap cleanup EXIT
+        #   TMP_INDEX=$(mktemp)
+        #   cleanup() { rm -f "$TMP_INDEX"; }
+        #   trap cleanup EXIT
 
-          GIT_INDEX_FILE="$TMP_INDEX" "$GIT" read-tree HEAD
+        #   GIT_INDEX_FILE="$TMP_INDEX" "$GIT" read-tree HEAD
 
-          for path in modules/features/software/noctalia/settings.json \
-                      modules/features/software/noctalia/plugins.json; do
-            if [ -e "$path" ]; then
-              GIT_INDEX_FILE="$TMP_INDEX" "$GIT" add "$path"
-            fi
-          done
+        #   for path in modules/features/software/noctalia/settings.json \
+        #               modules/features/software/noctalia/plugins.json; do
+        #     if [ -e "$path" ]; then
+        #       GIT_INDEX_FILE="$TMP_INDEX" "$GIT" add "$path"
+        #     fi
+        #   done
 
-          if GIT_INDEX_FILE="$TMP_INDEX" "$GIT" diff --cached --quiet; then
-            exit 0
-          fi
+        #   if GIT_INDEX_FILE="$TMP_INDEX" "$GIT" diff --cached --quiet; then
+        #     exit 0
+        #   fi
 
-          GIT_INDEX_FILE="$TMP_INDEX" "$GIT" commit -m "chore(noctalia): auto-sync config changes"
-        '';
+        #   GIT_INDEX_FILE="$TMP_INDEX" "$GIT" commit -m "chore(noctalia): auto-sync config changes"
+        # '';
       in {
         imports = [inputs.noctalia.noctalia-main.homeModules.default];
 
-        programs.noctalia-shell.enable = true;
+        programs.noctalia.enable = true;
 
-        home.activation.noctaliaCleanupBackups = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
-          rm -f \
-            "${configDir}/settings.json.backup" \
-            "${configDir}/plugins.json.backup" \
-            "${configDir}/settings.json.hmbackup" \
-            "${configDir}/plugins.json.hmbackup"
+        # home.activation.noctaliaCleanupBackups = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
+        #   rm -f \
+        #     "${configDir}/settings.json.backup" \
+        #     "${configDir}/plugins.json.backup" \
+        #     "${configDir}/settings.json.hmbackup" \
+        #     "${configDir}/plugins.json.hmbackup"
 
-          if [ -d "${configDir}/plugins" ]; then
-            find "${configDir}/plugins" -maxdepth 1 -type d -name '*.backup' -exec rm -rf {} +
-          fi
+        #   if [ -d "${configDir}/plugins" ]; then
+        #     find "${configDir}/plugins" -maxdepth 1 -type d -name '*.backup' -exec rm -rf {} +
+        #   fi
 
-          rm -rf "$HOME/.cache/noctalia-qs/qmlcache" \
-                 "$HOME/.cache/noctalia-qs/qtpipelinecache-x86_64-little_endian-lp64"
-        '';
+        #   rm -rf "$HOME/.cache/noctalia-qs/qmlcache" \
+        #          "$HOME/.cache/noctalia-qs/qtpipelinecache-x86_64-little_endian-lp64"
+        # '';
 
-        home.activation.noctaliaSettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
-          mkdir -p "${configDir}"
-          SETTINGS="${configDir}/settings.json"
-          REPO_SETTINGS="${repoDir}/settings.json"
+        # home.activation.noctaliaSettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
+        #   mkdir -p "${configDir}"
+        #   SETTINGS="${configDir}/settings.json"
+        #   REPO_SETTINGS="${repoDir}/settings.json"
 
-          if [ -f "$REPO_SETTINGS" ]; then
-            if [ -L "$SETTINGS" ] || [ ! -e "$SETTINGS" ] || \
-               ! ${pkgs.diffutils}/bin/diff -q "$REPO_SETTINGS" "$SETTINGS" > /dev/null 2>&1; then
-              rm -f "$SETTINGS"
-              ${pkgs.coreutils}/bin/install -m 644 "$REPO_SETTINGS" "$SETTINGS"
-              echo "[noctalia] Seeded settings.json from repo"
-            fi
-          elif [ -L "$SETTINGS" ] || [ ! -e "$SETTINGS" ]; then
-            rm -f "$SETTINGS"
-            ${pkgs.coreutils}/bin/install -m 644 ${./settings.json} "$SETTINGS"
-            mkdir -p "${repoDir}"
-            ${pkgs.coreutils}/bin/install -m 644 "$SETTINGS" "${repoDir}/settings.json"
-            echo "[noctalia] Seeded settings.json from store (fresh system)"
-          fi
+        #   if [ -f "$REPO_SETTINGS" ]; then
+        #     if [ -L "$SETTINGS" ] || [ ! -e "$SETTINGS" ] || \
+        #        ! ${pkgs.diffutils}/bin/diff -q "$REPO_SETTINGS" "$SETTINGS" > /dev/null 2>&1; then
+        #       rm -f "$SETTINGS"
+        #       ${pkgs.coreutils}/bin/install -m 644 "$REPO_SETTINGS" "$SETTINGS"
+        #       echo "[noctalia] Seeded settings.json from repo"
+        #     fi
+        #   elif [ -L "$SETTINGS" ] || [ ! -e "$SETTINGS" ]; then
+        #     rm -f "$SETTINGS"
+        #     ${pkgs.coreutils}/bin/install -m 644 ${./settings.json} "$SETTINGS"
+        #     mkdir -p "${repoDir}"
+        #     ${pkgs.coreutils}/bin/install -m 644 "$SETTINGS" "${repoDir}/settings.json"
+        #     echo "[noctalia] Seeded settings.json from store (fresh system)"
+        #   fi
 
-          # Patch machine-specific values that must not be committed
-          ${patchSettingsScript} \
-            "$SETTINGS" \
-            "${nocPaths.wallpaper_dir}" \
-            "${nocPaths.avatar_image}" \
-            "${nocCfg.bar_monitor}" \
-            "${nocCfg.dock_monitor}" \
-            "${nocCfg.location_name}" \
-            "${username}"
-          echo "[noctalia] Patched machine-specific values into settings.json"
-        '';
+        #   # Patch machine-specific values that must not be committed
+        #   ${patchSettingsScript} \
+        #     "$SETTINGS" \
+        #     "${nocPaths.wallpaper_dir}" \
+        #     "${nocPaths.avatar_image}" \
+        #     "${nocCfg.bar_monitor}" \
+        #     "${nocCfg.dock_monitor}" \
+        #     "${nocCfg.location_name}" \
+        #     "${username}"
+        #   echo "[noctalia] Patched machine-specific values into settings.json"
+        # '';
 
-        home.activation.noctaliaPlugins = lib.hm.dag.entryAfter ["writeBoundary"] ''
-          mkdir -p "${configDir}"
-          PLUGINS="${configDir}/plugins.json"
-          REPO_PLUGINS="${repoDir}/plugins.json"
+        # home.activation.noctaliaPlugins = lib.hm.dag.entryAfter ["writeBoundary"] ''
+        #   mkdir -p "${configDir}"
+        #   PLUGINS="${configDir}/plugins.json"
+        #   REPO_PLUGINS="${repoDir}/plugins.json"
 
-          if [ -f "$REPO_PLUGINS" ]; then
-            if [ -L "$PLUGINS" ] || [ ! -e "$PLUGINS" ] || \
-               ! ${pkgs.diffutils}/bin/diff -q "$REPO_PLUGINS" "$PLUGINS" > /dev/null 2>&1; then
-              rm -f "$PLUGINS"
-              ${pkgs.coreutils}/bin/install -m 644 "$REPO_PLUGINS" "$PLUGINS"
-              echo "[noctalia] Seeded plugins.json from repo"
-            fi
-          elif [ -L "$PLUGINS" ] || [ ! -e "$PLUGINS" ]; then
-            rm -f "$PLUGINS"
-            ${pkgs.coreutils}/bin/install -m 644 ${./plugins.json} "$PLUGINS"
-            mkdir -p "${repoDir}"
-            ${pkgs.coreutils}/bin/install -m 644 "$PLUGINS" "${repoDir}/plugins.json"
-            echo "[noctalia] Seeded plugins.json from store (fresh system)"
-          fi
-        '';
+        #   if [ -f "$REPO_PLUGINS" ]; then
+        #     if [ -L "$PLUGINS" ] || [ ! -e "$PLUGINS" ] || \
+        #        ! ${pkgs.diffutils}/bin/diff -q "$REPO_PLUGINS" "$PLUGINS" > /dev/null 2>&1; then
+        #       rm -f "$PLUGINS"
+        #       ${pkgs.coreutils}/bin/install -m 644 "$REPO_PLUGINS" "$PLUGINS"
+        #       echo "[noctalia] Seeded plugins.json from repo"
+        #     fi
+        #   elif [ -L "$PLUGINS" ] || [ ! -e "$PLUGINS" ]; then
+        #     rm -f "$PLUGINS"
+        #     ${pkgs.coreutils}/bin/install -m 644 ${./plugins.json} "$PLUGINS"
+        #     mkdir -p "${repoDir}"
+        #     ${pkgs.coreutils}/bin/install -m 644 "$PLUGINS" "${repoDir}/plugins.json"
+        #     echo "[noctalia] Seeded plugins.json from store (fresh system)"
+        #   fi
+        # '';
 
-        systemd.user.services.noctalia-sync = {
-          Unit = {
-            Description = "Bidirectional sync: Noctalia config ↔ repo";
-            After = ["default.target"];
-          };
-          Service = {
-            ExecStart = "${syncScript}";
-            Restart = "always";
-            RestartSec = "3s";
-            TimeoutStopSec = "5s";
-            KillMode = "process";
-          };
-          Install.WantedBy = ["default.target"];
-        };
+        # systemd.user.services.noctalia-sync = {
+        #   Unit = {
+        #     Description = "Bidirectional sync: Noctalia config ↔ repo";
+        #     After = ["default.target"];
+        #   };
+        #   Service = {
+        #     ExecStart = "${syncScript}";
+        #     Restart = "always";
+        #     RestartSec = "3s";
+        #     TimeoutStopSec = "5s";
+        #     KillMode = "process";
+        #   };
+        #   Install.WantedBy = ["default.target"];
+        # };
 
-        systemd.user.services.noctalia-commit = {
-          Unit.Description = "Commit pending Noctalia config changes to git";
-          Service = {
-            Type = "oneshot";
-            ExecStart = "${commitScript}";
-          };
-        };
+        # systemd.user.services.noctalia-commit = {
+        #   Unit.Description = "Commit pending Noctalia config changes to git";
+        #   Service = {
+        #     Type = "oneshot";
+        #     ExecStart = "${commitScript}";
+        #   };
+        # };
 
-        systemd.user.timers.noctalia-commit = {
-          Unit.Description = "Timer for Noctalia config auto-commit";
-          Timer = {
-            OnBootSec = "15min";
-            OnUnitActiveSec = "15min";
-            Unit = "noctalia-commit.service";
-          };
-          # Install.WantedBy = ["timers.target"];
-        };
+        # systemd.user.timers.noctalia-commit = {
+        #   Unit.Description = "Timer for Noctalia config auto-commit";
+        #   Timer = {
+        #     OnBootSec = "15min";
+        #     OnUnitActiveSec = "15min";
+        #     Unit = "noctalia-commit.service";
+        #   };
+        #   # Install.WantedBy = ["timers.target"];
+        # };
       };
     };
   };

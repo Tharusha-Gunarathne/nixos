@@ -271,7 +271,7 @@ layout {
 // See the binds section below for more spawn examples.
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
-spawn-at-startup "noctalia-shell"
+spawn-at-startup "noctalia"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
@@ -381,10 +381,10 @@ blur {
 window-rule {
     // Match the exact App ID from your logs
     match app-id="application-Shutter"
-    
+
     // Match the actual main window, ignoring the "win0" ghost window
     match title="Shutter Encoder"
-    
+
     // Force it to tile
     open-floating false
 }
@@ -398,13 +398,13 @@ debug {
 
 // Set the overview wallpaper on the backdrop.
 layer-rule {
-  match namespace="^noctalia-overview*"
+  match namespace="^noctalia-backdrop"
   place-within-backdrop true
 }
 
 // Example: block out two password managers from screen capture.
 // (This example rule is commented out with a "/-" in front.)
-/-window-rule {
+window-rule {
     match app-id=r#"^org\.keepassxc\.KeePassXC$"#
     match app-id=r#"^org\.gnome\.World\.Secrets$"#
 
@@ -416,7 +416,7 @@ layer-rule {
 
 // Example: enable rounded corners for all windows.
 // (This example rule is commented out with a "/-" in front.)
-/-window-rule {
+window-rule {
     geometry-corner-radius 12
     clip-to-geometry true
 }
@@ -435,7 +435,7 @@ binds {
     // Mod-Shift-/, which is usually the same as Mod-?,
     // shows a list of important hotkeys.
     // Mod+Shift+Slash { show-hotkey-overlay; }
-    Mod+Shift+Slash { spawn-sh "noctalia-shell ipc -n call plugin togglePanel keybind-cheatsheet"; }
+    Mod+Shift+Slash { spawn-sh "noctalia ipc -n call plugin togglePanel keybind-cheatsheet"; }
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+Return hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
@@ -493,7 +493,7 @@ binds {
 
     Mod+Ctrl+Down  { move-window-down; }
     Mod+Ctrl+Up    { move-window-up; }
-    
+
     Mod+Ctrl+Right { move-column-right; }
     Mod+Ctrl+X     { move-column-right; }
 
@@ -501,7 +501,7 @@ binds {
     Mod+Ctrl+J     { move-window-down; }
     Mod+Ctrl+K     { move-window-up; }
     Mod+Ctrl+L     { move-column-right; }
-    
+
     Mod+Z  { focus-column-left; }
     Mod+X  { focus-column-right; }
 
@@ -713,8 +713,8 @@ binds {
 
     // NOCTALIA KEYBINDS
     // Core Noctalia binds
-    // Mod+Space { spawn-sh "noctalia-shell ipc call launcher toggle"; }
-    
+    // Mod+Space { spawn-sh "noctalia ipc call launcher toggle"; }
+
     // ==========================
     // Urgent Situation Key Binds
     // ==========================
@@ -729,18 +729,17 @@ binds {
 
     Mod+Space { spawn-sh "vicinae toggle"; }
     Mod+Shift+A { spawn-sh "vicinae deeplink vicinae://launch/clipboard/history"; }
-    Mod+S { spawn-sh "noctalia-shell ipc call controlCenter toggle"; }
-    Mod+Comma { spawn-sh "noctalia-shell ipc call settings toggle"; }
-    Mod+P { spawn-sh "noctalia-shell ipc call sessionMenu toggle"; }
-    Mod+Shift+Tab { spawn-sh "noctalia-shell ipc -n call plugin:wallcards toggle"; }
-    // Mod+M { spawn-sh "noctalia-shell ipc -n call plugin togglePanel monique"; }
+    Mod+S { spawn-sh "noctalia msg panel-toggle control-center"; }
+    Mod+Comma { spawn-sh "noctalia msg settings-toggle"; }
+    Mod+P { spawn-sh "noctalia msg panel-toggle session"; }
+    // Mod+M { spawn-sh "noctalia msg plugin togglePanel monique"; }
 
     // Audio & Brightness
-    XF86AudioRaiseVolume { spawn "noctalia-shell" "ipc" "call" "volume" "increase"; }
-    XF86AudioLowerVolume { spawn "noctalia-shell" "ipc" "call" "volume" "decrease"; }
-    XF86AudioMute { spawn "noctalia-shell" "ipc" "call" "volume" "muteOutput"; }
-    XF86MonBrightnessUp { spawn "noctalia-shell" "ipc" "call" "brightness" "increase"; }
-    XF86MonBrightnessDown { spawn "noctalia-shell" "ipc" "call" "brightness" "decrease"; }
+    XF86AudioRaiseVolume { spawn-sh "noctalia msg volume-up"; }
+    XF86AudioLowerVolume { spawn-sh "noctalia msg volume-down"; }
+    XF86AudioMute { spawn-sh "noctalia msg volume-mute"; }
+    XF86MonBrightnessUp { spawn-sh "noctalia msg brightness-up"; }
+    XF86MonBrightnessDown { spawn-sh "noctalia msg brightness-down"; }
 
     // Scroll lock keyboard LEDs toggle
     Scroll_Lock { spawn "keyboard-leds-toggle"; }
