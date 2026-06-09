@@ -2,7 +2,6 @@
   flake.nixosModules.noctaliaNiri = {
     config,
     lib,
-    pkgs,
     ...
   }: let
     username = config.myConfig.primaryUser;

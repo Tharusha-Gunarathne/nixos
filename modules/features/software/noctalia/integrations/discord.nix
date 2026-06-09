@@ -2,7 +2,6 @@
   flake.nixosModules.noctaliaDiscord = {
     config,
     lib,
-    pkgs,
     ...
   }: let
     username = config.myConfig.primaryUser;
@@ -42,7 +41,6 @@
       (lib.mkIf (!shell.noctalia) {
         home-manager.users.${username} = {
           lib,
-          pkgs,
           ...
         }: {
           home.activation.noctaliaDiscordCleanup = lib.hm.dag.entryAfter ["writeBoundary"] ''

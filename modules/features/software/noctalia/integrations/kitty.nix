@@ -2,7 +2,6 @@
   flake.nixosModules.noctaliaKitty = {
     config,
     lib,
-    pkgs,
     ...
   }: let
     username = config.myConfig.primaryUser;
@@ -13,7 +12,6 @@
         home-manager.users.${username} = {
           config,
           lib,
-          pkgs,
           ...
         }: {
           home.activation.kittyNoctaliaTheme = lib.hm.dag.entryAfter ["writeBoundary"] ''
@@ -30,7 +28,6 @@
         home-manager.users.${username} = {
           config,
           lib,
-          pkgs,
           ...
         }: {
           programs.kitty.extraConfig = lib.mkForce "";

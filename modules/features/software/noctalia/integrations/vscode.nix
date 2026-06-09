@@ -100,7 +100,6 @@
       (lib.mkIf (!shell.noctalia) {
         home-manager.users.${username} = {
           lib,
-          pkgs,
           ...
         }: {
           home.activation.noctaliaVscodeCleanup = lib.hm.dag.entryAfter ["writeBoundary"] ''

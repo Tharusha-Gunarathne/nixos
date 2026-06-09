@@ -1,7 +1,6 @@
 {inputs, ...}: {
   flake.nixosModules.niri = {
     config,
-    lib,
     pkgs,
     ...
   }: let
