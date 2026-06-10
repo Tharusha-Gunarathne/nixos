@@ -107,6 +107,7 @@
         "ddkjiahejlhfcafbddmgiahcphecmpfh" # uBlock Origin Lite
         "nngceckbapebfimnlniiiahkandclblb" # Bitwarden
         "mhpeahbikehnfkfnmopaigggliclhmnc" # BroTab
+        "kcmipingpfbohfjckomimmahknoddnke" # Vicinae Integration
       ];
     };
   };
