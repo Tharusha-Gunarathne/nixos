@@ -1,6 +1,6 @@
 {
   inputs,
-  # self,
+  self,
   # localConfig,
   ...
 }: {
@@ -14,14 +14,13 @@
     # nocPaths = localConfig.paths;
     # nocCfg = localConfig.noctalia;
   in {
-    # imports = [
-    #   self.nixosModules.noctaliaPluginSettings
-    #   self.nixosModules.noctaliaKitty
-    #   self.nixosModules.noctaliaNiri
-    #   self.nixosModules.noctaliaVscode
-    #   self.nixosModules.noctaliaSpotify
-    #   self.nixosModules.noctaliaDiscord
-    # ];
+    imports = [
+      self.nixosModules.noctaliaKitty
+      self.nixosModules.noctaliaNiri
+      self.nixosModules.noctaliaVscode
+      self.nixosModules.noctaliaSpotify
+      self.nixosModules.noctaliaDiscord
+    ];
 
     config = lib.mkIf config.myConfig.shell.noctalia {
       home-manager.users.${username} = {
