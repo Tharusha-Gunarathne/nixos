@@ -40,27 +40,32 @@
     # Nix store via NixOS options.
     system.activationScripts.nixAccessTokens = lib.stringAfter ["etc"] ''
       set -euo pipefail
-
+    
       REPO_ROOT="${config.myConfig.repoRoot}"
       ENV_FILE="$REPO_ROOT/.env.local"
       OUT_FILE="/etc/nix/access-tokens.conf"
-
+    
       token=""
-
+    
       if [ -f "$ENV_FILE" ]; then
-        token="$(${pkgs.python3}/bin/python3 -c 'import sys, tomllib; cfg = tomllib.load(open(sys.argv[1], "rb")); g = cfg.get("github") or {}; t = (g.get("access-token") or "") if isinstance(g, dict) else ""; print(t.strip() if isinstance(t, str) else "")' "$ENV_FILE")"
+        token="$(${pkgs.python3}/bin/python3 -c 'import sys, tomllib; cfg = tomllib.load(open(sys.argv[1], "rb")); g = cfg.get("github") or {}; t = (g.get("access_token") or "") if isinstance(g, dict) else ""; print(t.strip() if isinstance(t, str) else "")' "$ENV_FILE")"
       fi
-
+    
       if [ -n "$token" ]; then
         ${pkgs.coreutils}/bin/install -d -m 0755 /etc/nix
-
+    
         tmp="$(${pkgs.coreutils}/bin/mktemp)"
         umask 077
         printf '%s\n' "access-tokens = github.com=$token" > "$tmp"
-        ${pkgs.coreutils}/bin/install -m 0600 "$tmp" "$OUT_FILE"
+        ${pkgs.coreutils}/bin/install -m 0644 "$tmp" "$OUT_FILE"
         ${pkgs.coreutils}/bin/rm -f "$tmp"
       else
         ${pkgs.coreutils}/bin/rm -f "$OUT_FILE"
+      fi
+    
+      # Restart nix-daemon so it picks up the updated token file
+      if ${pkgs.systemd}/bin/systemctl is-active --quiet nix-daemon; then
+        ${pkgs.systemd}/bin/systemctl restart nix-daemon || true
       fi
     '';
 
