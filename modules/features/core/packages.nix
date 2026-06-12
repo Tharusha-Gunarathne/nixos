@@ -7,7 +7,7 @@
     nixpkgs.config.permittedInsecurePackages = [
       "electron-39.8.10"
     ];
-    
+
     environment.systemPackages = with pkgs; [
       # Core CLI
       vim
@@ -62,9 +62,12 @@
         brotab
 
         # User development stack
-        python314
+        (python314.withPackages (ps:
+          with ps; [
+            pip
+            jupyterlab
+        ]))
         uv
-        python314Packages.pip
         nodejs
         lmstudio
         claude-code
