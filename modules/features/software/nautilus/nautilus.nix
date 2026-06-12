@@ -40,6 +40,36 @@
           value = {source = sourceDir + "/${name}";};
         })
         extensionFiles);
+
+      systemd.user.services.gvfs-daemon-prewarm = {
+        Unit = {
+          Description = "Pre-warm GVFS daemon for fast Nautilus first launch";
+          After = ["graphical-session.target"];
+          PartOf = ["graphical-session.target"];
+        };
+        Service = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = "${pkgs.glib}/bin/gio mount -li";
+        };
+        Install.WantedBy = ["graphical-session.target"];
+      };
+
+      systemd.user.services.nautilus-prewarm = {
+        Unit = {
+          Description = "Pre-warm Nautilus for fast first launch";
+          After = ["graphical-session.target" "gvfs-daemon-prewarm.service"];
+          PartOf = ["graphical-session.target"];
+          Wants = ["gvfs-daemon-prewarm.service"];
+        };
+        Service = {
+          Type = "simple";  # stays running, not oneshot
+          ExecStart = "${pkgs.nautilus}/bin/nautilus --gapplication-service";
+          Restart = "on-failure";
+          RestartSec = "5s";
+        };
+        Install.WantedBy = ["graphical-session.target"];
+      };
     };
   };
 }
