@@ -360,6 +360,7 @@ window-rule {
     match app-id=r#"^brave-[a-z0-9]+-Profile_[0-9]+$"#
     match app-id="Lotion"
     match app-id="dev.zed.Zed"
+    match app-id="microsoft-edge"
     opacity 1.0
 }
 
