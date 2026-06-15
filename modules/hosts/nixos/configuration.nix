@@ -53,6 +53,7 @@
       self.nixosModules.openWebUI
       self.nixosModules.simpMusic
       self.nixosModules.adb
+      self.nixosModules.tailscale
       #services
       self.nixosModules.lamp
       self.nixosModules.cockpit
