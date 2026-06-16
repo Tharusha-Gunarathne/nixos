@@ -74,6 +74,7 @@
         octaveFull
         postman
         firebase-tools
+        devenv
 
         # Desktop apps
         ente-auth
