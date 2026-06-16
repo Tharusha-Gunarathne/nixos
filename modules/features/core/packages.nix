@@ -92,7 +92,6 @@
         qbittorrent
         obsidian
         qalculate-gtk
-        rquickshare
 
         # System management
         mission-center
