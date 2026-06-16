@@ -1,16 +1,5 @@
 {
-  description = "Tharusha's NixOS Flake";
-
-  nixConfig = {
-    extra-substituters = [
-      "https://vicinae.cachix.org"
-      "https://niri.cachix.org"
-    ];
-    extra-trusted-public-keys = [
-      "vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc="
-      "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
-    ];
-  };
+  description = "Tharusha's NixOS Flake";  
 
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";

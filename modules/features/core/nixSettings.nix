@@ -9,6 +9,23 @@
       trusted-users = ["root" config.myConfig.primaryUser];
       experimental-features = ["nix-command" "flakes"];
       auto-optimise-store = true;
+
+      # Declared at system level (not relying on flake nixConfig, which is
+      # only a *suggestion* unless --accept-flake-config is passed or the
+      # prompt was already accepted interactively once). This guarantees
+      # these caches are always trusted for nixos-rebuild, nh, etc.
+      substituters = [
+        "https://cache.nixos.org"
+        "https://vicinae.cachix.org"
+        "https://niri.cachix.org"
+        "https://noctalia.cachix.org"
+      ];
+      trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc="
+        "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
+        "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
+      ];
     };
 
     nixpkgs.config.allowUnfree = true;
@@ -18,13 +35,6 @@
       dates = "weekly";
       options = "--delete-older-than 30d";
     };
-
-    nix.extraOptions = ''
-      !include /etc/nix/access-tokens.conf
-      warn-dirty = false
-      keep-going = true
-      log-lines = 20
-    '';
 
     systemd.settings.Manager = {
       DefaultTimeoutStopSec = "15s";
@@ -69,6 +79,13 @@
       fi
     '';
 
+    nix.extraOptions = ''
+      !include /etc/nix/access-tokens.conf
+      warn-dirty = false
+      keep-going = true
+      log-lines = 20
+    '';
+    
     system.stateVersion = "25.11";
   };
 
