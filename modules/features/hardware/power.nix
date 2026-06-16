@@ -31,8 +31,8 @@
     # ===========================================================================
     services.undervolt = lib.mkIf config.myConfig.isUnderVoltEnabled {
       enable = true;
-      coreOffset = -170;
-      uncoreOffset = -160;
+      coreOffset = -100;
+      uncoreOffset = -80;
       gpuOffset = 0;
     };
 
