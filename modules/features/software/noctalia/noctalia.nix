@@ -1,7 +1,7 @@
 {
   inputs,
   self,
-  # localConfig,
+  localConfig,
   ...
 }: {
   flake.nixosModules.noctalia = {
@@ -10,9 +10,7 @@
     ...
   }: let
     username = config.myConfig.primaryUser;
-    # repoRoot = config.myConfig.repoRoot;
-    # nocPaths = localConfig.paths;
-    # nocCfg = localConfig.noctalia;
+    repoRoot = config.myConfig.repoRoot;
   in {
     imports = [
       self.nixosModules.noctaliaKitty
@@ -24,245 +22,224 @@
 
     config = lib.mkIf config.myConfig.shell.noctalia {
       home-manager.users.${username} = {
-        # config,
-        # pkgs,
-        # lib,
+        config,
+        pkgs,
+        lib,
         ...
       }: let
-        # configDir = "${config.xdg.configHome}/noctalia";
-        # repoDir = "${repoRoot}/modules/features/software/noctalia";
+        stateDir = "${config.xdg.stateHome}/noctalia";
+        repoDir = "${repoRoot}/modules/features/software/noctalia";
+        fileName = "settings.toml";
 
-        # Patch machine-specific values into settings.json after seeding.
-        # This keeps the committed settings.json free of personal paths.
-        # patchSettingsScript = pkgs.writers.writePython3 "noctalia-patch-settings" {} ''
-        #   import json
-        #   import sys
+        homeDir = config.home.homeDirectory;
 
-        #   settings_path = sys.argv[1]
-        #   wallpaper_dir = sys.argv[2]
-        #   avatar_image = sys.argv[3]
-        #   bar_monitor = sys.argv[4]
-        #   dock_monitor = sys.argv[5]
-        #   location_name = sys.argv[6]
-        #   username = sys.argv[7]
+        capitalize = s:
+          if s == ""
+          then s
+          else lib.toUpper (builtins.substring 0 1 s) + builtins.substring 1 (builtins.stringLength s - 1) s;
 
-        #   with open(settings_path) as f:
-        #       data = json.load(f)
+        configuredDisplayName = localConfig.user.display_name or "";
+        displayName =
+          if configuredDisplayName != ""
+          then configuredDisplayName
+          else lib.concatStringsSep "-" (map capitalize (lib.splitString "-" username));
 
-        #   # Wallpaper directory
-        #   data.setdefault("wallpaper", {})
-        #   data["wallpaper"]["directory"] = wallpaper_dir
-        #   for m in data["wallpaper"].get("monitorDirectories", []):
-        #       m["directory"] = wallpaper_dir
+        # ${VAR}-style placeholders, .env-style. Nix strings containing
+        # the literal text "${...}" — plain text at this point, not
+        # shell or Nix variables.
+        homeToken = "\${NOCTALIA_HOME}";
+        usernameToken = "\${NOCTALIA_USERNAME}";
+        displayNameToken = "\${NOCTALIA_DISPLAY_NAME}";
+        envsubstVars = "${homeToken} ${usernameToken} ${displayNameToken}";
 
-        #   # Avatar
-        #   data.setdefault("general", {})
-        #   data["general"]["avatarImage"] = avatar_image
+        # Real values <-> ${VAR} placeholders.
+        templateScript = pkgs.writeShellScript "noctalia-template" ''
+          set -euo pipefail
+          MODE="$1"
+          SRC="$2"
+          DST="$3"
 
-        #   # Bar monitors list
-        #   data.setdefault("bar", {})
-        #   data["bar"]["monitors"] = [bar_monitor]
+          export NOCTALIA_HOME="${homeDir}"
+          export NOCTALIA_USERNAME="${username}"
+          export NOCTALIA_DISPLAY_NAME="${displayName}"
 
-        #   # Dock monitors list
-        #   data.setdefault("dock", {})
-        #   data["dock"]["monitors"] = [dock_monitor]
+          TMP="$(mktemp)"
+          trap 'rm -f "$TMP"' EXIT
 
-        #   # Location name (weather / calendar)
-        #   data.setdefault("location", {})
-        #   data["location"]["name"] = location_name
+          case "$MODE" in
+            to-repo)
+              # Single-quote the replacement text so bash doesn't expand
+              # ''${NOCTALIA_HOME}-style tokens via the live env vars of the
+              # same name — only the search side ($NOCTALIA_HOME etc.,
+              # double-quoted) should be expanded here.
+              ${pkgs.gnused}/bin/sed \
+                -e "s|$NOCTALIA_HOME|"'${homeToken}'"|g" \
+                -e "s|$NOCTALIA_USERNAME|"'${usernameToken}'"|g" \
+                -e "s|$NOCTALIA_DISPLAY_NAME|"'${displayNameToken}'"|g" \
+                "$SRC" > "$TMP"
+              ;;
+            to-state)
+              ${pkgs.gettext}/bin/envsubst '${envsubstVars}' \
+                < "$SRC" > "$TMP"
+              ;;
+            *)
+              echo "[noctalia-template] unknown mode: $MODE" >&2
+              exit 1
+              ;;
+          esac
 
-        #   # Hook binary paths (use per-user profile bin)
-        #   profile_bin = f"/etc/profiles/per-user/{username}/bin"
-        #   data.setdefault("hooks", {})
-        #   color_hook = f"{profile_bin}/spicetify-noctalia-color-hook"
-        #   mpv_hook = f"{profile_bin}/noctalia-mpv-modernz-sync"
-        #   combined = f"{color_hook} && {mpv_hook}"
-        #   data["hooks"]["colorGeneration"] = combined
-        #   data["hooks"]["darkModeChange"] = color_hook
-        #   data["hooks"]["wallpaperChange"] = combined
+          ${pkgs.coreutils}/bin/install -m 644 "$TMP" "$DST"
+        '';
 
-        #   with open(settings_path, "w") as f:
-        #       json.dump(data, f, indent=4)
-        # '';
+        syncScript = pkgs.writeShellScript "noctalia-sync" ''
+          set -euo pipefail
+          STATE_DIR="${stateDir}"
+          REPO_DIR="${repoDir}"
+          FILE="${fileName}"
+          TEMPLATE="${templateScript}"
+          INOTIFY="${pkgs.inotify-tools}/bin/inotifywait"
+          SHA="${pkgs.coreutils}/bin/sha256sum"
+          CUT="${pkgs.coreutils}/bin/cut"
+          STAT="${pkgs.coreutils}/bin/stat"
+          MARKER_DIR="''${XDG_RUNTIME_DIR:-/tmp}/noctalia-sync"
+          DEBOUNCE_SECONDS=2.0
 
-        # syncScript = pkgs.writeShellScript "noctalia-sync" ''
-        #   set -euo pipefail
-        #   CONFIG_DIR="${configDir}"
-        #   REPO_DIR="${repoDir}"
-        #   CP="${pkgs.coreutils}/bin/cp"
-        #   INOTIFY="${pkgs.inotify-tools}/bin/inotifywait"
-        #   LOCK_DIR="/tmp/noctalia-sync-lock"
+          mkdir -p "$STATE_DIR" "$REPO_DIR" "$MARKER_DIR"
 
-        #   mkdir -p "$CONFIG_DIR" "$REPO_DIR" "$LOCK_DIR"
+          STATE_PATH="$STATE_DIR/$FILE"
+          REPO_PATH="$REPO_DIR/$FILE"
+          STATE_SELF_WRITE="$MARKER_DIR/state-self-write.sha256"
+          REPO_SELF_WRITE="$MARKER_DIR/repo-self-write.sha256"
 
-        #   acquire_lock() {
-        #     local file="$1"
-        #     local lockfile="$LOCK_DIR/$file.lock"
-        #     if [ -f "$lockfile" ]; then
-        #       return 1
-        #     fi
-        #     touch "$lockfile"
-        #     ( sleep 4; rm -f "$lockfile" ) &
-        #     return 0
-        #   }
+          hash_of() {
+            [ -f "$1" ] && "$SHA" "$1" | "$CUT" -d' ' -f1 || echo ""
+          }
 
-        #   (
-        #     "$INOTIFY" -m -e close_write,moved_to "$CONFIG_DIR" 2>/dev/null |
-        #     while read -r _dir _event file; do
-        #       if [[ "$file" == "settings.json" || "$file" == "plugins.json" ]]; then
-        #         if acquire_lock "config-to-repo-$file"; then
-        #           echo "[noctalia-sync] config→repo: $file"
-        #           "$CP" "$CONFIG_DIR/$file" "$REPO_DIR/$file"
-        #         fi
-        #       fi
-        #     done
-        #   ) &
+          write_atomic() {
+            local content="$1" dest="$2"
+            mkdir -p "$(dirname "$dest")"
+            local tmp
+            tmp="$(mktemp "$(dirname "$dest")/.tmp.XXXXXX")"
+            printf '%s' "$content" > "$tmp"
+            mv -f "$tmp" "$dest"
+          }
 
-        #   (
-        #     "$INOTIFY" -m -e close_write,moved_to "$REPO_DIR" 2>/dev/null |
-        #     while read -r _dir _event file; do
-        #       if [[ "$file" == "settings.json" || "$file" == "plugins.json" ]]; then
-        #         if acquire_lock "repo-to-config-$file"; then
-        #           echo "[noctalia-sync] repo→config: $file"
-        #           "$CP" "$REPO_DIR/$file" "$CONFIG_DIR/$file"
-        #         fi
-        #       fi
-        #     done
-        #   ) &
+          sync_one() {
+            local mode="$1" src="$2" dst="$3" incoming_marker="$4" outgoing_marker="$5" label="$6"
 
-        #   wait
-        # '';
+            local src_hash
+            src_hash="$(hash_of "$src")"
 
-        # commitScript = pkgs.writeShellScript "noctalia-commit" ''
-        #   REPO_ROOT="${repoRoot}"
-        #   GIT="${pkgs.git}/bin/git"
+            if [ -f "$incoming_marker" ] && [ "$(cat "$incoming_marker")" = "$src_hash" ]; then
+              rm -f "$incoming_marker"
+              return 0
+            fi
 
-        #   cd "$REPO_ROOT"
+            local scratch
+            scratch="$(mktemp)"
+            "$TEMPLATE" "$mode" "$src" "$scratch"
 
-        #   TMP_INDEX=$(mktemp)
-        #   cleanup() { rm -f "$TMP_INDEX"; }
-        #   trap cleanup EXIT
+            local new_hash dst_hash
+            new_hash="$(hash_of "$scratch")"
+            dst_hash="$(hash_of "$dst")"
 
-        #   GIT_INDEX_FILE="$TMP_INDEX" "$GIT" read-tree HEAD
+            if [ "$new_hash" != "$dst_hash" ]; then
+              write_atomic "$new_hash" "$outgoing_marker"
+              mv -f "$scratch" "$dst"
+              chmod 644 "$dst"
+              echo "[noctalia-sync] $label"
+            else
+              rm -f "$scratch"
+            fi
+          }
 
-        #   for path in modules/features/software/noctalia/settings.json \
-        #               modules/features/software/noctalia/plugins.json; do
-        #     if [ -e "$path" ]; then
-        #       GIT_INDEX_FILE="$TMP_INDEX" "$GIT" add "$path"
-        #     fi
-        #   done
+          state_to_repo() {
+            sync_one to-repo "$STATE_PATH" "$REPO_PATH" "$STATE_SELF_WRITE" "$REPO_SELF_WRITE" \
+              "state→repo: $FILE (templated)"
+          }
 
-        #   if GIT_INDEX_FILE="$TMP_INDEX" "$GIT" diff --cached --quiet; then
-        #     exit 0
-        #   fi
+          repo_to_state() {
+            sync_one to-state "$REPO_PATH" "$STATE_PATH" "$REPO_SELF_WRITE" "$STATE_SELF_WRITE" \
+              "repo→state: $FILE (expanded)"
+          }
 
-        #   GIT_INDEX_FILE="$TMP_INDEX" "$GIT" commit -m "chore(noctalia): auto-sync config changes"
-        # '';
+          reconcile_on_start() {
+            if [ -f "$REPO_PATH" ] && [ ! -f "$STATE_PATH" ]; then
+              echo "[noctalia-sync] startup reconcile: seeding state from repo"
+              repo_to_state
+              return
+            fi
+            if [ -f "$STATE_PATH" ] && [ ! -f "$REPO_PATH" ]; then
+              echo "[noctalia-sync] startup reconcile: seeding repo from state"
+              state_to_repo
+              return
+            fi
+            if [ -f "$STATE_PATH" ] && [ -f "$REPO_PATH" ]; then
+              local state_mtime repo_mtime
+              state_mtime="$("$STAT" -c %Y "$STATE_PATH")"
+              repo_mtime="$("$STAT" -c %Y "$REPO_PATH")"
+              if [ "$state_mtime" -gt "$repo_mtime" ]; then
+                echo "[noctalia-sync] startup reconcile: state is newer"
+                state_to_repo
+              elif [ "$repo_mtime" -gt "$state_mtime" ]; then
+                echo "[noctalia-sync] startup reconcile: repo is newer"
+                repo_to_state
+              fi
+            fi
+          }
+
+          watch_debounced() {
+            local dir="$1" action="$2"
+            local dirty=0 changed_file
+
+            "$INOTIFY" -m -e close_write,moved_to --format '%f' "$dir" 2>/dev/null |
+              while true; do
+                if read -t "$DEBOUNCE_SECONDS" -r changed_file; then
+                  [ "$changed_file" = "$FILE" ] && dirty=1
+                elif [ "$dirty" = "1" ]; then
+                  dirty=0
+                  "$action"
+                fi
+              done
+          }
+
+          reconcile_on_start
+
+          watch_debounced "$STATE_DIR" state_to_repo &
+          watch_debounced "$REPO_DIR" repo_to_state &
+
+          wait
+        '';
       in {
         imports = [inputs.noctalia.noctalia-main.homeModules.default];
 
         programs.noctalia.enable = true;
 
-        # home.activation.noctaliaCleanupBackups = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
-        #   rm -f \
-        #     "${configDir}/settings.json.backup" \
-        #     "${configDir}/plugins.json.backup" \
-        #     "${configDir}/settings.json.hmbackup" \
-        #     "${configDir}/plugins.json.hmbackup"
+        home.activation.noctaliaSeedSettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
+          mkdir -p "${stateDir}"
+          STATE="${stateDir}/${fileName}"
+          REPO="${repoDir}/${fileName}"
 
-        #   if [ -d "${configDir}/plugins" ]; then
-        #     find "${configDir}/plugins" -maxdepth 1 -type d -name '*.backup' -exec rm -rf {} +
-        #   fi
+          if [ -f "$REPO" ] && [ ! -e "$STATE" ]; then
+            ${templateScript} to-state "$REPO" "$STATE"
+            echo "[noctalia] Seeded settings.toml from repo (fresh state dir, expanded)"
+          fi
+        '';
 
-        #   rm -rf "$HOME/.cache/noctalia-qs/qmlcache" \
-        #          "$HOME/.cache/noctalia-qs/qtpipelinecache-x86_64-little_endian-lp64"
-        # '';
-
-        # home.activation.noctaliaSettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
-        #   mkdir -p "${configDir}"
-        #   SETTINGS="${configDir}/settings.json"
-        #   REPO_SETTINGS="${repoDir}/settings.json"
-
-        #   if [ -f "$REPO_SETTINGS" ]; then
-        #     if [ -L "$SETTINGS" ] || [ ! -e "$SETTINGS" ] || \
-        #        ! ${pkgs.diffutils}/bin/diff -q "$REPO_SETTINGS" "$SETTINGS" > /dev/null 2>&1; then
-        #       rm -f "$SETTINGS"
-        #       ${pkgs.coreutils}/bin/install -m 644 "$REPO_SETTINGS" "$SETTINGS"
-        #       echo "[noctalia] Seeded settings.json from repo"
-        #     fi
-        #   elif [ -L "$SETTINGS" ] || [ ! -e "$SETTINGS" ]; then
-        #     rm -f "$SETTINGS"
-        #     ${pkgs.coreutils}/bin/install -m 644 ${./settings.json} "$SETTINGS"
-        #     mkdir -p "${repoDir}"
-        #     ${pkgs.coreutils}/bin/install -m 644 "$SETTINGS" "${repoDir}/settings.json"
-        #     echo "[noctalia] Seeded settings.json from store (fresh system)"
-        #   fi
-
-        #   # Patch machine-specific values that must not be committed
-        #   ${patchSettingsScript} \
-        #     "$SETTINGS" \
-        #     "${nocPaths.wallpaper_dir}" \
-        #     "${nocPaths.avatar_image}" \
-        #     "${nocCfg.bar_monitor}" \
-        #     "${nocCfg.dock_monitor}" \
-        #     "${nocCfg.location_name}" \
-        #     "${username}"
-        #   echo "[noctalia] Patched machine-specific values into settings.json"
-        # '';
-
-        # home.activation.noctaliaPlugins = lib.hm.dag.entryAfter ["writeBoundary"] ''
-        #   mkdir -p "${configDir}"
-        #   PLUGINS="${configDir}/plugins.json"
-        #   REPO_PLUGINS="${repoDir}/plugins.json"
-
-        #   if [ -f "$REPO_PLUGINS" ]; then
-        #     if [ -L "$PLUGINS" ] || [ ! -e "$PLUGINS" ] || \
-        #        ! ${pkgs.diffutils}/bin/diff -q "$REPO_PLUGINS" "$PLUGINS" > /dev/null 2>&1; then
-        #       rm -f "$PLUGINS"
-        #       ${pkgs.coreutils}/bin/install -m 644 "$REPO_PLUGINS" "$PLUGINS"
-        #       echo "[noctalia] Seeded plugins.json from repo"
-        #     fi
-        #   elif [ -L "$PLUGINS" ] || [ ! -e "$PLUGINS" ]; then
-        #     rm -f "$PLUGINS"
-        #     ${pkgs.coreutils}/bin/install -m 644 ${./plugins.json} "$PLUGINS"
-        #     mkdir -p "${repoDir}"
-        #     ${pkgs.coreutils}/bin/install -m 644 "$PLUGINS" "${repoDir}/plugins.json"
-        #     echo "[noctalia] Seeded plugins.json from store (fresh system)"
-        #   fi
-        # '';
-
-        # systemd.user.services.noctalia-sync = {
-        #   Unit = {
-        #     Description = "Bidirectional sync: Noctalia config ↔ repo";
-        #     After = ["default.target"];
-        #   };
-        #   Service = {
-        #     ExecStart = "${syncScript}";
-        #     Restart = "always";
-        #     RestartSec = "3s";
-        #     TimeoutStopSec = "5s";
-        #     KillMode = "process";
-        #   };
-        #   Install.WantedBy = ["default.target"];
-        # };
-
-        # systemd.user.services.noctalia-commit = {
-        #   Unit.Description = "Commit pending Noctalia config changes to git";
-        #   Service = {
-        #     Type = "oneshot";
-        #     ExecStart = "${commitScript}";
-        #   };
-        # };
-
-        # systemd.user.timers.noctalia-commit = {
-        #   Unit.Description = "Timer for Noctalia config auto-commit";
-        #   Timer = {
-        #     OnBootSec = "15min";
-        #     OnUnitActiveSec = "15min";
-        #     Unit = "noctalia-commit.service";
-        #   };
-        #   # Install.WantedBy = ["timers.target"];
-        # };
+        systemd.user.services.noctalia-sync = {
+          Unit = {
+            Description = "Bidirectional sync: Noctalia settings.toml ↔ repo (debounced, self-write aware, reconciles on start)";
+            After = ["default.target"];
+          };
+          Service = {
+            ExecStart = "${syncScript}";
+            Restart = "always";
+            RestartSec = "3s";
+            TimeoutStopSec = "5s";
+            KillMode = "control-group";
+          };
+          Install.WantedBy = ["default.target"];
+        };
       };
     };
   };
