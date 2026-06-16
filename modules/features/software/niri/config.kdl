@@ -729,7 +729,9 @@ binds {
     // ============================
 
     Mod+Space { spawn-sh "vicinae toggle"; }
+    Mod+B { spawn-sh "noctalia msg panel-toggle launcher"; }
     Mod+Shift+A { spawn-sh "vicinae deeplink vicinae://launch/clipboard/history"; }
+    Mod+Shift+Tab { spawn-sh "noctalia msg panel-toggle wallpaper"; }
     Mod+S { spawn-sh "noctalia msg panel-toggle control-center"; }
     Mod+Comma { spawn-sh "noctalia msg settings-toggle"; }
     Mod+P { spawn-sh "noctalia msg panel-toggle session"; }
