@@ -5,6 +5,7 @@
     ...
   }: let
     lUser = localConfig.user;
+    lRepoDir = lUser.repo_dir;
     lStorage = localConfig.storage;
   in {
     options.myConfig = {
@@ -24,7 +25,7 @@
       repoRoot = lib.mkOption {
         type = lib.types.str;
         description = "Absolute path to the nixos-configs repo root";
-        default = "/home/${config.myConfig.primaryUser}/nixos-configs";
+        default = "/home/${config.myConfig.primaryUser}/${lRepoDir}";
       };
 
       # Undervolt the CPU
