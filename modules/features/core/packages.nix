@@ -75,6 +75,12 @@
         postman
         firebase-tools
         devenv
+        jetbrains.webstorm
+        jetbrains.phpstorm
+        jetbrains.pycharm
+        jetbrains.idea
+        jetbrains.datagrip
+        jetbrains.rust-rover
 
         # Desktop apps
         ente-auth
