@@ -6,7 +6,7 @@ tint_intensity = 0.4999999888241291
 background_opacity = 0.69999998435378075
 capsule = true
 capsule_foreground = "primary"
-capsule_opacity = 0.54999998770654202
+capsule_opacity = 0.24999999441206455
 capsule_radius = 5
 center = [ "clock", "workspaces" ]
 color = "primary"
@@ -304,14 +304,18 @@ wallpaper_scheme = "m3-tonal-spot"
 [wallpaper]
 directory = "${NOCTALIA_HOME}/Pictures/Wallpapers"
 
+    [wallpaper.automation]
+    enabled = true
+    interval_seconds = 2700
+
     [wallpaper.default]
-    path = "${NOCTALIA_HOME}/Pictures/Wallpapers/call-of-duty-3840x2160-21037.jpeg"
+    path = "${NOCTALIA_HOME}/Pictures/Wallpapers/swiss-alps-wallpaper-3840x2160-hiking-trails-weather-patterns-27248.jpg"
 
     [wallpaper.last]
-    path = "${NOCTALIA_HOME}/Pictures/Wallpapers/call-of-duty-3840x2160-21037.jpeg"
+    path = "${NOCTALIA_HOME}/Pictures/Wallpapers/swiss-alps-wallpaper-3840x2160-hiking-trails-weather-patterns-27248.jpg"
 
     [wallpaper.monitors.eDP-1]
-    path = "${NOCTALIA_HOME}/Pictures/Wallpapers/call-of-duty-3840x2160-21037.jpeg"
+    path = "${NOCTALIA_HOME}/Pictures/Wallpapers/swiss-alps-wallpaper-3840x2160-hiking-trails-weather-patterns-27248.jpg"
 
 [widget.clock]
 format = "{:%H:%M %a, %B %d}"
