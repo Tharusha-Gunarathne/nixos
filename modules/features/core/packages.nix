@@ -87,7 +87,7 @@
         ente-auth
         bitwarden-desktop
         btop
-        libreoffice
+        onlyoffice-desktopeditors
         drawio
         localsend
         bleachbit
