@@ -12,7 +12,7 @@ center = [ "clock", "workspaces" ]
 color = "primary"
 end = [ "tray", "notifications", "network", "bluetooth", "volume", "brightness", "battery", "control-center" ]
 font_weight = 400
-radius = 12
+radius = 10
 start = [ "wallpaper", "sysmon", "media" ]
 thickness = 32
 
