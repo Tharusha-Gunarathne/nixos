@@ -3,19 +3,16 @@ enabled = true
 tint_intensity = 0.4999999888241291
 
 [bar.default]
-background_opacity = 0.79999998211860657
-border = "on_primary"
-border_width = 0.5
+background_opacity = 0.69999998435378075
 capsule = true
 capsule_foreground = "primary"
-capsule_opacity = 0.14999999664723873
-capsule_radius = 6
+capsule_opacity = 0.54999998770654202
+capsule_radius = 5
 center = [ "clock", "workspaces" ]
 color = "primary"
 end = [ "tray", "notifications", "network", "bluetooth", "volume", "brightness", "battery", "control-center" ]
 font_weight = 400
 radius = 12
-shadow = false
 start = [ "wallpaper", "sysmon", "media" ]
 thickness = 32
 
@@ -276,9 +273,9 @@ ui_scale = 1.05
     speed = 0.69999999999999996
 
     [shell.panel]
-    borders = false
     open_near_click_session = true
     open_near_click_wallpaper = true
+    transparency_mode = "glass"
 
     [shell.shadow]
     direction = "center"
