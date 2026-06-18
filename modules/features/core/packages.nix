@@ -70,6 +70,7 @@
         uv
         nodejs
         lmstudio
+        antigravity
         claude-code
         octaveFull
         postman
