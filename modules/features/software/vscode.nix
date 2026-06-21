@@ -16,6 +16,7 @@
         "kdl-org.kdl"
         "jnoortheen.nix-ide"
         "ecmel.vscode-html-css"
+        "anthropic.claude-code"
       ]
       ++ (with pkgs.vscode-extensions; [
         github.copilot
