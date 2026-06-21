@@ -94,6 +94,9 @@
         qbittorrent
         obsidian
         qalculate-gtk
+        planify
+        devtoolbox
+        varia
         
         # System management
         mission-center
