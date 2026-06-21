@@ -112,6 +112,7 @@
             "nix.serverSettings",
             "terminal.integrated.defaultProfile.linux",
             "terminal.integrated.profiles.linux",
+            "markdown-pdf.executablePath",
         ]
         for key in managed_keys:
             current[key] = defaults[key]
