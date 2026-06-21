@@ -62,11 +62,6 @@
         brotab
 
         # User development stack
-        (python314.withPackages (ps:
-          with ps; [
-            pip
-            jupyterlab
-        ]))
         uv
         nodejs
         lmstudio
@@ -99,7 +94,7 @@
         qbittorrent
         obsidian
         qalculate-gtk
-
+        
         # System management
         mission-center
 

@@ -53,6 +53,7 @@
       self.nixosModules.simpMusic
       self.nixosModules.adb
       self.nixosModules.tailscale
+      self.nixosModules.python
       #services
       self.nixosModules.lamp
       self.nixosModules.cockpit
