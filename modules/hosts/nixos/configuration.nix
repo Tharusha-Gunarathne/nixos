@@ -49,7 +49,6 @@
       self.nixosModules.fastfetch
       self.nixosModules.loupe
       self.nixosModules.zedEditor
-      # self.nixosModules.freeClaudeCode
       self.nixosModules.openWebUI
       self.nixosModules.simpMusic
       self.nixosModules.adb
