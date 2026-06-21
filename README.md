@@ -97,7 +97,7 @@ atomically without modifying any application module.
 
 | Option                        | Type    | Default                          | Description                          |
 | ----------------------------- | ------- | -------------------------------- | ------------------------------------ |
-| `myConfig.primaryUser`        | string  | `"tharusha-gunarathne"`          | Primary user account                 |
+| `myConfig.primaryUser`        | string  | `"<username>"`          | Primary user account                 |
 | `myConfig.primaryUid`         | int     | `1000`                           | Primary user UID                     |
 | `myConfig.repoRoot`           | string  | `/home/<username>/nixos-configs` | Absolute path to this repo           |
 | `myConfig.isUnderVoltEnabled` | bool    | `true`                           | Enable CPU undervolting              |
