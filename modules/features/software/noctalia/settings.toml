@@ -305,7 +305,6 @@ wallpaper_scheme = "m3-tonal-spot"
 directory = "REDACTED-HOME/Pictures/Wallpapers"
 
     [wallpaper.automation]
-    enabled = true
     interval_seconds = 2700
 
     [wallpaper.default]
