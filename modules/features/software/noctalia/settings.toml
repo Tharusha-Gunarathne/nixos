@@ -202,7 +202,7 @@ widget_order = [
         background_color = "on_primary"
         background_padding = 0.0
         background_radius = 32.0
-        image_path = "${NOCTALIA_HOME}/avatar.png"
+        image_path = "REDACTED-HOME/avatar.png"
         opacity = 1.0
 
     [lockscreen_widgets.widget.lockscreen-widget-0000000000000003]
@@ -222,7 +222,7 @@ widget_order = [
         background_radius = 4.0
         color = "primary"
         font_family = "JetBrainsMono Nerd Font Mono"
-        title = "${NOCTALIA_DISPLAY_NAME}"
+        title = "REDACTED-DISPLAY-NAME"
 
     [lockscreen_widgets.widget.lockscreen-widget-0000000000000004]
     box_height = 64.0
@@ -260,7 +260,7 @@ lock_keys = false
 enabled = []
 
 [shell]
-avatar_path = "${NOCTALIA_HOME}/avatar.png"
+avatar_path = "REDACTED-HOME/avatar.png"
 font_family = "Ubuntu Sans"
 lang = "en"
 password_style = "random"
@@ -302,20 +302,20 @@ wallpaper_scheme = "m3-tonal-spot"
     ]
 
 [wallpaper]
-directory = "${NOCTALIA_HOME}/Pictures/Wallpapers"
+directory = "REDACTED-HOME/Pictures/Wallpapers"
 
     [wallpaper.automation]
     enabled = true
     interval_seconds = 2700
 
     [wallpaper.default]
-    path = "${NOCTALIA_HOME}/Pictures/Wallpapers/swiss-alps-wallpaper-3840x2160-hiking-trails-weather-patterns-27248.jpg"
+    path = "REDACTED-BY-GIT-FILTER"
 
     [wallpaper.last]
-    path = "${NOCTALIA_HOME}/Pictures/Wallpapers/swiss-alps-wallpaper-3840x2160-hiking-trails-weather-patterns-27248.jpg"
+    path = "REDACTED-BY-GIT-FILTER"
 
     [wallpaper.monitors.eDP-1]
-    path = "${NOCTALIA_HOME}/Pictures/Wallpapers/swiss-alps-wallpaper-3840x2160-hiking-trails-weather-patterns-27248.jpg"
+    path = "REDACTED-BY-GIT-FILTER"
 
 [widget.clock]
 format = "{:%H:%M %a, %B %d}"

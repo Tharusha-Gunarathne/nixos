@@ -30,7 +30,6 @@
         stateDir = "${config.xdg.stateHome}/noctalia";
         repoDir = "${repoRoot}/modules/features/software/noctalia";
         fileName = "settings.toml";
-
         homeDir = config.home.homeDirectory;
 
         capitalize = s:
@@ -44,51 +43,25 @@
           then configuredDisplayName
           else lib.concatStringsSep "-" (map capitalize (lib.splitString "-" username));
 
-        # ${VAR}-style placeholders, .env-style. Nix strings containing
-        # the literal text "${...}" — plain text at this point, not
-        # shell or Nix variables.
-        homeToken = "\${NOCTALIA_HOME}";
-        usernameToken = "\${NOCTALIA_USERNAME}";
-        displayNameToken = "\${NOCTALIA_DISPLAY_NAME}";
-        envsubstVars = "${homeToken} ${usernameToken} ${displayNameToken}";
-
-        # Real values <-> ${VAR} placeholders.
-        templateScript = pkgs.writeShellScript "noctalia-template" ''
+        # The git clean filter (modules/features/software/git.nix) replaces
+        # real personal info with these tokens before settings.toml is
+        # staged or committed. The real working-tree file is never touched
+        # by git, so these tokens only ever show up in REPO_PATH right after
+        # checking out this repo fresh on a (possibly different) machine.
+        # This script restores the current machine's real values in that
+        # case; in normal day-to-day sync it's a no-op pass-through, since
+        # these exact strings never occur in real settings data.
+        #
+        # Token strings here MUST match PERSONAL_VALUES in git.nix.
+        expandPlaceholdersScript = pkgs.writeShellScript "noctalia-expand-placeholders" ''
           set -euo pipefail
-          MODE="$1"
-          SRC="$2"
-          DST="$3"
-
-          export NOCTALIA_HOME="${homeDir}"
-          export NOCTALIA_USERNAME="${username}"
-          export NOCTALIA_DISPLAY_NAME="${displayName}"
-
-          TMP="$(mktemp)"
-          trap 'rm -f "$TMP"' EXIT
-
-          case "$MODE" in
-            to-repo)
-              # Single-quote the replacement text so bash doesn't expand
-              # ''${NOCTALIA_HOME}-style tokens via the live env vars of the
-              # same name — only the search side ($NOCTALIA_HOME etc.,
-              # double-quoted) should be expanded here.
-              ${pkgs.gnused}/bin/sed \
-                -e "s|$NOCTALIA_HOME|"'${homeToken}'"|g" \
-                -e "s|$NOCTALIA_USERNAME|"'${usernameToken}'"|g" \
-                -e "s|$NOCTALIA_DISPLAY_NAME|"'${displayNameToken}'"|g" \
-                "$SRC" > "$TMP"
-              ;;
-            to-state)
-              ${pkgs.gettext}/bin/envsubst '${envsubstVars}' \
-                < "$SRC" > "$TMP"
-              ;;
-            *)
-              echo "[noctalia-template] unknown mode: $MODE" >&2
-              exit 1
-              ;;
-          esac
-
-          ${pkgs.coreutils}/bin/install -m 644 "$TMP" "$DST"
+          SRC="$1"
+          DST="$2"
+          ${pkgs.gnused}/bin/sed \
+            -e "s|REDACTED-HOME|${homeDir}|g" \
+            -e "s|REDACTED-USERNAME|${username}|g" \
+            -e "s|REDACTED-DISPLAY-NAME|${displayName}|g" \
+            "$SRC" > "$DST"
         '';
 
         syncScript = pkgs.writeShellScript "noctalia-sync" ''
@@ -96,7 +69,8 @@
           STATE_DIR="${stateDir}"
           REPO_DIR="${repoDir}"
           FILE="${fileName}"
-          TEMPLATE="${templateScript}"
+          EXPAND="${expandPlaceholdersScript}"
+          CP="${pkgs.coreutils}/bin/cp"
           INOTIFY="${pkgs.inotify-tools}/bin/inotifywait"
           SHA="${pkgs.coreutils}/bin/sha256sum"
           CUT="${pkgs.coreutils}/bin/cut"
@@ -124,8 +98,10 @@
             mv -f "$tmp" "$dest"
           }
 
+          # $1=src $2=dst $3=incoming_marker $4=outgoing_marker $5=label
+          # $6="1" to run placeholder expansion on the way through (repo→state only)
           sync_one() {
-            local mode="$1" src="$2" dst="$3" incoming_marker="$4" outgoing_marker="$5" label="$6"
+            local src="$1" dst="$2" incoming_marker="$3" outgoing_marker="$4" label="$5" expand="$6"
 
             local src_hash
             src_hash="$(hash_of "$src")"
@@ -137,7 +113,11 @@
 
             local scratch
             scratch="$(mktemp)"
-            "$TEMPLATE" "$mode" "$src" "$scratch"
+            if [ "$expand" = "1" ]; then
+              "$EXPAND" "$src" "$scratch"
+            else
+              "$CP" "$src" "$scratch"
+            fi
 
             local new_hash dst_hash
             new_hash="$(hash_of "$scratch")"
@@ -154,13 +134,13 @@
           }
 
           state_to_repo() {
-            sync_one to-repo "$STATE_PATH" "$REPO_PATH" "$STATE_SELF_WRITE" "$REPO_SELF_WRITE" \
-              "state→repo: $FILE (templated)"
+            sync_one "$STATE_PATH" "$REPO_PATH" "$STATE_SELF_WRITE" "$REPO_SELF_WRITE" \
+              "state→repo: $FILE" 0
           }
 
           repo_to_state() {
-            sync_one to-state "$REPO_PATH" "$STATE_PATH" "$REPO_SELF_WRITE" "$STATE_SELF_WRITE" \
-              "repo→state: $FILE (expanded)"
+            sync_one "$REPO_PATH" "$STATE_PATH" "$REPO_SELF_WRITE" "$STATE_SELF_WRITE" \
+              "repo→state: $FILE (placeholders expanded)" 1
           }
 
           reconcile_on_start() {
@@ -221,8 +201,8 @@
           REPO="${repoDir}/${fileName}"
 
           if [ -f "$REPO" ] && [ ! -e "$STATE" ]; then
-            ${templateScript} to-state "$REPO" "$STATE"
-            echo "[noctalia] Seeded settings.toml from repo (fresh state dir, expanded)"
+            ${expandPlaceholdersScript} "$REPO" "$STATE"
+            echo "[noctalia] Seeded settings.toml from repo (fresh state dir, placeholders expanded)"
           fi
         '';
 
