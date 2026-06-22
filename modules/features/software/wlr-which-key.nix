@@ -33,7 +33,8 @@
       name = "wk-apps";
       entries = [
         { key = "n"; desc = "Nautilus"; cmd = "nautilus"; }
-        { key = "z"; desc = "Zed";      cmd = "zed"; }
+        { key = "z"; desc = "Zed";      cmd = "zeditor"; }
+        { key = "b"; desc = "Brave";    cmd = "brave-default-launcher"; }
         { key = "f"; desc = "Ferdium";  cmd = "ferdium"; }
         { key = "l"; desc = "Lotion";   cmd = "lotion"; }
       ];
