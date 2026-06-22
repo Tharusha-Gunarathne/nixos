@@ -435,13 +435,11 @@ binds {
 
     // Mod-Shift-/, which is usually the same as Mod-?,
     // shows a list of important hotkeys.
-    // Mod+Shift+Slash { show-hotkey-overlay; }
-    Mod+Shift+Slash { spawn-sh "noctalia ipc -n call plugin togglePanel keybind-cheatsheet"; }
+    Mod+Shift+Slash { show-hotkey-overlay; }
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+Return hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Mod+T hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
-    // Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
@@ -671,8 +669,8 @@ binds {
     Mod+Shift+Equal { set-window-height "+10%"; }
 
     // Move the focused window between the floating and the tiling layout.
-    Mod+V       { toggle-window-floating; }
-    Mod+Shift+V { switch-focus-between-floating-and-tiling; }
+    Mod+Shift+V       { toggle-window-floating; }
+    Mod+V { switch-focus-between-floating-and-tiling; }
 
     // Toggle tabbed column display mode.
     // Windows in this column will appear as vertical tabs,
@@ -722,9 +720,9 @@ binds {
 
     // Open Brave to YouTube in a new workspace
 
-    Mod+grave hotkey-overlay-title="Open YouTube in Brave (new workspace)" { spawn-sh "ws_count=$(niri msg -j workspaces 2>/dev/null | jq length || echo 0); target=$((ws_count + 1)); niri msg action focus-workspace \"$target\" >/dev/null 2>&1 || true; brave-default-launcher --new-window 'https://www.youtube.com' >/dev/null 2>&1 & sleep 0.3; niri msg action move-workspace-to-index \"$target\" >/dev/null 2>&1 || true"; }
+    // Mod+grave hotkey-overlay-title="Open YouTube in Brave (new workspace)" { spawn-sh "ws_count=$(niri msg -j workspaces 2>/dev/null | jq length || echo 0); target=$((ws_count + 1)); niri msg action focus-workspace \"$target\" >/dev/null 2>&1 || true; brave-default-launcher --new-window 'https://www.youtube.com' >/dev/null 2>&1 & sleep 0.3; niri msg action move-workspace-to-index \"$target\" >/dev/null 2>&1 || true"; }
 
-    Ctrl+Shift+grave hotkey-overlay-title="Open YouTube in Brave (new workspace)" { spawn-sh "ws_count=$(niri msg -j workspaces 2>/dev/null | jq length || echo 0); target=$((ws_count + 1)); niri msg action focus-workspace \"$target\" >/dev/null 2>&1 || true; brave-default-launcher --new-window 'https://www.youtube.com' >/dev/null 2>&1 & sleep 0.3; niri msg action move-workspace-to-index \"$target\" >/dev/null 2>&1 || true"; }
+    // Ctrl+Shift+grave hotkey-overlay-title="Open YouTube in Brave (new workspace)" { spawn-sh "ws_count=$(niri msg -j workspaces 2>/dev/null | jq length || echo 0); target=$((ws_count + 1)); niri msg action focus-workspace \"$target\" >/dev/null 2>&1 || true; brave-default-launcher --new-window 'https://www.youtube.com' >/dev/null 2>&1 & sleep 0.3; niri msg action move-workspace-to-index \"$target\" >/dev/null 2>&1 || true"; }
 
     // ============================
 
@@ -735,7 +733,6 @@ binds {
     Mod+S { spawn-sh "noctalia msg panel-toggle control-center"; }
     Mod+Comma { spawn-sh "noctalia msg settings-toggle"; }
     Mod+P { spawn-sh "noctalia msg panel-toggle session"; }
-    // Mod+M { spawn-sh "noctalia msg plugin togglePanel monique"; }
 
     // Audio & Brightness
     XF86AudioRaiseVolume { spawn-sh "noctalia msg volume-up"; }
