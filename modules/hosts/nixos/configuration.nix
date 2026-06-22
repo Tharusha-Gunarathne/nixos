@@ -54,6 +54,7 @@
       self.nixosModules.adb
       self.nixosModules.tailscale
       self.nixosModules.python
+      self.nixosModules.wlrWhichKey
       #services
       self.nixosModules.lamp
       self.nixosModules.cockpit

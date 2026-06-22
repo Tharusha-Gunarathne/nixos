@@ -733,6 +733,7 @@ binds {
     Mod+S { spawn-sh "noctalia msg panel-toggle control-center"; }
     Mod+Comma { spawn-sh "noctalia msg settings-toggle"; }
     Mod+P { spawn-sh "noctalia msg panel-toggle session"; }
+    Mod+D hotkey-overlay-title="App Launcher Menu" { spawn "wk-apps"; } 
 
     // Audio & Brightness
     XF86AudioRaiseVolume { spawn-sh "noctalia msg volume-up"; }
