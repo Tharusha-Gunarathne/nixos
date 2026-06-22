@@ -255,6 +255,7 @@ scale = 0.90000000000000002
 
 [osd.kinds]
 lock_keys = false
+media = false
 
 [plugins]
 enabled = []
@@ -273,6 +274,7 @@ ui_scale = 1.05
     speed = 0.69999999999999996
 
     [shell.panel]
+    open_near_click_control_center = true
     open_near_click_session = true
     open_near_click_wallpaper = true
     transparency_mode = "glass"
