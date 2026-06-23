@@ -97,6 +97,7 @@
         planify
         devtoolbox
         varia
+        virtualbox 
         
         # System management
         mission-center
