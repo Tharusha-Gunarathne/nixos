@@ -55,6 +55,7 @@
       self.nixosModules.tailscale
       self.nixosModules.python
       self.nixosModules.wlrWhichKey
+      self.nixosModules.gns3
       #services
       self.nixosModules.lamp
       self.nixosModules.cockpit
