@@ -17,6 +17,7 @@
         "jnoortheen.nix-ide"
         "ecmel.vscode-html-css"
         "anthropic.claude-code"
+        "tomoki1207.pdf"
       ]
       ++ (with pkgs.vscode-extensions; [
         github.copilot
