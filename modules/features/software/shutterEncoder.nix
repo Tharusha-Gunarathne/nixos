@@ -6,19 +6,20 @@
   }: let
     username = config.myConfig.primaryUser;
     asset = inputs.sources.releaseAssets.shutterEncoder;
-    uiscale = 1.0; # Adjust as needed for high-DPI displays
+    uiscale = 1.0;
 
     src = pkgs.fetchurl {
       inherit (asset) url sha256 name;
     };
 
-    # Centralized all file and directory paths, always quoted for safety
-    shutterAppSrc = "usr/lib/Shutter Encoder";
-    shutterAppDest = "$out/app";
-    shutterIconSrc = "usr/lib/Shutter Encoder/usr/share/icons/hicolor/256x256/apps/icon.png";
-    shutterIconDest = "$out/share/icons/hicolor/256x256/apps/shutter-encoder.png";
-    shutterDesktopSrc = "usr/share/applications/Shutter_Encoder.desktop";
+    # 20.2 structure: everything under opt/shutter-encoder/
+    shutterAppSrc    = "opt/shutter-encoder/lib/app";
+    shutterAppDest   = "$out/app";
+    shutterIconSrc   = "opt/shutter-encoder/lib/Shutter_Encoder.png";
+    shutterIconDest  = "$out/share/icons/hicolor/256x256/apps/shutter-encoder.png";
+    shutterDesktopSrc  = "opt/shutter-encoder/lib/shutter-encoder-Shutter_Encoder.desktop";
     shutterDesktopDest = "$out/share/applications/shutter-encoder.desktop";
+    shutterBinSrc    = "opt/shutter-encoder/bin/Shutter Encoder";
 
     shutterData = pkgs.stdenv.mkDerivation {
       pname = "shutter-encoder-data";
@@ -40,10 +41,13 @@
 
         mkdir -p "$(dirname "${shutterDesktopDest}")"
         cp "${shutterDesktopSrc}" "${shutterDesktopDest}"
+
+        mkdir -p "$out/bin"
+        cp "${shutterBinSrc}" "$out/bin/shutter-encoder-bin"
+        chmod +x "$out/bin/shutter-encoder-bin"
       '';
     };
 
-    # FHS runtime
     shutterEncoder = pkgs.buildFHSEnv {
       name = "shutter-encoder";
 
@@ -71,20 +75,16 @@
           xdpyinfo
         ];
 
+      # 20.2 uses the binary directly instead of AppRun
       runScript = "${pkgs.writeShellScript "shutter-launch" ''
-        # Inject the Java UI scale flag via environment variable
         export _JAVA_OPTIONS="-Dsun.java2d.uiScale=${toString uiscale}"
-
-        APP="${shutterData}/app"
-        cd "$APP"
-        exec ./AppRun "$@"
+        exec "${shutterData}/bin/shutter-encoder-bin" "$@"
       ''}";
     };
   in {
     home-manager.users.${username} = {...}: {
       home.packages = [shutterEncoder];
 
-      # Fix desktop entry (point to correct binary)
       xdg.desktopEntries.shutter-encoder = {
         name = "Shutter Encoder";
         exec = "shutter-encoder";
@@ -93,8 +93,8 @@
         type = "Application";
       };
 
-      # Provide icon from store
-      home.file.".local/share/icons/hicolor/256x256/apps/shutter-encoder.png".source = "${shutterData}/share/icons/hicolor/256x256/apps/shutter-encoder.png";
+      home.file.".local/share/icons/hicolor/256x256/apps/shutter-encoder.png".source =
+        "${shutterData}/share/icons/hicolor/256x256/apps/shutter-encoder.png";
     };
   };
 }

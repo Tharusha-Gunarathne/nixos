@@ -62,10 +62,10 @@
       };
 
       shutterEncoder = {
-        version = "20.1";
-        url = "https://www.shutterencoder.com/Shutter%20Encoder%2020.1%20Linux%2064bits.deb";
-        name = "shutter-encoder.deb";
-        sha256 = "gh4G7qkAuRKIZZ7WDdwT+QXyUQCvGeC5OPBQH6VWAaw=";
+        version = "20.2";
+        url = "https://www.shutterencoder.com/Shutter%20Encoder%2020.2%20Linux%2064bits.deb";
+        name = "shutter-encoder-20.2.deb";
+        sha256 = "1bxfwfnpr7z0j25caj0dfjrijc9rqpb07jh5yqd248mm3cckhnh3";
       };
 
       simpMusic = {
