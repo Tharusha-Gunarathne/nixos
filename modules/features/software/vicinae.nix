@@ -27,7 +27,7 @@
     home-manager.users.${username} = {pkgs, ...}: {
       imports = [inputs.vicinae.vicinae-main.homeManagerModules.default];
 
-      services.vicinae = {
+      programs.vicinae = {
         enable = true;
         systemd = {
           enable = true;
