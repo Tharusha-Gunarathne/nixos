@@ -1,8 +1,5 @@
 {...}: {
-  flake.nixosModules.variables = {
-    config,
-    ...
-  }: let
+  flake.nixosModules.variables = {config, ...}: let
     username = config.myConfig.primaryUser;
   in {
     home-manager.users.${username} = {...}: {
@@ -19,6 +16,10 @@
         pictures = "$HOME/Pictures";
         videos = "$HOME/Videos";
       };
+
+      home.sessionPath = [
+        "$HOME/.local/bin"
+      ];
 
       home.sessionVariables = {
         LIBVA_DRIVER_NAME = "nvidia";

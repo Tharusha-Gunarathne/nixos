@@ -56,6 +56,7 @@
       self.nixosModules.python
       self.nixosModules.wlrWhichKey
       self.nixosModules.gns3
+      self.nixosModules.claudeCode
       #services
       self.nixosModules.lamp
       self.nixosModules.cockpit

@@ -17,6 +17,7 @@
     noctalia.url = "path:./plugins/noctalia";
     vicinae.url = "path:./plugins/vicinae";
     sources.url = "path:./plugins/sources";
+    claude-plugins.url = "path:./plugins/claude";
     spicetify-nix = {
       url = "github:Gerg-L/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";
