@@ -1,6 +1,12 @@
-{...}: {
+{localConfig, ...}: {
   flake.nixosModules.variables = {config, ...}: let
     username = config.myConfig.primaryUser;
+
+    # Read the GitHub PAT from .env.local if the [github] section exists.
+    # Same field nixSettings.nix already reads for /etc/nix/access-tokens.conf.
+    # Falls back to "" so the module stays functional without one.
+    githubConfig = localConfig.github or {};
+    githubToken = githubConfig.access_token or "";
   in {
     home-manager.users.${username} = {...}: {
       xdg.userDirs = {
@@ -22,6 +28,7 @@
       ];
 
       home.sessionVariables = {
+        GITHUB_PERSONAL_ACCESS_TOKEN = githubToken;
         LIBVA_DRIVER_NAME = "nvidia";
         XDG_SESSION_TYPE = "wayland";
         GBM_BACKEND = "nvidia-drm";
