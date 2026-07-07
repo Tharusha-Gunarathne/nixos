@@ -732,6 +732,7 @@ binds {
     Mod+Shift+Tab { spawn-sh "noctalia msg panel-toggle wallpaper"; }
     Mod+S { spawn-sh "noctalia msg panel-toggle control-center"; }
     Mod+Comma { spawn-sh "noctalia msg settings-toggle"; }
+    Mod+A { spawn-sh "noctalia msg panel-toggle control-center calendar"; }
     Mod+P { spawn-sh "noctalia msg panel-toggle session"; }
     Mod+D hotkey-overlay-title="App Launcher Menu" { spawn "wk-apps"; } 
 
