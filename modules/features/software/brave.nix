@@ -106,7 +106,7 @@
       ExtensionInstallForcelist = [
         "ddkjiahejlhfcafbddmgiahcphecmpfh" # uBlock Origin Lite
         "nngceckbapebfimnlniiiahkandclblb" # Bitwarden
-        "mhpeahbikehnfkfnmopaigggliclhmnc" # BroTab
+        "ghbmnnjooekpmoecnnnilnnbdlolhkhiz" # Google Docs
         "kcmipingpfbohfjckomimmahknoddnke" # Vicinae Integration
       ];
     };
