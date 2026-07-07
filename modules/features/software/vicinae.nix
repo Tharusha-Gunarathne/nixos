@@ -86,7 +86,6 @@
           extensions = let
             exts = inputs.vicinae.vicinae-extensions.packages.${pkgs.stdenv.hostPlatform.system};
           in [
-            exts.bluetooth
             exts.nix
             exts.power-profile
             exts.process-manager
