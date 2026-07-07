@@ -14,11 +14,13 @@
       phpPackage = pkgs.php83;
       adminAddr = "admin@localhost";
 
-      # Restrict to loopback — this laptop moves across networks (uni, etc.),
-      # and there's no reason a local dev server should be reachable from them.
-      listen = [{ip = "127.0.0.1"; port = 80;}];
-
       virtualHosts."localhost" = {
+        listen = [
+          {
+            ip = "127.0.0.1";
+            port = 80;
+          }
+        ];
         documentRoot = "/var/www/html";
         extraConfig = ''
           <Directory "/var/www/html">
