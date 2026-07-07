@@ -6,6 +6,7 @@
   }: {
     nixpkgs.config.permittedInsecurePackages = [
       "electron-39.8.10"
+      "pnpm-10.29.2"
     ];
 
     environment.systemPackages = with pkgs; [
@@ -63,7 +64,9 @@
 
         # User development stack
         uv
+        gh
         nodejs
+        bun
         lmstudio
         antigravity
         claude-code
