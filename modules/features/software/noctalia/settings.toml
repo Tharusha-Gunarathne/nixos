@@ -16,6 +16,13 @@ radius = 10
 start = [ "wallpaper", "sysmon", "media" ]
 thickness = 32
 
+[calendar]
+enabled = true
+
+    [calendar.account.personal_google]
+    name = "REDACTED-DISPLAY-NAME"
+    type = "google"
+
 [[control_center.shortcuts]]
 type = "wifi"
 
