@@ -43,6 +43,12 @@
       # '')
       # ----------------------------
 
+      # LifeOS launcher
+      (pkgs.writeShellScriptBin "lifeos" ''
+        exec bun "$HOME/.claude/LIFEOS/TOOLS/lifeos.ts" -s "$HOME/.claude/LIFEOS/LIFEOS_SYSTEM_PROMPT.md" "$@"
+      '')
+      # ----------------------------
+
       # Open-Web-UI
       (pkgs.writeShellScriptBin "start-open-web-ui" ''
         exec systemctl --user start open-webui "$@"
