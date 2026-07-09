@@ -2,7 +2,6 @@
   flake.nixosModules.lamp = {
     config,
     pkgs,
-    lib,
     ...
   }: let
     username = config.myConfig.primaryUser;

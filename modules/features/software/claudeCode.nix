@@ -2,7 +2,6 @@
   flake.nixosModules.claudeCode = {
     config,
     pkgs,
-    lib,
     ...
   }: let
     username = config.myConfig.primaryUser;
