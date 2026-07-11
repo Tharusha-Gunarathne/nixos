@@ -28,6 +28,11 @@
         exec fr.handbrake.ghb "$@"
       '')
 
+      # To open desktop entries
+      (pkgs.writeShellScriptBin "open" ''
+        exec ${pkgs.glib}/bin/gio launch "$@"
+      '')
+
       # Free Claude Code
       # (pkgs.writeShellScriptBin "start-free-claude-code" ''
       #   exec systemctl --user start free-claude-code "$@"
