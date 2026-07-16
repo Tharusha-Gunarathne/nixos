@@ -48,6 +48,7 @@
 
     noctaliaSettingsCleanFilter = pkgs.writers.writePython3 "noctalia-settings-clean-filter" {
       libraries = [pkgs.python3Packages.tomlkit];
+      flakeIgnore = ["E231" "E501" "E302" "E305"];
     } ''
       import sys
       import tomlkit
