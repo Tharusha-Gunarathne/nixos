@@ -9,7 +9,23 @@
       (pkgs.writeShellScriptBin "nix-switch" ''
         REPO_ROOT="${config.myConfig.repoRoot}"
         cd "$REPO_ROOT"
-        exec sudo nixos-rebuild switch --flake "path:.#nixos" "$@"
+
+        was_up=0
+        if ${pkgs.tailscale}/bin/tailscale status --json | ${pkgs.jq}/bin/jq -e '.BackendState == "Running"' >/dev/null 2>&1; then
+          was_up=1
+          echo "Bringing Tailscale down for the rebuild..."
+          sudo ${pkgs.tailscale}/bin/tailscale down
+        fi
+
+        restore_tailscale() {
+          if [ "$was_up" -eq 1 ]; then
+            echo "Restoring Tailscale..."
+            sudo ${pkgs.tailscale}/bin/tailscale up
+          fi
+        }
+        trap restore_tailscale EXIT
+
+        sudo nixos-rebuild switch --flake "path:.#nixos" "$@"
       '')
       (pkgs.writeShellScriptBin "nix-update" ''
         REPO_ROOT="${config.myConfig.repoRoot}"
