@@ -26,6 +26,10 @@
         }
       ];
 
+      overrides = {
+        "com.usebottles.bottles".Context.filesystems = ["home"];
+      };
+
       update.auto = {
         enable = true;
         onCalendar = "weekly";
