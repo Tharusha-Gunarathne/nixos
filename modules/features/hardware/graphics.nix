@@ -49,5 +49,7 @@
         ];
       };
     };
+    
+    environment.variables.__GL_SHADER_DISK_CACHE_SIZE = "12000000000"; # 12GB, cuts stutter from shader recompiles
   };
 }

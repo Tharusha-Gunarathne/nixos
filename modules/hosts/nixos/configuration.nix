@@ -57,6 +57,7 @@
       self.nixosModules.wlrWhichKey
       self.nixosModules.gns3
       self.nixosModules.claudeCode
+      self.nixosModules.gaming
       #services
       self.nixosModules.lamp
       self.nixosModules.cockpit
