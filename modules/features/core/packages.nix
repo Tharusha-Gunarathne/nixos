@@ -10,6 +10,24 @@
       "pnpm-10.29.2"
     ];
 
+    nixpkgs.overlays = [
+      (final: prev: {
+        pythonPackagesExtensions =
+          prev.pythonPackagesExtensions
+          ++ [
+            (pyfinal: pyprev: {
+              # nixpkgs bug: textstat's derivation says 0.7.13 but the actual
+              # fetched wheel's METADATA still says 0.7.12 (version bumped
+              # without content changing). Correct the label to match reality
+              # instead of suppressing the check.
+              textstat = pyprev.textstat.overridePythonAttrs (old: {
+                version = "0.7.12";
+              });
+            })
+          ];
+      })
+    ];
+
     environment.systemPackages = with pkgs; [
       # Core CLI
       vim
@@ -69,7 +87,7 @@
         nodejs
         bun
         lmstudio
-        antigravity
+        antigravity-ide
         claude-code
         octaveFull
         postman
