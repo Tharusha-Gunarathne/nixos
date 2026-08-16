@@ -46,6 +46,14 @@
         rev = "2683ab842c19bd334331276a48a2029f55267cd1";
         hash = "sha256-GrTrFy+PmEh6M3hQgAJWJfnqjiwOgHGkvQatB9P1wds=";
       };
+
+      libdisplayInfo0_2 = {
+        domain = "gitlab.freedesktop.org";
+        owner = "emersion";
+        repo = "libdisplay-info";
+        rev = "0.2.0";
+        hash = "sha256-6xmWBrPHghjok43eIDGeshpUEQTuwWLXNHg7CnBUt3Q=";
+      };
     };
 
     releaseAssets = {

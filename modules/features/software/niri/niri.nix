@@ -7,13 +7,24 @@
     username = config.myConfig.primaryUser;
     shell = config.myConfig.shell;
     configPath = "${config.myConfig.repoRoot}/modules/features/software/niri/config.kdl";
+    libdisplayInfo0_2Pin = inputs.sources.sourcePins.libdisplayInfo0_2;    
   in {
     # Apply the overlay so pkgs.niri-stable exists
-    nixpkgs.overlays = [ inputs.niri-flake.overlays.niri ];
+    nixpkgs.overlays = [
+      inputs.niri-flake.overlays.niri
+      (final: prev: {
+        libdisplay-info_0_2 = prev.libdisplay-info.overrideAttrs (old: {
+          version = libdisplayInfo0_2Pin.rev;
+          src = prev.fetchFromGitLab {
+            inherit (libdisplayInfo0_2Pin) domain owner repo rev hash;
+          };
+        });
+      })
+    ];
 
     programs.niri = {
       enable = true;
-      package = pkgs.niri-unstable;  # v26.04 from niri-flake's cache, no compilation
+      package = pkgs.niri-unstable; # v26.04 from niri-flake's cache, no compilation
     };
 
     home-manager.users.${username} = {
