@@ -49,9 +49,6 @@
       efibootmgr
       intel-undervolt
 
-      # Development tooling available system-wide
-      nil
-
       # Session/runtime tooling shared by compositor + plugins
       xwayland-satellite
       qt6.qt5compat
@@ -80,25 +77,6 @@
         fzf
         brotab
 
-        # User development stack
-        uv
-        gh
-        nodejs
-        bun
-        lmstudio
-        antigravity-ide
-        claude-code
-        octaveFull
-        postman
-        firebase-tools
-        devenv
-        jetbrains.webstorm
-        jetbrains.phpstorm
-        jetbrains.pycharm
-        jetbrains.idea
-        jetbrains.datagrip
-        jetbrains.rust-rover
-
         # Desktop apps
         ente-auth
         bitwarden-desktop
@@ -116,10 +94,9 @@
         obsidian
         qalculate-gtk
         planify
-        devtoolbox
         varia
-        virtualbox 
-        
+        virtualbox
+
         # System management
         mission-center
 

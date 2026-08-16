@@ -1,0 +1,53 @@
+{self, ...}: {
+  flake.nixosModules.development = {
+    pkgs,
+    config,
+    ...
+  }: {
+    imports = [
+      self.nixosModules.gns3
+      self.nixosModules.claudeCode
+    ];
+    
+    environment.systemPackages = with pkgs; [
+      # Compilers / build toolchain
+      gcc
+      gnumake
+      gdb
+      pkg-config
+      nil # nix language server
+    ];
+
+    home-manager.users.${config.myConfig.primaryUser} = {pkgs, ...}: {
+      home.packages = with pkgs; [
+        # Language runtimes / package managers
+        uv
+        nodejs
+        bun
+        devenv
+        octaveFull
+
+        # IDEs
+        jetbrains.webstorm
+        jetbrains.phpstorm
+        jetbrains.pycharm
+        jetbrains.idea
+        jetbrains.datagrip
+        jetbrains.rust-rover
+        antigravity-ide
+
+        # Dev-adjacent tooling
+        gh
+        postman
+        firebase-tools
+        devtoolbox
+
+        # CLI tooling
+        claude-code
+
+        # Miscellaneous
+        lmstudio
+      ];
+    };
+  };
+}

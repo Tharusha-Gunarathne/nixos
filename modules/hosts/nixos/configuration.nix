@@ -55,13 +55,12 @@
       self.nixosModules.tailscale
       self.nixosModules.python
       self.nixosModules.wlrWhichKey
-      self.nixosModules.gns3
-      self.nixosModules.claudeCode
       self.nixosModules.gaming
+      self.nixosModules.development
       #services
       self.nixosModules.lamp
       self.nixosModules.cockpit
-      self.nixosModules.hotspot
+      # self.nixosModules.hotspot
       # user
       self.nixosModules.gtk
       self.nixosModules.variables
