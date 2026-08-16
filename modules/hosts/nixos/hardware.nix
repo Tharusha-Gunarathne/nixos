@@ -2,7 +2,6 @@
   flake.nixosModules.nixosHardware = {
     config,
     lib,
-    pkgs,
     modulesPath,
     ...
   }: let
