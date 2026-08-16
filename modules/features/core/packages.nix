@@ -21,7 +21,7 @@
               # without content changing). Correct the label to match reality
               # instead of suppressing the check.
               textstat = pyprev.textstat.overridePythonAttrs (old: {
-                version = "0.7.12";
+                version = "0.7.13";
               });
             })
           ];
@@ -63,7 +63,6 @@
       tesseract
       zbar
       wl-screenrec
-      wf-recorder
       translate-shell
       gifski
 
