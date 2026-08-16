@@ -1,4 +1,4 @@
-config_version = 2
+config_version = 12
 
 [backdrop]
 enabled = true
@@ -64,6 +64,8 @@ widget_order = [
     cx = 853.5
     cy = 413.5
     output = "eDP-1"
+    placement_height = 1067.0
+    placement_width = 1707.0
     rotation = 0.0
     type = "clock"
 
@@ -80,6 +82,8 @@ widget_order = [
     cx = 861.5
     cy = 553.5
     output = "eDP-1"
+    placement_height = 1067.0
+    placement_width = 1707.0
     rotation = 0.0
     type = "clock"
 
@@ -98,6 +102,8 @@ widget_order = [
     cy = 669.5
     enabled = false
     output = "eDP-1"
+    placement_height = 1067.0
+    placement_width = 1707.0
     rotation = 0.0
     type = "media_player"
 
@@ -113,6 +119,8 @@ widget_order = [
     cy = 847.20001220703125
     enabled = false
     output = "eDP-1"
+    placement_height = 1067.0
+    placement_width = 1707.0
     rotation = 0.0
     type = "sysmon"
 
@@ -128,6 +136,8 @@ widget_order = [
     cy = 980.70001220703125
     enabled = false
     output = "eDP-1"
+    placement_height = 1067.0
+    placement_width = 1707.0
     rotation = 0.0
     type = "weather"
 
@@ -170,13 +180,26 @@ widget_order = [
     visible = true
 
     [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
-    box_height = 0.0
-    box_width = 0.0
+    box_height = 196.0
+    box_width = 810.0
     cx = 853.5
     cy = 846.5
     output = "eDP-1"
+    placement_height = 1067.0
+    placement_width = 1707.0
     rotation = 0.0
     type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
+        center_password_text = false
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
 
     [lockscreen_widgets.widget.lockscreen-widget-0000000000000001]
     box_height = 80.0
@@ -184,6 +207,8 @@ widget_order = [
     cx = 853.5
     cy = 325.5
     output = "eDP-1"
+    placement_height = 1067.0
+    placement_width = 1707.0
     rotation = 0.0
     type = "clock"
 
@@ -203,6 +228,8 @@ widget_order = [
     cx = 853.5
     cy = 533.5
     output = "eDP-1"
+    placement_height = 1067.0
+    placement_width = 1707.0
     rotation = 0.0
     type = "sticker"
 
@@ -220,6 +247,8 @@ widget_order = [
     cx = 853.5
     cy = 717.5
     output = "eDP-1"
+    placement_height = 1067.0
+    placement_width = 1707.0
     rotation = 0.0
     type = "label"
 
@@ -239,6 +268,8 @@ widget_order = [
     cx = 853.5
     cy = 245.5
     output = "eDP-1"
+    placement_height = 1067.0
+    placement_width = 1707.0
     rotation = 0.0
     type = "clock"
 
