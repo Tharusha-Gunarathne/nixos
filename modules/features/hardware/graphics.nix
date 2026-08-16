@@ -39,6 +39,8 @@
 
       graphics = {
         enable = true;
+        # For 32 bit applications
+        enable32Bit = true; # Before 24.11: hardware.opengl.driSupport32Bit
         extraPackages = with pkgs; [
           intel-media-driver
           intel-vaapi-driver
@@ -46,10 +48,11 @@
           libva-utils
           libvdpau-va-gl
           nvidia-vaapi-driver
+          rocmPackages.clr
         ];
       };
     };
-    
+
     environment.variables.__GL_SHADER_DISK_CACHE_SIZE = "12000000000"; # 12GB, cuts stutter from shader recompiles
   };
 }
