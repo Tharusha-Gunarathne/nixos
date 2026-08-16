@@ -32,6 +32,8 @@
       wineWow64Packages.staging
       winetricks
       faugus-launcher
+      lutris
+      protonup-qt
     ];
 
     environment.sessionVariables = {
