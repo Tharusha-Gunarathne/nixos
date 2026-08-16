@@ -36,6 +36,15 @@
       options = "--delete-older-than 30d";
     };
 
+    # Keep the desktop responsive while nix-daemon is doing heavy builds
+    # (e.g. compiling noctalia/C++ packages from source). This lowers the
+    # daemon's CPU/IO scheduling priority relative to interactive processes
+    # like the compositor, without slowing down the build itself when the
+    # system is otherwise idle.
+    nix.daemonCPUSchedPolicy = "batch";
+    nix.daemonIOSchedClass = "best-effort";
+    nix.daemonIOSchedPriority = 7;
+
     systemd.settings.Manager = {
       DefaultTimeoutStopSec = "15s";
     };
