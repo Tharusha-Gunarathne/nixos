@@ -9,7 +9,7 @@
 
     uiscale = 2.0; # Adjust as needed for high-DPI displays
 
-    appimageContents = pkgs.appimageTools.extractType2 {
+    appimageContents = pkgs.appimageTools.extract {
       pname = "simpmusic";
       version = asset.version;
       src = pkgs.fetchurl {
