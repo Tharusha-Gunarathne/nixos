@@ -1,5 +1,4 @@
 {
-  inputs,
   self,
   localConfig,
   ...
@@ -18,6 +17,7 @@
       self.nixosModules.noctaliaVscode
       self.nixosModules.noctaliaSpotify
       self.nixosModules.noctaliaDiscord
+      self.nixosModules.noctaliaPlugins
     ];
 
     config = lib.mkIf config.myConfig.shell.noctalia {
@@ -191,8 +191,6 @@
           wait
         '';
       in {
-        imports = [inputs.noctalia.noctalia-main.homeModules.default];
-
         programs.noctalia.enable = true;
 
         home.activation.noctaliaSeedSettings = lib.hm.dag.entryAfter ["writeBoundary"] ''

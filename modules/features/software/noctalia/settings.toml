@@ -1,4 +1,4 @@
-config_version = 12
+config_version = 13
 
 [backdrop]
 enabled = true
@@ -10,9 +10,9 @@ capsule = true
 capsule_foreground = "primary"
 capsule_opacity = 0.24999999441206455
 capsule_radius = 5
-center = [ "clock", "workspaces" ]
+center = [ "notifications", "clock", "workspaces" ]
 color = "primary"
-end = [ "tray", "notifications", "network", "bluetooth", "volume", "brightness", "battery", "control-center" ]
+end = [ "tray", "network", "bluetooth", "volume", "brightness", "battery", "control-center" ]
 font_weight = 400
 radius = 10
 start = [ "wallpaper", "sysmon", "media" ]
@@ -146,16 +146,19 @@ widget_order = [
         font_family = "Unifont"
 
 [dock]
-auto_hide = true
 background_opacity = 0.64999998547136784
+border = "surface_variant"
 cross_axis_padding = 2
 enabled = true
-icon_size = 36
-item_spacing = 1
+icon_size = 53
+inactive_opacity = 0.79999998211860657
+item_spacing = 5
+magnification_scale = 1.5000000074505806
 main_axis_padding = 10
 pinned = [ "brave-browser", "dev.zed.Zed", "org.gnome.Nautilus", "ferdium", "lotion", "spotify", "kitty" ]
 reserve_space = false
 show_dots = true
+smart_auto_hide = true
 
 [location]
 auto_locate = true
@@ -298,7 +301,16 @@ lock_keys = false
 media = false
 
 [plugins]
-enabled = []
+enabled = [
+    "noctalia/bitwarden",
+    "noctalia/notes",
+    "alexander/screen-toolkit",
+    "noctalia/timer",
+    "raycursive/niri-displays",
+    "icefish/phone-operate",
+    "kenn/keybind-cheatsheet",
+    "noctalia/wallpaper_depth"
+]
 
 [shell]
 avatar_path = "REDACTED-HOME/avatar.png"
@@ -311,7 +323,7 @@ settings_show_advanced = true
 ui_scale = 1.0500000081956387
 
     [shell.animation]
-    speed = 0.69999999999999996
+    speed = 0.60000000894069672
 
     [shell.panel]
     open_near_click_control_center = true
@@ -366,7 +378,7 @@ glyph = "navigation-filled"
 
 [widget.media]
 hide_when_no_media = true
-max_length = 200
+max_length = 175
 title_scroll = "on_hover"
 
 [widget.network]
@@ -374,6 +386,7 @@ show_label = false
 
 [widget.tray]
 anchor = true
+drawer = true
 
 [widget.workspaces]
 capsule_radius = 4
