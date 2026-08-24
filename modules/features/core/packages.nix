@@ -76,6 +76,7 @@
         yazi
         fzf
         brotab
+        bitwarden-cli
 
         # Desktop apps
         ente-auth
