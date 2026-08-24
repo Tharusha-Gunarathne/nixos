@@ -13,6 +13,7 @@
       "icefish/phone-operate"
       "raycursive/niri-displays"
       "kenn/keybind-cheatsheet"
+      # "cleboost/hotspot"
     ];
   in {
     config = lib.mkIf config.myConfig.shell.noctalia {

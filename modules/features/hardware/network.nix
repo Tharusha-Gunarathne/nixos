@@ -3,6 +3,8 @@
     net = localConfig.network;
     hasStaticIp = net.static_ip != "";
   in {
+    environment.systemPackages = with pkgs; [ iw pciutils ];
+    
     networking.hostName = "nixos";
     networking.networkmanager.enable = true;
     networking.enableIPv6 = false;
