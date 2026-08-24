@@ -10,6 +10,7 @@
       self.nixosModules.shellAliases
       self.nixosModules.users
       self.nixosModules.polkit
+      self.nixosModules.homeManager
       # hardware
       self.nixosModules.audio
       self.nixosModules.bluetooth
