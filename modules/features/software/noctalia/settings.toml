@@ -5,17 +5,17 @@ enabled = true
 tint_intensity = 0.4999999888241291
 
 [bar.default]
-background_opacity = 0.69999998435378075
+background_opacity = 0.79999998211860657
 capsule = true
 capsule_foreground = "primary"
 capsule_opacity = 0.24999999441206455
 capsule_radius = 5
-center = [ "notifications", "clock", "workspaces" ]
+center = [ "notifications", "clock", "workspaces", "status" ]
 color = "primary"
-end = [ "tray", "network", "bluetooth", "volume", "brightness", "battery", "control-center" ]
+end = [ "tray", "toggle", "network", "bluetooth", "volume", "brightness", "battery", "control-center" ]
 font_weight = 400
 radius = 10
-start = [ "wallpaper", "sysmon", "media" ]
+start = [ "wallpaper", "sysmon", "widget", "media" ]
 thickness = 32
 
 [calendar]
@@ -150,15 +150,13 @@ background_opacity = 0.64999998547136784
 border = "surface_variant"
 cross_axis_padding = 2
 enabled = true
-icon_size = 53
+icon_size = 40
 inactive_opacity = 0.79999998211860657
 item_spacing = 5
 magnification_scale = 1.5000000074505806
 main_axis_padding = 10
 pinned = [ "brave-browser", "dev.zed.Zed", "org.gnome.Nautilus", "ferdium", "lotion", "spotify", "kitty" ]
-reserve_space = false
 show_dots = true
-smart_auto_hide = true
 
 [location]
 auto_locate = true
@@ -300,6 +298,16 @@ scale = 0.90000000000000002
 lock_keys = false
 media = false
 
+[plugin_settings."alexander/screen-toolkit"]
+panel-legacy_open_near_click = true
+panel-legacy_placement = "attached"
+panel_open_near_click = true
+panel_placement = "attached"
+
+[plugin_settings."cleboost/hotspot"]
+password = "REDACTED-PRIVATE-VALUE"
+ssid = "Legion_16IRX9"
+
 [plugins]
 enabled = [
     "noctalia/bitwarden",
@@ -329,9 +337,9 @@ ui_scale = 1.0500000081956387
     open_near_click_control_center = true
     open_near_click_session = true
     open_near_click_wallpaper = true
-    transparency_mode = "glass"
 
     [shell.shadow]
+    alpha = 0.19999999552965164
     direction = "center"
 
 [theme]
@@ -384,9 +392,23 @@ title_scroll = "on_hover"
 [widget.network]
 show_label = false
 
+[widget.status]
+icon_color = "primary"
+scale = 1.1500000000000001
+type = "icefish/phone-operate:status"
+
+[widget.toggle]
+color = "primary"
+glyph = "rss"
+icon_color = "primary"
+type = "cleboost/hotspot:toggle"
+
 [widget.tray]
 anchor = true
 drawer = true
+
+[widget.widget]
+type = "alexander/screen-toolkit:widget"
 
 [widget.workspaces]
 capsule_radius = 4
