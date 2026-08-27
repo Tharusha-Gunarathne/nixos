@@ -11,10 +11,6 @@
 #   sudo start-hotspot -h                         show usage/help
 #   (flags in any order; -pw and -nopw cannot be combined)
 #
-#   An open network is never implicit: if [hotspot].password in .env.local is
-#   empty and neither -pw nor -nopw is passed, start-hotspot refuses rather
-#   than quietly broadcasting without encryption.
-#
 #   sudo stop-hotspot        stop broadcasting, your WiFi connection is untouched
 #   hotspot-status           check whether it's currently active
 #   hotspot-clients          list connected devices
@@ -48,8 +44,7 @@
     apIface   = "ap0";          # virtual AP interface
 
     # Account granted passwordless start/stop, so the Noctalia plugin can
-    # toggle the hotspot without a prompt. Reuses [user].username from
-    # .env.local rather than introducing a hotspot-specific key.
+    # toggle the hotspot without a prompt.
     hotspotUser = localConfig.user.username;
 
     apGateway   = "10.42.0.1";
@@ -96,8 +91,6 @@
         -h, --help      show this message
 
       -pw and -nopw cannot be used together.
-      An open network is never the default: if no password is set in
-      .env.local and neither -pw nor -nopw is given, this exits with an error.
 
       Examples:
         start-hotspot
@@ -158,8 +151,7 @@
 
       # An open network must always be an explicit choice. Silently falling
       # back to a blank password from .env.local would broadcast an
-      # unencrypted AP on a plain `start-hotspot`, so refuse and make the
-      # caller say so with -nopw.
+      # unencrypted AP on a plain `start-hotspot`.
       if [ "$NOPW_SET" -eq 0 ] && [ -z "$PASS" ]; then
         echo "[hotspot] No password configured. Set password under [hotspot] in .env.local, or pass -pw <password>, or pass -nopw to deliberately start an open network." >&2
         exit 1
@@ -170,9 +162,9 @@
         exit 1
       fi
 
-      # These land verbatim in the hostapd config below, and this script is
-      # reachable through passwordless sudo, so reject anything that could
-      # break out of its line and inject a directive.
+      # SSID and password land verbatim in the hostapd config below, and this
+      # script is reachable through passwordless sudo, so reject anything that
+      # could break out of its line and inject a directive.
       case "$SSID" in
         "" ) echo "[hotspot] SSID must not be empty." >&2; exit 1 ;;
         *[![:print:]]* ) echo "[hotspot] SSID contains non-printable characters." >&2; exit 1 ;;
@@ -186,6 +178,14 @@
       esac
       if [ -n "$PASS" ] && [ ''${#PASS} -gt 63 ]; then
         echo "[hotspot] Password must be at most 63 characters." >&2
+        exit 1
+      fi
+
+      # Refuse to stack a second instance on a live one. Deliberately does not
+      # touch $AP: per the design note at the top of this file, start/stop only
+      # toggle the interface up/down and never recreate it.
+      if [ -f /run/hostapd-ap0.pid ] && [ -d "/proc/$(cat /run/hostapd-ap0.pid 2>/dev/null)" ]; then
+        echo "[hotspot] Already running. Stop it first with: stop-hotspot" >&2
         exit 1
       fi
 
@@ -218,11 +218,19 @@
         exit 1
       fi
 
+      # Clear any leftover state from a crashed session before bringing the
+      # interface up. This is a down/flush only -- never a delete and re-add,
+      # which would trigger the STA reassociation blip the dispatcher-hook
+      # design exists to avoid, and drop your WiFi every time you start.
+      ${pkgs.iproute2}/bin/ip link set "$AP" down 2>/dev/null || true
+      ${pkgs.iproute2}/bin/ip addr flush dev "$AP" 2>/dev/null || true
+
       ${pkgs.iproute2}/bin/ip link set "$AP" up
       ${pkgs.iproute2}/bin/ip addr flush dev "$AP"
       ${pkgs.iproute2}/bin/ip addr add ${apGateway}/24 dev "$AP"
 
-      cat > /run/hostapd-$AP.conf <<EOF
+      mkdir -p /run/hostapd
+      cat > /run/hostapd-ap0.conf <<EOF
       interface=$AP
       driver=nl80211
       ssid=$SSID
@@ -230,24 +238,51 @@
       channel=$CHANNEL
       ieee80211n=1
       macaddr_acl=0
+      ctrl_interface=/run/hostapd
+      ctrl_interface_group=0
       EOF
       if [ -n "$PASS" ]; then
-        cat >> /run/hostapd-$AP.conf <<EOF
+        cat >> /run/hostapd-ap0.conf <<EOF
       wpa=2
       wpa_passphrase=$PASS
       wpa_key_mgmt=WPA-PSK
       rsn_pairwise=CCMP
       EOF
       else
-        echo "auth_algs=1" >> /run/hostapd-$AP.conf
+        echo "auth_algs=1" >> /run/hostapd-ap0.conf
       fi
-      ${pkgs.hostapd}/bin/hostapd -B /run/hostapd-$AP.conf -P /run/hostapd-$AP.pid
+
+      # The conf holds wpa_passphrase in clear text and /run is world-readable,
+      # so keep it root-only. Everything the unprivileged status command needs
+      # goes into a separate public file that deliberately excludes the key.
+      chmod 600 /run/hostapd-ap0.conf
+      if [ -n "$PASS" ]; then SECURED=yes; else SECURED=no; fi
+      printf 'ssid=%s\nchannel=%s\nsecured=%s\n' "$SSID" "$CHANNEL" "$SECURED" > /run/hotspot-ap0.info
+      chmod 644 /run/hotspot-ap0.info
+      ${pkgs.hostapd}/bin/hostapd -B /run/hostapd-ap0.conf -P /run/hostapd-ap0.pid
+
+      # `hostapd -B` forks and the parent exits 0 immediately, so `set -e`
+      # cannot catch a child that dies a moment later during driver setup.
+      # Without this the script would continue, start dnsmasq, add the NAT
+      # rules and exit 0 with no AP running -- reporting success while the
+      # hotspot is dead. Teardown here mirrors stop-hotspot: down and flush
+      # only, never a delete.
+      sleep 1
+      if [ ! -f /run/hostapd-ap0.pid ] || [ ! -d "/proc/$(cat /run/hostapd-ap0.pid 2>/dev/null)" ]; then
+        echo "[hotspot] hostapd exited during startup on channel $CHANNEL." >&2
+        echo "[hotspot] To see why, run it in the foreground:" >&2
+        echo "[hotspot]   sudo ${pkgs.hostapd}/bin/hostapd /run/hostapd-ap0.conf" >&2
+        rm -f /run/hostapd-ap0.pid
+        ${pkgs.iproute2}/bin/ip addr flush dev "$AP" 2>/dev/null || true
+        ${pkgs.iproute2}/bin/ip link set "$AP" down 2>/dev/null || true
+        exit 1
+      fi
 
       ${pkgs.dnsmasq}/bin/dnsmasq \
         --interface="$AP" --bind-interfaces --except-interface=lo \
         --dhcp-range=${dhcpStart},${dhcpEnd},12h \
         --no-resolv --server=1.1.1.1 --server=8.8.8.8 \
-        --pid-file=/run/dnsmasq-$AP.pid
+        --pid-file=/run/dnsmasq-ap0.pid
 
       ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s ${apCidr} -o "$STA" -j MASQUERADE
       ${pkgs.iptables}/bin/iptables -A FORWARD -i "$AP" -o "$STA" -j ACCEPT
@@ -267,14 +302,15 @@
       ${pkgs.iptables}/bin/iptables -D FORWARD -i "$AP" -o "$STA" -j ACCEPT 2>/dev/null || true
       ${pkgs.iptables}/bin/iptables -D FORWARD -i "$STA" -o "$AP" -m state --state RELATED,ESTABLISHED -j ACCEPT 2>/dev/null || true
 
-      if [ -f /run/dnsmasq-$AP.pid ]; then
-        kill "$(cat /run/dnsmasq-$AP.pid)" 2>/dev/null || true
-        rm -f /run/dnsmasq-$AP.pid
+      if [ -f /run/dnsmasq-ap0.pid ]; then
+        kill "$(cat /run/dnsmasq-ap0.pid)" 2>/dev/null || true
+        rm -f /run/dnsmasq-ap0.pid
       fi
-      if [ -f /run/hostapd-$AP.pid ]; then
-        kill "$(cat /run/hostapd-$AP.pid)" 2>/dev/null || true
-        rm -f /run/hostapd-$AP.pid
+      if [ -f /run/hostapd-ap0.pid ]; then
+        kill "$(cat /run/hostapd-ap0.pid)" 2>/dev/null || true
+        rm -f /run/hostapd-ap0.pid
       fi
+      rm -f /run/hotspot-ap0.info /run/hostapd-ap0.conf
 
       ${pkgs.iproute2}/bin/ip addr flush dev "$AP" 2>/dev/null || true
       ${pkgs.iproute2}/bin/ip link set "$AP" down 2>/dev/null || true
@@ -282,13 +318,17 @@
       echo "[hotspot] Hotspot stopped. $STA's connection is untouched."
     '';
 
-    # Single source of truth for hotspot state, in two flavours:
-    #   hotspot-status           human-readable, unchanged behaviour
+    # Two flavours:
+    #   hotspot-status           human-readable
     #   hotspot-status --json    machine-readable snapshot for the Noctalia plugin
     #
-    # Deliberately unprivileged: the Noctalia service polls this every few
-    # seconds, and nothing here needs root. `iw station dump` is attempted but
-    # allowed to fail, in which case per-client signal strength is simply absent.
+    # Deliberately unprivileged: the plugin polls this every few seconds and
+    # nothing here needs root. `iw station dump` is attempted but allowed to
+    # fail, in which case per-client signal strength is simply absent.
+    #
+    # Activity is judged by a live hostapd process, not by `ip link ... state
+    # UP`. ap0 is created and left present for the whole boot by the dispatcher
+    # hook, so its mere existence says nothing about whether the AP is running.
     hotspotStatus = pkgs.writeShellScriptBin "hotspot-status" ''
       set -o pipefail
 
@@ -301,9 +341,7 @@
           --json) JSON=1; shift ;;
           --ap)   [ $# -ge 2 ] || { echo "hotspot-status: --ap requires a value" >&2; exit 1; }; AP="$2"; shift 2 ;;
           --sta)  [ $# -ge 2 ] || { echo "hotspot-status: --sta requires a value" >&2; exit 1; }; STA="$2"; shift 2 ;;
-          -h|--help)
-            echo "Usage: hotspot-status [--json] [--ap <iface>] [--sta <iface>]"
-            exit 0 ;;
+          -h|--help) echo "Usage: hotspot-status [--json] [--ap <iface>] [--sta <iface>]"; exit 0 ;;
           *) echo "hotspot-status: unknown argument: $1" >&2; exit 1 ;;
         esac
       done
@@ -318,26 +356,40 @@
         fi
       }
 
-      # --- access point -------------------------------------------------
+      # `kill -0 <pid>` fails with EPERM when an unprivileged user probes a
+      # root-owned process, so it reports a running hostapd as dead. That is
+      # why `hotspot-status` said "not active" without sudo, and why the
+      # plugin's unprivileged poll always showed the hotspot off. /proc is
+      # world-readable, so test there instead, and compare comm to guard
+      # against PID reuse.
+      pid_alive() {
+        p="''${1:-}"
+        case "$p" in (""|*[!0-9]*) return 1 ;; esac
+        [ -d "/proc/$p" ] || return 1
+        read -r c < "/proc/$p/comm" 2>/dev/null || return 0
+        [ "$c" = "''${2:-hostapd}" ]
+      }
+
       ACTIVE=false
-      PIDFILE="/run/hostapd-$AP.pid"
-      CONFFILE="/run/hostapd-$AP.conf"
-      if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE" 2>/dev/null)" 2>/dev/null; then
+      if [ -f /run/hostapd-ap0.pid ] && pid_alive "$(cat /run/hostapd-ap0.pid 2>/dev/null)" hostapd; then
         ACTIVE=true
       fi
 
+      # Read the public info file, not the root-only conf.
       AP_SSID=""
       AP_CHANNEL=0
-      if [ "$ACTIVE" = true ] && [ -f "$CONFFILE" ]; then
-        AP_SSID=$(sed -n 's/^ssid=//p' "$CONFFILE" | head -n1)
-        AP_CHANNEL=$(sed -n 's/^channel=//p' "$CONFFILE" | head -n1)
+      SECURED=no
+      if [ "$ACTIVE" = true ] && [ -f /run/hotspot-ap0.info ]; then
+        AP_SSID=$(sed -n 's/^ssid=//p' /run/hotspot-ap0.info | head -n1)
+        AP_CHANNEL=$(sed -n 's/^channel=//p' /run/hotspot-ap0.info | head -n1)
+        SECURED=$(sed -n 's/^secured=//p' /run/hotspot-ap0.info | head -n1)
       fi
       case "$AP_CHANNEL" in (""|*[!0-9]*) AP_CHANNEL=0 ;; esac
+      case "$SECURED" in (yes) SECURED=true ;; (*) SECURED=false ;; esac
 
       GATEWAY=$(${pkgs.iproute2}/bin/ip -4 -o addr show dev "$AP" 2>/dev/null \
         | ${pkgs.gawk}/bin/awk '{print $4}' | cut -d/ -f1 | head -n1)
 
-      # --- uplink (the STA whose channel the AP borrows) ----------------
       UP_CONNECTED=false
       UP_SSID=""
       UP_CHANNEL=0
@@ -349,22 +401,37 @@
         UP_CHANNEL=$(freq_to_channel "''${UP_FREQ:-}")
       fi
 
-      # --- connected clients --------------------------------------------
       # ip neigh gives IPs, iw station dump gives MACs + signal. Merge on MAC
       # so a station that has associated but not yet taken a lease still shows.
       CLIENTS='[]'
       if [ "$ACTIVE" = true ]; then
         NEIGH=$(${pkgs.iproute2}/bin/ip -4 neigh show dev "$AP" 2>/dev/null | grep -v -e FAILED -e INCOMPLETE || true)
-        STATIONS=$(${pkgs.iw}/bin/iw dev "$AP" station dump 2>/dev/null || true)
+
+        # Association state is the only reliable "is it still here" signal.
+        # ARP entries linger as STALE for minutes after a device disconnects,
+        # so a neighbour entry alone must never create a client row.
+        # `iw station dump` needs CAP_NET_ADMIN on some drivers; when the
+        # unprivileged read fails we retry through a NOPASSWD helper, and only
+        # if both fail do we degrade to the (stale-prone) neighbour list.
+        STATIONS_OK=1
+        if ! STATIONS=$(${pkgs.iw}/bin/iw dev "$AP" station dump 2>/dev/null); then
+          if ! STATIONS=$(sudo -n hotspot-stations "$AP" 2>/dev/null); then
+            STATIONS=""
+            STATIONS_OK=0
+          fi
+        fi
+
         CLIENTS=$( {
             printf '%s\n' "$STATIONS" | sed 's/^/S /'
             printf '%s\n' "$NEIGH"    | sed 's/^/N /'
-          } | ${pkgs.gawk}/bin/awk '
-              $1=="S" && $2=="Station" { mac=tolower($3); seen[mac]=1 }
+          } | ${pkgs.gawk}/bin/awk -v stations_ok="$STATIONS_OK" '
+              $1=="S" && $2=="Station" { mac=tolower($3); assoc[mac]=1 }
               $1=="S" && $2=="signal:" { if (mac != "") sig[mac]=$3 }
-              $1=="N" && $3=="lladdr"  { m=tolower($4); ip[m]=$2; seen[m]=1 }
+              $1=="N" && $3=="lladdr"  { m=tolower($4); ip[m]=$2; neigh[m]=1 }
               END {
-                for (m in seen)
+                if (stations_ok == "1") { for (m in assoc) show[m]=1 }
+                else                    { for (m in neigh) show[m]=1 }
+                for (m in show)
                   printf "%s\t%s\t%s\n", m, (m in ip ? ip[m] : ""), (m in sig ? sig[m] : "")
               }
             ' | ${pkgs.jq}/bin/jq -R -s '
@@ -389,6 +456,8 @@
           --arg     up_ssid "$UP_SSID" \
           --argjson up_channel "$UP_CHANNEL" \
           --argjson clients "$CLIENTS" \
+          --argjson secured "$SECURED" \
+          --arg     default_ssid "${ssid}" \
           '{
              available: $available,
              active: $active,
@@ -396,6 +465,8 @@
              ap_interface: $ap_interface,
              sta_interface: $sta_interface,
              channel: $channel,
+             secured: $secured,
+             default_ssid: $default_ssid,
              gateway: $gateway,
              uplink: { connected: $up_connected, ssid: $up_ssid, channel: $up_channel },
              clients: $clients,
@@ -425,6 +496,54 @@
         || echo "  (none yet, or hotspot not active)"
     '';
 
+    # Privileged station dump, used only when the unprivileged `iw` read is
+    # refused by the driver. Read-only.
+    hotspotStations = pkgs.writeShellScriptBin "hotspot-stations" ''
+      set -o pipefail
+      AP="''${1:-${apIface}}"
+      case "$AP" in (*[!a-zA-Z0-9_-]*) echo "hotspot-stations: bad interface" >&2; exit 1 ;; esac
+      ${pkgs.iw}/bin/iw dev "$AP" station dump
+    '';
+
+    # Deauthenticate one associated client. hostapd has no persistent ban here,
+    # so a device may simply reconnect -- this drops the current session, it is
+    # not a block list.
+    hotspotKick = pkgs.writeShellScriptBin "hotspot-kick" ''
+      set -o pipefail
+      MAC="''${1:-}"
+      H="[0-9a-fA-F][0-9a-fA-F]"
+      # Reachable through passwordless sudo, so validate strictly rather than
+      # handing an arbitrary string to hostapd_cli.
+      case "$MAC" in
+        $H:$H:$H:$H:$H:$H) : ;;
+        *) echo "hotspot-kick: expected a MAC address, got: $MAC" >&2; exit 1 ;;
+      esac
+      if [ ! -S /run/hostapd/${apIface} ]; then
+        echo "hotspot-kick: hostapd control socket not found; is the hotspot running?" >&2
+        exit 1
+      fi
+      ${pkgs.hostapd}/bin/hostapd_cli -p /run/hostapd -i ${apIface} deauthenticate "$MAC"
+    '';
+
+    # Prints the passphrase of the running hotspot, nothing else. The conf is
+    # root-only (chmod 600 above), so this needs sudo -- it is the one privileged
+    # read the plugin makes, and only when the user taps "reveal". Deliberately
+    # a separate command rather than a field in hotspot-status, so the key never
+    # rides along on the unprivileged status poll.
+    hotspotSecret = pkgs.writeShellScriptBin "hotspot-secret" ''
+      set -o pipefail
+      # --default prints the password configured in .env.local (what a start
+      # with no override would use); with no flag, the passphrase of the
+      # hotspot currently running.
+      if [ "''${1:-}" = "--default" ]; then
+        printf '%s\n' "${password}"
+        exit 0
+      fi
+      CONF=/run/hostapd-ap0.conf
+      [ -f "$CONF" ] || exit 0
+      sed -n 's/^wpa_passphrase=//p' "$CONF" | head -n1
+    '';
+
     hotspotReset = pkgs.writeShellScriptBin "hotspot-reset" ''
       set -euo pipefail
       echo "[hotspot] Resetting ${apIface} (stop and remove)..."
@@ -445,11 +564,14 @@
       hotspotStatus
       hotspotClients
       hotspotReset
+      hotspotSecret
+      hotspotStations
+      hotspotKick
     ];
 
     # The Noctalia plugin drives the hotspot with `sudo -n`, so these three
-    # need to be passwordless. Everything else still prompts as usual.
-    # hotspot-status is deliberately absent: it is read-only and unprivileged.
+    # need to be passwordless. hotspot-status is deliberately absent: it is
+    # read-only and unprivileged, so the poll loop never touches sudo.
     security.sudo.extraRules = [
       {
         users = [hotspotUser];
@@ -460,9 +582,15 @@
             "/run/current-system/sw/bin/start-hotspot"
             "/run/current-system/sw/bin/stop-hotspot"
             "/run/current-system/sw/bin/hotspot-reset"
+            "/run/current-system/sw/bin/hotspot-secret"
+            "/run/current-system/sw/bin/hotspot-stations"
+            "/run/current-system/sw/bin/hotspot-kick"
             "${startHotspot}/bin/start-hotspot"
             "${stopHotspot}/bin/stop-hotspot"
             "${hotspotReset}/bin/hotspot-reset"
+            "${hotspotSecret}/bin/hotspot-secret"
+            "${hotspotStations}/bin/hotspot-stations"
+            "${hotspotKick}/bin/hotspot-kick"
           ];
         in
           map (command: {
