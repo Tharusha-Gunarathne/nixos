@@ -15,9 +15,29 @@
       "kenn/keybind-cheatsheet"
       # "cleboost/hotspot"
     ];
+
+    # Locally authored plugins, installed by placing files rather than by
+    # `noctalia msg plugins enable` -- that IPC only knows about the official
+    # and community registries below, not a plugin that lives in its own repo.
+    #
+    # Each value must resolve to the directory that directly contains
+    # plugin.toml. noctalia-hotspot's repo nests the plugin under hotspot/,
+    # hence the appended path; a future plugin repo laid out flat wouldn't
+    # need one.
+    #
+    # To add another: give it its own `flake = false` input inside
+    # plugins/noctalia/flake.nix, then add one line here. Nothing in
+    # configuration.nix ever needs to change for this.
+    localPlugins = {
+      hotspot = "${inputs.noctalia.inputs.noctalia-hotspot-plugin}/hotspot";
+    };
   in {
     config = lib.mkIf config.myConfig.shell.noctalia {
-      home-manager.users.${config.myConfig.primaryUser} = {config, lib, ...}: {
+      home-manager.users.${config.myConfig.primaryUser} = {
+        config,
+        lib,
+        ...
+      }: {
         xdg.configFile."noctalia/config.toml".text = ''
           [[plugins.source]]
           name = "official"
@@ -29,6 +49,16 @@
           kind = "path"
           location = "${inputs.noctalia.inputs.noctalia-community-plugins}"
         '';
+
+        home.file =
+          lib.mapAttrs' (name: source: {
+            name = ".local/share/noctalia/plugins/${name}";
+            value = {
+              inherit source;
+              recursive = true;
+            };
+          })
+          localPlugins;
 
         home.activation.noctaliaPluginsEnable = lib.hm.dag.entryAfter ["writeBoundary"] ''
           export PATH="${config.home.profileDirectory}/bin:$PATH"
