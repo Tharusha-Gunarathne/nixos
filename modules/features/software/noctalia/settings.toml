@@ -309,7 +309,6 @@ panel-legacy_placement = "attached"
 panel_open_near_click = true
 panel_placement = "attached"
 
-
 [plugin_settings."noctalia/wallpaper_depth"]
 feather = 0
 threshold = 60
