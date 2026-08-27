@@ -39,27 +39,21 @@
       self.nixosModules.kdeconnect
       self.nixosModules.kitty
       self.nixosModules.lotion
-      self.nixosModules.neovim
       self.nixosModules.obs
       self.nixosModules.shutterEncoder
       self.nixosModules.spotify
       self.nixosModules.throne
       self.nixosModules.vicinae
-      self.nixosModules.vscode
       self.nixosModules.xdm
       self.nixosModules.fastfetch
       self.nixosModules.loupe
-      self.nixosModules.zedEditor
       self.nixosModules.openWebUI
       self.nixosModules.simpMusic
-      self.nixosModules.adb
       self.nixosModules.tailscale
-      self.nixosModules.python
       self.nixosModules.wlrWhichKey
       self.nixosModules.gaming
       self.nixosModules.development
       #services
-      self.nixosModules.lamp
       self.nixosModules.cockpit
       self.nixosModules.hotspot
       # user

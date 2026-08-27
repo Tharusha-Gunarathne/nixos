@@ -7,6 +7,12 @@
     imports = [
       self.nixosModules.gns3
       self.nixosModules.claudeCode
+      self.nixosModules.python
+      self.nixosModules.vscode
+      self.nixosModules.zedEditor
+      self.nixosModules.adb
+      self.nixosModules.lamp
+      self.nixosModules.neovim
     ];
     
     environment.systemPackages = with pkgs; [
