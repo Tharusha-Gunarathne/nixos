@@ -6,6 +6,8 @@ tint_intensity = 0.4999999888241291
 
 [bar.default]
 background_opacity = 0.79999998211860657
+border = "on_secondary"
+border_width = 0.5
 capsule = true
 capsule_foreground = "primary"
 capsule_opacity = 0.24999999441206455
@@ -59,10 +61,10 @@ widget_order = [
     visible = true
 
     [desktop_widgets.widget.desktop-widget-0000000000000001]
-    box_height = 296.0
-    box_width = 464.0
-    cx = 853.5
-    cy = 413.5
+    box_height = 352.0
+    box_width = 536.0
+    cx = 841.5
+    cy = 405.5
     output = "eDP-1"
     placement_height = 1067.0
     placement_width = 1707.0
@@ -77,10 +79,10 @@ widget_order = [
         format = "{:%H:%M}"
 
     [desktop_widgets.widget.desktop-widget-0000000000000002]
-    box_height = 88.0
-    box_width = 416.0
-    cx = 861.5
-    cy = 553.5
+    box_height = 112.0
+    box_width = 440.0
+    cx = 853.5
+    cy = 565.5
     output = "eDP-1"
     placement_height = 1067.0
     placement_width = 1707.0
@@ -88,6 +90,7 @@ widget_order = [
     type = "clock"
 
         [desktop_widgets.widget.desktop-widget-0000000000000002.settings]
+        background = false
         background_color = "surface_variant"
         background_opacity = 0.5
         background_padding = 18.0
@@ -146,11 +149,13 @@ widget_order = [
         font_family = "Unifont"
 
 [dock]
+active_scale = 1.1000000163912773
 background_opacity = 0.64999998547136784
-border = "surface_variant"
+border = "on_secondary"
+border_width = 1.0
 cross_axis_padding = 2
 enabled = true
-icon_size = 40
+icon_size = 44
 inactive_opacity = 0.79999998211860657
 item_spacing = 5
 magnification_scale = 1.5000000074505806
@@ -206,7 +211,7 @@ widget_order = [
     box_height = 80.0
     box_width = 288.0
     cx = 853.5
-    cy = 325.5
+    cy = 245.5
     output = "eDP-1"
     placement_height = 1067.0
     placement_width = 1707.0
@@ -227,7 +232,7 @@ widget_order = [
     box_height = 288.0
     box_width = 304.0
     cx = 853.5
-    cy = 533.5
+    cy = 453.5
     output = "eDP-1"
     placement_height = 1067.0
     placement_width = 1707.0
@@ -246,7 +251,7 @@ widget_order = [
     box_height = 48.0
     box_width = 288.0
     cx = 853.5
-    cy = 717.5
+    cy = 637.5
     output = "eDP-1"
     placement_height = 1067.0
     placement_width = 1707.0
@@ -267,7 +272,7 @@ widget_order = [
     box_height = 64.0
     box_width = 352.0
     cx = 853.5
-    cy = 245.5
+    cy = 165.5
     output = "eDP-1"
     placement_height = 1067.0
     placement_width = 1707.0
@@ -304,9 +309,10 @@ panel-legacy_placement = "attached"
 panel_open_near_click = true
 panel_placement = "attached"
 
-[plugin_settings."cleboost/hotspot"]
-password = "REDACTED-PRIVATE-VALUE"
-ssid = "Legion_16IRX9"
+
+[plugin_settings."noctalia/wallpaper_depth"]
+feather = 0
+threshold = 60
 
 [plugins]
 enabled = [
@@ -317,7 +323,8 @@ enabled = [
     "raycursive/niri-displays",
     "icefish/phone-operate",
     "kenn/keybind-cheatsheet",
-    "noctalia/wallpaper_depth"
+    "noctalia/wallpaper_depth",
+    "REDACTED-USERNAME/hotspot"
 ]
 
 [shell]
@@ -398,10 +405,7 @@ scale = 1.1500000000000001
 type = "icefish/phone-operate:status"
 
 [widget.toggle]
-color = "primary"
-glyph = "rss"
-icon_color = "primary"
-type = "cleboost/hotspot:toggle"
+type = "REDACTED-USERNAME/hotspot:toggle"
 
 [widget.tray]
 anchor = true
