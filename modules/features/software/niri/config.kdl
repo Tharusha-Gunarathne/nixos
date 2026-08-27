@@ -751,4 +751,5 @@ binds {
 
 // Monique monitor configuration
 
-include "./noctalia.kdl"
+
+include "noctalia.kdl"
