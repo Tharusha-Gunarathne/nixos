@@ -18,6 +18,7 @@
       gsettings-desktop-schemas
       bibata-cursors
       papirus-folders
+      gtk3
     ];
 
     programs.dconf.enable = true;
@@ -26,6 +27,11 @@
 
     environment.pathsToLink = [
       "/share/gsettings-schemas/gsettings-desktop-schemas-${pkgs.gsettings-desktop-schemas.version}"
+    ];
+
+    systemd.tmpfiles.rules = [
+      "d /usr/share 0755 root root -"
+      "L+ /usr/share/icons - - - - /run/current-system/sw/share/icons"
     ];
 
     home-manager.users.${username} = {
@@ -81,11 +87,11 @@
         icon_theme=Papirus-Dark
         style=adwaita-dark
         standard_dialogs=default
-      
+
         [Fonts]
         fixed="JetBrainsMono Nerd Font,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1"
         general="Ubuntu Sans,11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1"
-      
+
         [Interface]
         activate_item_on_single_click=1
         buttonbox_layout=0
@@ -114,7 +120,7 @@
           ${pkgs.coreutils}/bin/cp -r "$STORE_BASE" "$LOCAL_BASE"
           ${pkgs.coreutils}/bin/cp -r "$STORE_DARK" "$LOCAL_THEME"
           chmod -R u+w "$LOCAL_BASE" "$LOCAL_THEME"
-          export PATH="${lib.makeBinPath (with pkgs; [gawk coreutils gnused findutils])}:$PATH"
+          export PATH="${lib.makeBinPath (with pkgs; [gawk coreutils gnused findutils gtk3])}:$PATH"
           ${pkgs.papirus-folders}/bin/papirus-folders -C "$TARGET_COLOR" --theme Papirus-Dark
           echo "$STORE_DARK:$TARGET_COLOR" > "$STATE_FILE"
           echo "[papirus-folders] Folder color set to $TARGET_COLOR"
