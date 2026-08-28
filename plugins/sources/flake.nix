@@ -54,6 +54,13 @@
         rev = "0.2.0";
         hash = "sha256-6xmWBrPHghjok43eIDGeshpUEQTuwWLXNHg7CnBUt3Q=";
       };
+
+      kdeconnectPortalFix = {
+        owner = "iamnarayana";
+        repo = "wayland-kdeconnect-fix";
+        rev = "ea55f66c8238235983d60d381bf2abe1fed50043"; 
+        hash = "sha256-OW18+pO92XvlTLrHo+S9/EVUophr5Dl1GdGJcmVAq/o=";
+      };
     };
 
     releaseAssets = {
