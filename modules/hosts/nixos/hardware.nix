@@ -37,7 +37,7 @@
 
     boot.initrd.availableKernelModules = ["xhci_pci" "nvme" "thunderbolt" "usbhid" "usb_storage" "sd_mod" "sdhci_pci"];
     boot.initrd.kernelModules = [];
-    boot.kernelModules = ["kvm-intel"];
+    boot.kernelModules = ["kvm-intel" "bridge"];
     boot.extraModulePackages = [];
 
     fileSystems = lib.mkMerge ([

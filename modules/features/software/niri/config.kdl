@@ -363,6 +363,7 @@ window-rule {
     match app-id="Lotion"
     match app-id="dev.zed.Zed"
     match app-id="microsoft-edge"
+    match app-id=r#"\.virt-manager"#
     opacity 1.0
 }
 
@@ -752,6 +753,6 @@ binds {
 // Monique monitor configuration
 
 
-include "noctalia.kdl"
 
-include "./noctalia.kdl"
+
+include "noctalia.kdl"
