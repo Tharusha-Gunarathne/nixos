@@ -357,14 +357,17 @@ wallpaper_scheme = "m3-tonal-spot"
     [theme.templates]
     builtin_ids = [ "gtk3", "gtk4", "kitty", "niri", "qt" ]
     community_ids = [
+        "antigravity",
+        "claude-code",
         "spicetify",
         "zen-browser",
+        "discord",
         "neovim",
         "obsidian",
         "vscode",
         "zed",
         "vicinae",
-        "discord",
+        "fastfetch",
         "papirus-icons",
         "yazi"
     ]
