@@ -6,6 +6,7 @@
       self.nixosModules.nixLd
       self.nixosModules.options
       self.nixosModules.packages
+      self.nixosModules.overlays
       self.nixosModules.performance
       self.nixosModules.shellAliases
       self.nixosModules.users
@@ -56,6 +57,7 @@
       #services
       self.nixosModules.cockpit
       self.nixosModules.hotspot
+      self.nixosModules.virtualization
       # user
       self.nixosModules.gtk
       self.nixosModules.variables
