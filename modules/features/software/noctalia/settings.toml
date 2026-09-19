@@ -367,6 +367,9 @@ ui_scale = 1.0500000081956387
     [shell.animation]
     speed = 0.60000000894069672
 
+    [shell.greeter_sync]
+    auto_sync = true
+
     [shell.panel]
     open_near_click_control_center = true
     open_near_click_session = true

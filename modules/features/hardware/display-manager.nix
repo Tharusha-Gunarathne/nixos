@@ -1,66 +1,46 @@
-{inputs, ...}: {
-  flake.nixosModules.displayManager = {pkgs, ...}: let
-    # Change this to any folder name under qylock/themes, e.g. "clockwork", "winter", "enfield".
-    themeName = "clockwork";
-    # Only applies when themeName = "clockwork".
-    clockworkMode = "dark"; # or "light"
-
-    qylockPin = inputs.sources.sourcePins.qylock;
-    qylockSrc = pkgs.fetchFromGitHub qylockPin;
-
-    qylockSddmTheme = pkgs.stdenvNoCC.mkDerivation {
-      pname = "sddm-theme-qylock-${themeName}";
-      version = "2026-04-17";
-      src = qylockSrc;
-      dontBuild = true;
-
-      installPhase = ''
-        runHook preInstall
-
-        themeDir="$out/share/sddm/themes/${themeName}"
-        mkdir -p "$themeDir"
-        cp -r "$src/themes/${themeName}/." "$themeDir/"
-
-        # Keep Clockwork-specific defaults declarative when that theme is selected.
-        if [ "${themeName}" = "clockwork" ] && [ -f "$themeDir/theme.conf" ]; then
-          ${pkgs.gnused}/bin/sed -i "s/^themeMode=.*/themeMode=${clockworkMode}/" "$themeDir/theme.conf"
-          ${pkgs.gnused}/bin/sed -i "s/^enableWindup=.*/enableWindup=true/" "$themeDir/theme.conf"
-        fi
-
-        runHook postInstall
-      '';
-    };
+{...}: {
+  flake.nixosModules.displayManager = {
+    config,
+    pkgs,
+    ...
+  }: let
+    username = config.myConfig.primaryUser;
+    greeterPkg = config.services.displayManager.noctalia-greeter.package;
   in {
-    services.greetd.enable = false;
-
-    services.displayManager.sddm = {
+    # Noctalia Greeter on greetd (nixpkgs module). Appearance (wallpaper,
+    # palette, font, monitor layout) is pushed from the shell via
+    # [shell.greeter_sync] in noctalia/settings.toml.
+    services.displayManager.noctalia-greeter = {
       enable = true;
-      # X11 greeter is generally more reliable for pointer support across hardware.
-      wayland.enable = false;
-
-      theme = "${qylockSddmTheme}/share/sddm/themes/${themeName}";
-
-      settings = {
-        Theme = {
-          CursorTheme = "Bibata-Modern-Ice";
-          CursorSize = 24;
-        };
+      cursorTheme = {
+        package = pkgs.bibata-cursors;
+        name = "Bibata-Modern-Ice";
       };
-      extraPackages = with pkgs; [
-        qt6.qtdeclarative
-        qt6.qt5compat
-        qt6.qtsvg
-        qt6.qtmultimedia
-        gst_all_1.gstreamer
-        gst_all_1.gst-plugins-base
-        gst_all_1.gst-plugins-good
-        gst_all_1.gst-plugins-bad
-        gst_all_1.gst-plugins-ugly
-      ];
+      settings = {
+        cursor.size = 24;
+        session.default = "Niri";
+      };
     };
 
-    services.xserver.enable = true;
+    # The greeter scans /run/current-system/sw/share/wayland-sessions,
+    # which NixOS doesn't link by default.
+    environment.pathsToLink = ["/share/wayland-sessions"];
 
-    environment.systemPackages = [qylockSddmTheme];
+    # Sync runs `pkexec noctalia-greeter-apply-appearance --sync`; the
+    # nixpkgs module doesn't ship the passwordless rule or pkexec wrapper
+    # (upstream's `passwordless-sync-users` does -- this mirrors it).
+    security.polkit.enablePkexecWrapper = true;
+    security.polkit.extraConfig = ''
+      polkit.addRule(function(action, subject) {
+        var allowedUsers = ${builtins.toJSON [username]};
+        if (action.id == "org.noctalia.greeter.sync-appearance" &&
+            action.lookup("program") == "${greeterPkg}/bin/noctalia-greeter-apply-appearance" &&
+            action.lookup("user") == "root" &&
+            subject.local && subject.active &&
+            allowedUsers.indexOf(subject.user) >= 0) {
+          return polkit.Result.YES;
+        }
+      });
+    '';
   };
 }
