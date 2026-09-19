@@ -76,11 +76,13 @@
         sha256 = "04cydd5i94qbnsi2535mswapng6hbwc567jhzbq8s715n0nvnn9n";
       };
 
+      # 20.2 was withdrawn upstream -- that URL now 301s to the HTML homepage,
+      # which is what the old pinned hash started failing against.
       shutterEncoder = {
-        version = "20.2";
-        url = "https://www.shutterencoder.com/Shutter%20Encoder%2020.2%20Linux%2064bits.deb";
-        name = "shutter-encoder-20.2.deb";
-        sha256 = "1hnswxlsh04syhc3pi6k53rqpfr0w384brqs2an7yf12nvrn5yxs";
+        version = "20.3";
+        url = "https://www.shutterencoder.com/Shutter%20Encoder%2020.3%20Linux%2064bits.deb";
+        name = "shutter-encoder-20.3.deb";
+        sha256 = "sha256-kQainGFYohTayYAwmP1gaFw/epxbc8LMqzWHRuQ/WPc=";
       };
 
       simpMusic = {

@@ -12,7 +12,7 @@
       inherit (asset) url sha256 name;
     };
 
-    # 20.2 structure: everything under opt/shutter-encoder/
+    # 20.2/20.3 structure: everything under opt/shutter-encoder/
     shutterAppSrc    = "opt/shutter-encoder/lib/app";
     shutterAppDest   = "$out/app";
     shutterIconSrc   = "opt/shutter-encoder/lib/Shutter_Encoder.png";
