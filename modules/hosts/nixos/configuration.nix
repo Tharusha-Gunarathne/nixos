@@ -27,6 +27,7 @@
       self.nixosModules.swap
       self.nixosModules.firmware
       self.nixosModules.keyboardLeds
+      self.nixosModules.fingerprint
       # software
       self.nixosModules.mpv
       self.nixosModules.nautilus
