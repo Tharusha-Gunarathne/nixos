@@ -23,6 +23,8 @@
         cursor.size = 24;
         session.default = "Niri";
         user.default = username; # skip the user picker, open on password
+        # Empty Enter hands off to the fingerprint reader (see fingerprint.nix).
+        auth.allow_empty_password = true;
         appearance = {
           scheme = "Synced"; # pin to the shell's colors
           password_style = "random"; # match the shell lock screen

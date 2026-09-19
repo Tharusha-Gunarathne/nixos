@@ -55,6 +55,18 @@
         hash = "sha256-6xmWBrPHghjok43eIDGeshpUEQTuwWLXNHg7CnBUt3Q=";
       };
 
+      # pam_fprintd fork that prompts for the password while listening on
+      # the fingerprint reader (fingerprint.nix, sudo only). Audited at
+      # this commit: a match returns success; a typed password is only
+      # stored as PAM_AUTHTOK for pam_unix to check.
+      fprintGrosshack = {
+        domain = "gitlab.com";
+        owner = "mishakmak";
+        repo = "pam-fprint-grosshack";
+        rev = "45b42524fb5783e1e555067743d7e0f70d27888a"; # grosshack branch, 1.94.2
+        hash = "sha256-obczZbf/oH4xGaVvp3y3ZyDdYhZnxlCWvL0irgEYIi0=";
+      };
+
       kdeconnectPortalFix = {
         owner = "iamnarayana";
         repo = "wayland-kdeconnect-fix";
