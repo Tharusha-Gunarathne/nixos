@@ -1,6 +1,7 @@
 {...}: {
   flake.nixosModules.displayManager = {
     config,
+    lib,
     pkgs,
     ...
   }: let
@@ -16,11 +17,39 @@
         package = pkgs.bibata-cursors;
         name = "Bibata-Modern-Ice";
       };
+      # Look (wallpaper, palette, font, layout) comes from Sync -- don't set
+      # those here, greeter.toml wins over sync.toml.
       settings = {
         cursor.size = 24;
         session.default = "Niri";
+        user.default = username; # skip the user picker, open on password
+        appearance = {
+          scheme = "Synced"; # pin to the shell's colors
+          password_style = "random"; # match the shell lock screen
+        };
       };
     };
+
+    # Avatar: AccountsService defaulted IconFile to ~/.face, which the
+    # greeter user can't read (home is 0700). Copy the shell's avatar into
+    # AccountsService's own world-readable icon store before the daemon
+    # reads its user files.
+    systemd.services.accounts-daemon.preStart = ''
+      src=${lib.escapeShellArg "/home/${username}/avatar.png"}
+      icon=/var/lib/AccountsService/icons/${username}
+      user=/var/lib/AccountsService/users/${username}
+      if [ -f "$src" ]; then
+        install -D -m 0644 "$src" "$icon"
+        mkdir -p "$(dirname "$user")"
+        if [ -f "$user" ] && grep -q '^Icon=' "$user"; then
+          sed -i "s|^Icon=.*|Icon=$icon|" "$user"
+        elif [ -f "$user" ]; then
+          sed -i "/^\[User\]/a Icon=$icon" "$user"
+        else
+          printf '[User]\nIcon=%s\nSystemAccount=false\n' "$icon" > "$user"
+        fi
+      fi
+    '';
 
     # The greeter scans /run/current-system/sw/share/wayland-sessions,
     # which NixOS doesn't link by default.
