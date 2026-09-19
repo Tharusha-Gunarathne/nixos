@@ -12,6 +12,23 @@
       (builtins.readDir sourceDir)
     );
   in {
+    # Nautilus hardcodes a 12s inactivity timeout, so the background
+    # `--gapplication-service` instance exits shortly after login and every
+    # launch pays full cold-start cost. Make it effectively infinite so the
+    # prewarmed instance stays resident; `nautilus -q` still quits it.
+    nixpkgs.overlays = [
+      (final: prev: {
+        nautilus = prev.nautilus.overrideAttrs (old: {
+          postPatch =
+            (old.postPatch or "")
+            + ''
+              substituteInPlace src/nautilus-application.c \
+                --replace-fail '"inactivity-timeout", 12000' '"inactivity-timeout", G_MAXINT'
+            '';
+        });
+      })
+    ];
+
     environment.systemPackages = with pkgs; [
       nautilus
       nautilus-python
@@ -65,8 +82,11 @@
         Service = {
           Type = "simple";  # stays running, not oneshot
           ExecStart = "${pkgs.nautilus}/bin/nautilus --gapplication-service";
-          Restart = "on-failure";
-          RestartSec = "5s";
+          # systemd's user environment lacks session variables, so pass the
+          # extension dir explicitly or python extensions won't load.
+          Environment = ["NAUTILUS_4_EXTENSION_DIR=${pkgs.nautilus-python}/lib/nautilus/extensions-4"];
+          Restart = "always";
+          RestartSec = "2s";
         };
         Install.WantedBy = ["graphical-session.target"];
       };
