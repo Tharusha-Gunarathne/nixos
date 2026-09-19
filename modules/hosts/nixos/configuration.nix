@@ -12,6 +12,7 @@
       self.nixosModules.users
       self.nixosModules.polkit
       self.nixosModules.homeManager
+      self.nixosModules.journald
       # hardware
       self.nixosModules.audio
       self.nixosModules.bluetooth
