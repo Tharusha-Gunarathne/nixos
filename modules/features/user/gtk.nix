@@ -6,10 +6,13 @@
   }: let
     username = config.myConfig.primaryUser;
     schemaDir = "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/gsettings-desktop-schemas-${pkgs.gsettings-desktop-schemas.version}/glib-2.0/schemas";
-
+    # Superseded by the noctalia v5 "papirus-icons" community template, which
+    # recolors Papirus folders automatically from the active theme palette.
+    # Kept commented in case the manual override is ever needed again.
+    #
     # Change this to any color from: papirus-folders -l --theme Papirus-Dark
     # e.g. adwaita, black, blue, bluegrey, breeze, brown, carmine, cyan, darkcyan, deeporange, green, grey, indigo, magenta, nordic, orange, palebrown, paleorange, pink, red, teal, violet, white, yellow, yaru ...
-    folderColor = "nordic";
+    # folderColor = "nordic";
   in {
     environment.systemPackages = with pkgs; [
       adwaita-icon-theme
@@ -17,8 +20,10 @@
       adw-gtk3
       gsettings-desktop-schemas
       bibata-cursors
-      papirus-folders
-      gtk3
+      # Only needed by the manual papirus folder recolor (see below) --
+      # gtk3 supplied gtk-update-icon-cache for papirus-folders.
+      # papirus-folders
+      # gtk3
     ];
 
     programs.dconf.enable = true;
@@ -105,27 +110,30 @@
         wheel_scroll_lines=3
       '';
 
-      home.activation.papirusFolderColor = lib.hm.dag.entryAfter ["writeBoundary"] ''
-        STORE_BASE="${pkgs.papirus-icon-theme}/share/icons/Papirus"
-        STORE_DARK="${pkgs.papirus-icon-theme}/share/icons/Papirus-Dark"
-        LOCAL_BASE="$HOME/.local/share/icons/Papirus"
-        LOCAL_THEME="$HOME/.local/share/icons/Papirus-Dark"
-        STATE_FILE="$HOME/.local/share/icons/.papirus-${folderColor}-state"
-        TARGET_COLOR="${folderColor}"
-
-        if [ ! -f "$STATE_FILE" ] || ! grep -qx "$STORE_DARK:$TARGET_COLOR" "$STATE_FILE"; then
-          echo "[papirus-folders] Seeding writable Papirus and Papirus-Dark..."
-          rm -rf "$LOCAL_BASE" "$LOCAL_THEME"
-          mkdir -p "$HOME/.local/share/icons"
-          ${pkgs.coreutils}/bin/cp -r "$STORE_BASE" "$LOCAL_BASE"
-          ${pkgs.coreutils}/bin/cp -r "$STORE_DARK" "$LOCAL_THEME"
-          chmod -R u+w "$LOCAL_BASE" "$LOCAL_THEME"
-          export PATH="${lib.makeBinPath (with pkgs; [gawk coreutils gnused findutils gtk3])}:$PATH"
-          ${pkgs.papirus-folders}/bin/papirus-folders -C "$TARGET_COLOR" --theme Papirus-Dark
-          echo "$STORE_DARK:$TARGET_COLOR" > "$STATE_FILE"
-          echo "[papirus-folders] Folder color set to $TARGET_COLOR"
-        fi
-      '';
+      # Manual Papirus folder recolor -- superseded by the noctalia v5
+      # "papirus-icons" community template, which now seeds and recolors
+      # ~/.local/share/icons/Papirus{,-Dark} on every theme change.
+      # home.activation.papirusFolderColor = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      #   STORE_BASE="${pkgs.papirus-icon-theme}/share/icons/Papirus"
+      #   STORE_DARK="${pkgs.papirus-icon-theme}/share/icons/Papirus-Dark"
+      #   LOCAL_BASE="$HOME/.local/share/icons/Papirus"
+      #   LOCAL_THEME="$HOME/.local/share/icons/Papirus-Dark"
+      #   STATE_FILE="$HOME/.local/share/icons/.papirus-${folderColor}-state"
+      #   TARGET_COLOR="${folderColor}"
+      #
+      #   if [ ! -f "$STATE_FILE" ] || ! grep -qx "$STORE_DARK:$TARGET_COLOR" "$STATE_FILE"; then
+      #     echo "[papirus-folders] Seeding writable Papirus and Papirus-Dark..."
+      #     rm -rf "$LOCAL_BASE" "$LOCAL_THEME"
+      #     mkdir -p "$HOME/.local/share/icons"
+      #     ${pkgs.coreutils}/bin/cp -r "$STORE_BASE" "$LOCAL_BASE"
+      #     ${pkgs.coreutils}/bin/cp -r "$STORE_DARK" "$LOCAL_THEME"
+      #     chmod -R u+w "$LOCAL_BASE" "$LOCAL_THEME"
+      #     export PATH="${lib.makeBinPath (with pkgs; [gawk coreutils gnused findutils gtk3])}:$PATH"
+      #     ${pkgs.papirus-folders}/bin/papirus-folders -C "$TARGET_COLOR" --theme Papirus-Dark
+      #     echo "$STORE_DARK:$TARGET_COLOR" > "$STATE_FILE"
+      #     echo "[papirus-folders] Folder color set to $TARGET_COLOR"
+      #   fi
+      # '';
     };
   };
 }
