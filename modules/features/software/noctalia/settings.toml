@@ -1,4 +1,4 @@
-config_version = 13
+config_version = 14
 
 [backdrop]
 enabled = true
@@ -17,7 +17,7 @@ color = "primary"
 end = [ "tray", "toggle", "network", "bluetooth", "volume", "brightness", "battery", "control-center" ]
 font_weight = 400
 radius = 10
-start = [ "wallpaper", "sysmon", "widget", "media" ]
+start = [ "wallpaper", "sysmon", "widget", "media", "bar" ]
 thickness = 32
 
 [calendar]
@@ -173,6 +173,7 @@ blur_intensity = 0.29999999329447746
 enabled = true
 schema_version = 2
 widget_order = [
+    "lockscreen-login-box@HDMI-A-3",
     "lockscreen-widget-0000000000000002",
     "lockscreen-login-box@eDP-1",
     "lockscreen-widget-0000000000000001",
@@ -184,6 +185,33 @@ widget_order = [
     cell_size = 16
     major_interval = 4
     visible = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-3"]
+    box_height = 196.0
+    box_width = 810.0
+    cx = 592.5
+    cy = 554.59814453125
+    output = "HDMI-A-3"
+    placement_height = 667.0
+    placement_width = 1185.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-3".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
 
     [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
     box_height = 196.0
@@ -386,6 +414,10 @@ directory = "REDACTED-HOME/Pictures/Wallpapers"
 
     [wallpaper.monitors.eDP-1]
     path = "REDACTED-BY-GIT-FILTER"
+
+[widget.bar]
+show_resolution = false
+type = "raycursive/niri-displays:bar"
 
 [widget.clock]
 format = "{:%H:%M %a, %B %d}"
