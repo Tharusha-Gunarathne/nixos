@@ -109,6 +109,13 @@ input {
     position x=1280 y=0
 }
 
+// Disable the top-left hot corner that opens the Overview.
+gestures {
+    hot-corners {
+        off
+    }
+}
+
 // Settings that influence how windows are positioned and sized.
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Layout
@@ -349,6 +356,9 @@ window-rule {
 window-rule {
     match app-id="org.gnome.Nautilus"
     opacity 0.95
+    // 0.66667 preset = 1121.33 logical px on eDP-1; fixed only takes integers.
+    default-column-width { proportion 0.66667; }
+    default-window-height { fixed 956; }
 }
 
 window-rule {
@@ -473,8 +483,7 @@ binds {
     //XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
 
     // Open/close the Overview: a zoomed-out view of workspaces and windows.
-    // You can also move the mouse into the top-left hot corner,
-    // or do a four-finger swipe up on a touchpad.
+    // You can also do a four-finger swipe up on a touchpad.
     Mod+O repeat=false { toggle-overview; }
 
     Mod+Q repeat=false { close-window; }
