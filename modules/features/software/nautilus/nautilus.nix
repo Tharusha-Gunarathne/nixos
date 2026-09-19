@@ -52,11 +52,24 @@
     environment.sessionVariables.NAUTILUS_4_EXTENSION_DIR = "${pkgs.nautilus-python}/lib/nautilus/extensions-4";
 
     home-manager.users.${username} = {...}: {
-      xdg.dataFile = builtins.listToAttrs (map (name: {
-          name = "nautilus-python/extensions/${name}";
-          value = {source = sourceDir + "/${name}";};
-        })
-        extensionFiles);
+      xdg.dataFile =
+        builtins.listToAttrs (map (name: {
+            name = "nautilus-python/extensions/${name}";
+            value = {source = sourceDir + "/${name}";};
+          })
+          extensionFiles)
+        // {
+          # Noctalia's dock D-Bus-activates DBusActivatable apps with a ~500ms
+          # timeout, then falls back to Exec. The resident instance's first
+          # window takes longer than that after login, so both paths fire and
+          # two windows open. Drop DBusActivatable so launchers use Exec, which
+          # still hands off to the resident instance without blocking the dock.
+          "applications/org.gnome.Nautilus.desktop".source =
+            pkgs.runCommand "org.gnome.Nautilus.desktop" {} ''
+              sed '/^DBusActivatable=/d' \
+                ${pkgs.nautilus}/share/applications/org.gnome.Nautilus.desktop > $out
+            '';
+        };
 
       systemd.user.services.gvfs-daemon-prewarm = {
         Unit = {
