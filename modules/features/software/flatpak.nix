@@ -2,8 +2,12 @@
   flake.nixosModules.flatpak = {
     pkgs,
     lib,
+    config,
     ...
-  }: {
+  }: let
+    nvidiaVersion = config.boot.kernelPackages.nvidiaPackages.stable.version;
+    nvidiaGLExtension = "org.freedesktop.Platform.GL.nvidia-" + builtins.replaceStrings ["."] ["-"] nvidiaVersion;
+  in {
     services.flatpak = {
       enable = true;
       uninstallUnmanaged = true;
@@ -22,6 +26,10 @@
         }
         {
           appId = "com.usebottles.bottles";
+          origin = "flathub";
+        }
+        {
+          appId = nvidiaGLExtension;
           origin = "flathub";
         }
       ];
