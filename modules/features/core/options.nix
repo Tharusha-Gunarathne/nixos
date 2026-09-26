@@ -33,7 +33,7 @@
       # stable undervolt values for your CPU and set them here.
       isUnderVoltEnabled = lib.mkOption {
         type = lib.types.bool;
-        default = false;
+        default = true;
         description = "Enable CPU undervolting. Requires Legion Optimization to be enabled & BIOS undervolt protection to be disabled.";
       };
 
