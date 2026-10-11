@@ -150,13 +150,13 @@ widget_order = [
 
 [dock]
 active_scale = 1.1000000163912773
-background_opacity = 0.64999998547136784
+background_opacity = 0.74999998323619366
 border = "on_secondary"
 border_width = 1.0
 cross_axis_padding = 2
 enabled = true
 icon_size = 44
-inactive_opacity = 0.79999998211860657
+inactive_opacity = 0.89999997988343239
 item_spacing = 5
 magnification_scale = 1.5000000074505806
 main_axis_padding = 10
