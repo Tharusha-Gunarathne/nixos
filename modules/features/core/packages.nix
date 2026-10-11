@@ -23,6 +23,7 @@
       ripgrep
       rar
       ntfs3g
+      tmux
 
       # Browser
       firefox
