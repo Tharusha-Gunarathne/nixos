@@ -27,6 +27,7 @@
     home-manager.users.${username} = {pkgs, ...}: {
       imports = [inputs.vicinae.vicinae-main.homeManagerModules.default];
 
+      systemd.user.services.vicinae.Service.UnsetEnvironment = ["LD_LIBRARY_PATH"];
       programs.vicinae = {
         enable = true;
         systemd = {
