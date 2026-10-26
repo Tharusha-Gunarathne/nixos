@@ -63,7 +63,7 @@ widget_order = [
     [desktop_widgets.widget.desktop-widget-0000000000000001]
     box_height = 352.0
     box_width = 536.0
-    cx = 841.5
+    cx = 841.49993896484375
     cy = 405.5
     output = "eDP-1"
     placement_height = 1067.0
@@ -101,7 +101,7 @@ widget_order = [
     [desktop_widgets.widget.desktop-widget-0000000000000003]
     box_height = 192.0
     box_width = 208.0
-    cx = 1568.5
+    cx = 1568.4998779296875
     cy = 669.5
     enabled = false
     output = "eDP-1"
@@ -215,7 +215,7 @@ widget_order = [
 
     [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
     box_height = 196.0
-    box_width = 810.0
+    box_width = 720.0
     cx = 853.5
     cy = 846.5
     output = "eDP-1"
@@ -239,7 +239,7 @@ widget_order = [
     box_height = 80.0
     box_width = 288.0
     cx = 853.5
-    cy = 245.5
+    cy = 245.49998474121094
     output = "eDP-1"
     placement_height = 1067.0
     placement_width = 1707.0
@@ -260,7 +260,7 @@ widget_order = [
     box_height = 288.0
     box_width = 304.0
     cx = 853.5
-    cy = 453.5
+    cy = 453.49996948242188
     output = "eDP-1"
     placement_height = 1067.0
     placement_width = 1707.0
@@ -339,7 +339,7 @@ panel_placement = "attached"
 
 [plugin_settings."noctalia/wallpaper_depth"]
 feather = 0
-threshold = 60
+threshold = 78
 
 [plugins]
 enabled = [
