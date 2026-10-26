@@ -32,6 +32,7 @@
         bun
         devenv
         octaveFull
+        go
 
         # IDEs
         jetbrains.webstorm
@@ -41,13 +42,16 @@
         jetbrains.datagrip
         jetbrains.rust-rover
         antigravity-ide
+        eclipses.eclipse-java
 
         # Dev-adjacent tooling
         gh
         postman
         firebase-tools
         devtoolbox
-
+        nasm
+        binutils
+        
         # CLI tooling
         claude-code
 
