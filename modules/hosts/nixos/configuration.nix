@@ -43,7 +43,7 @@
       self.nixosModules.kitty
       self.nixosModules.lotion
       self.nixosModules.obs
-      self.nixosModules.shutterEncoder
+      # self.nixosModules.shutterEncoder
       self.nixosModules.spotify
       self.nixosModules.throne
       self.nixosModules.vicinae
