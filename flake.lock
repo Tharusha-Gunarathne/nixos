@@ -1,37 +1,5 @@
 {
   "nodes": {
-    "caveman-skill": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1791438150,
-        "narHash": "sha256-przOot/S0VLw2aP3tOdxF27mZHMp0NQhyTls0eDAjjs=",
-        "owner": "JuliusBrussee",
-        "repo": "caveman",
-        "rev": "2e08b9177c07bb7249a8a2d1a6758e5db281d002",
-        "type": "github"
-      },
-      "original": {
-        "owner": "JuliusBrussee",
-        "repo": "caveman",
-        "type": "github"
-      }
-    },
-    "claude-plugins": {
-      "inputs": {
-        "caveman-skill": "caveman-skill",
-        "hallmark-skill": "hallmark-skill",
-        "taste-skill": "taste-skill"
-      },
-      "locked": {
-        "path": "./plugins/claude",
-        "type": "path"
-      },
-      "original": {
-        "path": "./plugins/claude",
-        "type": "path"
-      },
-      "parent": []
-    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -63,22 +31,6 @@
       "original": {
         "owner": "hercules-ci",
         "repo": "flake-parts",
-        "type": "github"
-      }
-    },
-    "hallmark-skill": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1786033158,
-        "narHash": "sha256-JflLR1ZgJZuqktK8rnYu7P0l0lKbB+MoQzs/SY/gcJs=",
-        "owner": "nutlope",
-        "repo": "hallmark",
-        "rev": "13ac0ec7e148655948100b6396439e481361d690",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nutlope",
-        "repo": "hallmark",
         "type": "github"
       }
     },
@@ -567,7 +519,6 @@
     },
     "root": {
       "inputs": {
-        "claude-plugins": "claude-plugins",
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",
         "import-tree": "import-tree",
@@ -696,22 +647,6 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
-        "type": "github"
-      }
-    },
-    "taste-skill": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1791583100,
-        "narHash": "sha256-IOK0JfY1DtWLs9QZbvBTf1WlnR3BgySlBxMe/QJ4iRM=",
-        "owner": "Leonxlnx",
-        "repo": "taste-skill",
-        "rev": "717446e07a78d4e6d7918b1fde1a263378eebac9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Leonxlnx",
-        "repo": "taste-skill",
         "type": "github"
       }
     },

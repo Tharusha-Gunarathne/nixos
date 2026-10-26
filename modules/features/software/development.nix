@@ -6,7 +6,7 @@
   }: {
     imports = [
       self.nixosModules.gns3
-      self.nixosModules.claudeCode
+      self.nixosModules.claudeSync
       self.nixosModules.python
       self.nixosModules.vscode
       self.nixosModules.zedEditor

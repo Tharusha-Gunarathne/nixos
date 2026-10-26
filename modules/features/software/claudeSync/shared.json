@@ -1,0 +1,220 @@
+{
+  "_comment": "Single source of truth for what Claude Code shares between NixOS and Windows. Read by default.nix (Nix), claude-shared.py (Linux) and bootstrap.ps1 (Windows). Plugins listed in enabledPlugins are installed on both OSes; mcpServers are merged into ~/.claude.json per OS.",
+  "linkDirs": [
+    "agents",
+    "commands",
+    "plans",
+    "file-history"
+  ],
+  "perEntryDirs": [
+    "skills"
+  ],
+  "perEntryExclude": [
+    "synced"
+  ],
+  "homeLinkDirs": {
+    ".claude-mem": "claude-mem"
+  },
+  "skillSources": [
+    {
+      "_comment": "Upstream repos skill-update.ts refreshes shared skills from (once a day per repo, only when the repo changed). A bundle entry covers every skill under 'dir' that matches a local skill; a 'skill' entry maps one skill to its folder. Skills installed with npx skills are found automatically."
+    },
+    {
+      "repo": "sickn33/agentic-awesome-skills",
+      "dir": "skills",
+      "intervalDays": 7
+    },
+    {
+      "repo": "JuliusBrussee/caveman",
+      "skill": "caveman",
+      "path": "skills/caveman"
+    },
+    {
+      "repo": "JuliusBrussee/caveman",
+      "skill": "caveman-commit",
+      "path": "skills/caveman-commit"
+    },
+    {
+      "repo": "JuliusBrussee/caveman",
+      "skill": "caveman-compress",
+      "path": "skills/caveman-compress"
+    },
+    {
+      "repo": "JuliusBrussee/caveman",
+      "skill": "caveman-help",
+      "path": "skills/caveman-help"
+    },
+    {
+      "repo": "JuliusBrussee/caveman",
+      "skill": "caveman-review",
+      "path": "skills/caveman-review"
+    },
+    {
+      "repo": "JuliusBrussee/caveman",
+      "skill": "caveman-stats",
+      "path": "skills/caveman-stats"
+    },
+    {
+      "repo": "JuliusBrussee/caveman",
+      "skill": "cavecrew",
+      "path": "skills/cavecrew"
+    },
+    {
+      "repo": "Leonxlnx/taste-skill",
+      "skill": "taste-skill",
+      "path": "skills/taste-skill"
+    },
+    {
+      "repo": "nutlope/hallmark",
+      "skill": "hallmark",
+      "path": "skills/hallmark"
+    }
+  ],
+  "settings": {
+    "cleanupPeriodDays": 3650,
+    "enabledPlugins": {
+      "superpowers@claude-plugins-official": true,
+      "code-simplifier@claude-plugins-official": true,
+      "caveman@caveman": true,
+      "github@claude-plugins-official": true,
+      "claude-mem@thedotmack": true
+    },
+    "extraKnownMarketplaces": {
+      "caveman": {
+        "source": {
+          "source": "github",
+          "repo": "JuliusBrussee/caveman"
+        }
+      },
+      "thedotmack": {
+        "source": {
+          "source": "github",
+          "repo": "thedotmack/claude-mem"
+        }
+      }
+    }
+  },
+  "linuxSettings": {
+    "_comment": "Merged on NixOS only: entries whose paths differ per OS. Windows keeps its own E:\\ paths.",
+    "enabledPlugins": {
+      "daniel-riley-ai-bootcamp@daniel-riley-ai-bootcamp-marketplace": true
+    },
+    "extraKnownMarketplaces": {
+      "daniel-riley-ai-bootcamp-marketplace": {
+        "source": {
+          "source": "directory",
+          "path": "/mnt/E_Drive/YT Shorts/daniel-riley-ai-bootcamp"
+        }
+      }
+    }
+  },
+  "windowsSettings": {
+    "_comment": "Merged on Windows only.",
+    "enabledPlugins": {
+      "daniel-riley-ai-bootcamp@daniel-riley-ai-bootcamp-marketplace": true
+    },
+    "extraKnownMarketplaces": {
+      "daniel-riley-ai-bootcamp-marketplace": {
+        "source": {
+          "source": "directory",
+          "path": "E:\\YT Shorts\\daniel-riley-ai-bootcamp"
+        }
+      }
+    }
+  },
+  "mcpServers": {
+    "_comment": "Per-OS launch commands. An OS without an entry keeps whatever it has.",
+    "headroom": {
+      "linux": {
+        "type": "stdio",
+        "command": "headroom",
+        "args": [
+          "mcp",
+          "serve"
+        ]
+      }
+    },
+    "serena": {
+      "linux": {
+        "type": "stdio",
+        "command": "uvx",
+        "args": [
+          "--from",
+          "serena-agent",
+          "serena",
+          "start-mcp-server",
+          "--project-from-cwd",
+          "--context",
+          "claude-code",
+          "--open-web-dashboard",
+          "False"
+        ]
+      },
+      "windows": {
+        "type": "stdio",
+        "command": "uvx",
+        "args": [
+          "--from",
+          "serena-agent",
+          "serena",
+          "start-mcp-server",
+          "--project-from-cwd",
+          "--context",
+          "claude-code",
+          "--open-web-dashboard",
+          "False"
+        ]
+      }
+    },
+    "sequential-thinking": {
+      "linux": {
+        "type": "stdio",
+        "command": "npx",
+        "args": [
+          "-y",
+          "@modelcontextprotocol/server-sequential-thinking"
+        ]
+      },
+      "windows": {
+        "type": "stdio",
+        "command": "cmd",
+        "args": [
+          "/c",
+          "npx",
+          "-y",
+          "@modelcontextprotocol/server-sequential-thinking"
+        ]
+      }
+    },
+    "context7": {
+      "linux": {
+        "type": "stdio",
+        "command": "npx",
+        "args": [
+          "-y",
+          "@upstash/context7-mcp"
+        ]
+      },
+      "windows": {
+        "type": "stdio",
+        "command": "cmd",
+        "args": [
+          "/c",
+          "npx",
+          "-y",
+          "@upstash/context7-mcp"
+        ]
+      }
+    },
+    "codegraph": {
+      "linux": {
+        "type": "stdio",
+        "command": "codegraph",
+        "args": [
+          "serve",
+          "--mcp"
+        ]
+      }
+    }
+  }
+}

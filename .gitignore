@@ -14,3 +14,9 @@ result-*
 
 # Machine-specific secrets — copy from .env.local.example
 .env.local
+
+# claude-mem on Linux once created "C:\\Users\\..." dirs from Windows paths (NTFS rejects them)
+C:*
+
+# Python bytecode (claudeSync tests)
+__pycache__/
