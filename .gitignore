@@ -20,3 +20,7 @@ C:*
 
 # Python bytecode (claudeSync tests)
 __pycache__/
+
+# Local AI tool state
+.claude/
+.serena/
