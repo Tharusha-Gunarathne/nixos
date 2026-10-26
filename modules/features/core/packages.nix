@@ -24,7 +24,9 @@
       rar
       ntfs3g
       tmux
-
+      openssl
+      zip
+      
       # Browser
       firefox
 
