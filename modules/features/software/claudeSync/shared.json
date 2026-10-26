@@ -132,6 +132,19 @@
           "mcp",
           "serve"
         ]
+      },
+      "windows": {
+        "type": "stdio",
+        "command": "uvx",
+        "args": [
+          "--python",
+          "3.13",
+          "--from",
+          "headroom-ai[all]==0.39.1",
+          "headroom",
+          "mcp",
+          "serve"
+        ]
       }
     },
     "serena": {
@@ -213,6 +226,42 @@
         "args": [
           "serve",
           "--mcp"
+        ]
+      },
+      "windows": {
+        "type": "stdio",
+        "command": "cmd",
+        "args": [
+          "/c",
+          "npx",
+          "-y",
+          "@colbymchenry/codegraph@1.1.6",
+          "serve",
+          "--mcp"
+        ]
+      }
+    },
+    "playwright": {
+      "linux": {
+        "type": "stdio",
+        "command": "npx",
+        "args": [
+          "-y",
+          "@playwright/mcp@latest",
+          "--executable-path",
+          "/etc/profiles/per-user/tharusha-gunarathne/bin/brave"
+        ]
+      },
+      "windows": {
+        "type": "stdio",
+        "command": "cmd",
+        "args": [
+          "/c",
+          "npx",
+          "-y",
+          "@playwright/mcp@latest",
+          "--browser",
+          "msedge"
         ]
       }
     }

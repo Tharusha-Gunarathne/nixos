@@ -155,6 +155,7 @@
             cp -f ${./skill-update.ts} ${lib.escapeShellArg "${cfg.sharedDir}/_sync/skill-update.ts"}
             cp -f ${./claude-sandbox.ps1} ${lib.escapeShellArg "${cfg.sharedDir}/_sync/claude-sandbox.ps1"}
             cp -f ${manifest} ${lib.escapeShellArg "${cfg.sharedDir}/_sync/shared.json"}
+            cp -f ${./README.md} ${lib.escapeShellArg "${cfg.sharedDir}/README.md"}
             # Old one-shot snapshots: re-reading them would undo uninstalls.
             rm -f ${lib.escapeShellArg "${cfg.sharedDir}/_sync/installed-linux.json"} \
               ${lib.escapeShellArg "${cfg.sharedDir}/_sync/installed-windows.json"}
