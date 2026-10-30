@@ -1,4 +1,4 @@
-{...}: {
+{inputs, ...}: {
   flake.nixosModules.niri = {
     config,
     pkgs,
@@ -10,7 +10,9 @@
   in {
     programs.niri = {
       enable = true;
-      package = pkgs.niri-unstable; # v26.04 from niri-flake's cache, no compilation
+      # Use the flake's own dependency set: its Cachix builds match this output.
+      # The overlay rebuilds against our nixpkgs and can miss that cache.
+      package = inputs.niri-flake.packages.${pkgs.stdenv.hostPlatform.system}.niri-unstable;
     };
 
     home-manager.users.${username} = {

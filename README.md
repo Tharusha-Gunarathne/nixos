@@ -109,12 +109,28 @@ atomically without modifying any application module.
 ## Build and Apply
 
 ```bash
-# Validate before applying
-nix build .#nixosConfigurations.nixos.config.system.build.toplevel --dry-run
+# Validate before applying (.env.local is intentionally outside Git)
+nix build 'path:.#nixosConfigurations.nixos.config.system.build.toplevel' --dry-run
 
 # Apply
-sudo nixos-rebuild switch --flake .#nixos
+sudo nixos-rebuild switch --flake 'path:.#nixos'
 ```
+
+After the first apply, use the installed helpers:
+
+```bash
+nix-switch --plan           # Preview build jobs and downloads
+nix-switch --show-trace     # Start a detached system-service rebuild
+nix-switch --logs           # Follow progress; Ctrl-C only stops the viewer
+nix-switch --status         # Show the active job or recent result
+```
+
+The helper checks the main desktop binary packages before allowing a large local
+build. Retry a cache miss later, or explicitly opt in with `--allow-source-builds`.
+Successful switches schedule low-priority garbage collection without deleting
+rollback generations. `nix-clean` also preserves generations unless `-d` is
+explicitly supplied. Optional application-only cache targets are defined in
+`cache/packages.nix`; private cache credentials belong outside this repository.
 
 ## Maintenance
 

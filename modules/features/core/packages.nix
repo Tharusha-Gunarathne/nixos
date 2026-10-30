@@ -87,7 +87,7 @@
         mission-center
 
         # App-specific packages
-        inputs.monique.packages.${pkgs.system}.default
+        inputs.monique.packages.${pkgs.stdenv.hostPlatform.system}.default
       ];
     };
   };

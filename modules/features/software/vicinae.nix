@@ -30,6 +30,7 @@
       systemd.user.services.vicinae.Service.UnsetEnvironment = ["LD_LIBRARY_PATH"];
       programs.vicinae = {
         enable = true;
+        package = vicinaePackage;
         systemd = {
           enable = true;
           autoStart = true;

@@ -50,7 +50,6 @@
       self.nixosModules.xdm
       self.nixosModules.fastfetch
       self.nixosModules.loupe
-      self.nixosModules.openWebUI
       self.nixosModules.simpMusic
       self.nixosModules.tailscale
       self.nixosModules.wlrWhichKey

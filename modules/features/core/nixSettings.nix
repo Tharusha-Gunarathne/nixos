@@ -9,6 +9,14 @@
       trusted-users = ["root" config.myConfig.primaryUser];
       experimental-features = ["nix-command" "flakes"];
       auto-optimise-store = true;
+      # Large IDE/browser builds duplicate several GiB in their work trees.
+      # Avoid exhausting disk and RAM by building all of them concurrently.
+      max-jobs = 2;
+      cores = 2;
+      # Try reclaiming unreferenced store paths before the filesystem fills.
+      # GC roots keep installed systems and retained generations protected.
+      min-free = 10 * 1024 * 1024 * 1024;
+      max-free = 20 * 1024 * 1024 * 1024;
 
       # Declared at system level (not relying on flake nixConfig, which is
       # only a *suggestion* unless --accept-flake-config is passed or the
@@ -19,12 +27,14 @@
         "https://vicinae.cachix.org"
         "https://niri.cachix.org"
         "https://noctalia.cachix.org"
+        "https://nix-community.cachix.org"
       ];
       trusted-public-keys = [
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
         "vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc="
         "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
         "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
     };
 
@@ -91,7 +101,7 @@
     nix.extraOptions = ''
       !include /etc/nix/access-tokens.conf
       warn-dirty = false
-      keep-going = true
+      keep-going = false
       log-lines = 20
     '';
     

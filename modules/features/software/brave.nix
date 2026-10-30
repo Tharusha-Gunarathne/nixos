@@ -12,6 +12,17 @@
       "--ozone-platform=wayland"
     ];
     braveFlags = lib.concatStringsSep " " braveArgs;
+    braveRuntime = pkgs.symlinkJoin {
+      name = "brave-${pkgs.brave.version}-runtime-flags";
+      inherit (pkgs.brave) meta;
+      paths = [pkgs.brave];
+      nativeBuildInputs = [pkgs.makeWrapper];
+      postBuild = ''
+        rm "$out/bin/brave"
+        makeWrapper ${pkgs.brave}/bin/brave "$out/bin/brave" \
+          --add-flags ${lib.escapeShellArg braveFlags}
+      '';
+    };
     browserMimeHandlers = [
       "text/html"
       "x-scheme-handler/http"
@@ -39,8 +50,10 @@
 
       programs.chromium = {
         enable = true;
-        package = pkgs.brave;
-        commandLineArgs = braveArgs;
+        # Home Manager's commandLineArgs override rebuilds the browser package.
+        # A tiny launcher preserves the same flags and the cached base binary.
+        package = braveRuntime;
+        commandLineArgs = [];
       };
 
       xdg.mimeApps.defaultApplications = builtins.listToAttrs (
