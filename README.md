@@ -1,236 +1,228 @@
-# NixOS Flake Configuration
+<div align="center">
 
-A modular NixOS + Home Manager configuration managed with flakes and structured
-using flake-parts and import-tree.
+# NixOS · Niri · Noctalia
 
-## Repository Layout
+A personal NixOS desktop, configured with flakes and Home Manager.
 
-```
-.
-├── flake.nix
-├── flake.lock
-├── plugins/
-│   ├── sources/
-│   └── noctalia/
-└── modules/
-    ├── systems.nix
-    ├── features/
-    │   ├── core/
-    │   ├── hardware/
-    │   ├── software/
-    │   │   └── noctalia/
-    │   │       └── integrations/
-    │   └── user/
-    └── hosts/
-        └── nixos/
-```
+A scrolling Wayland desktop, a coordinated shell, and modular system configuration in one repository.
 
-## Structure
+[Desktop](#desktop) · [Setup](#setup) · [Daily use](#daily-use) · [Customization](#customization) · [Troubleshooting](#troubleshooting)
 
-### `modules/`
+![Niri desktop with Noctalia’s top bar, desktop clock, and dock over a forest wallpaper](assets/desktop.png)
 
-All NixOS and Home Manager modules live here. Every `.nix` file is automatically
-imported by `import-tree`. Each file exposes a `flake.nixosModules.<name>` attribute
-and is explicitly imported in `modules/hosts/nixos/configuration.nix`.
+</div>
 
-### `modules/features/core/`
+## Desktop
 
-System-wide foundational options and settings.
+### A coordinated workspace
 
-### `modules/features/hardware/`
+[Niri](https://github.com/YaLTeR/niri) provides the scrolling tiling compositor. [Noctalia](https://github.com/noctalia-dev/noctalia-shell) supplies the bar, dock, desktop widgets, and shell integrations. Vicinae provides an application launcher, with Kitty and Fish for terminal work.
 
-Hardware-specific configuration including GPU, audio, networking, boot, display,
-and hardware-level system services (power management, thermal control, undervolting).
+### Applications and development tools
 
-### `modules/features/software/`
+The configuration includes Brave, Discord with Nixcord, Spotify with Spicetify, MPV, Nautilus, OBS, and other desktop applications. Development, gaming, virtualization, Tailscale, and KDE Connect are configured through separate modules. The enabled modules are listed in [the host configuration](modules/hosts/nixos/configuration.nix).
 
-Per-application configuration modules. Each module covers only the concerns of
-that application — no shell-specific logic belongs here.
+### One configuration, separate responsibilities
 
-### `modules/features/software/noctalia/`
+NixOS manages the system; Home Manager manages user applications and settings. `flake-parts` and `import-tree` organize the modules. Local subflakes pin Noctalia, Vicinae, and additional upstream sources. Machine values live in an ignored TOML file.
 
-The Noctalia desktop shell module. Handles shell installation, config seeding,
-bidirectional sync, git auto-commit, and plugin installation via
-`plugin-settings.nix` (which symlinks all plugins into `xdg.configFile` and
-applies any necessary source patches).
+## Setup
 
-### `modules/features/software/noctalia/integrations/`
+This is a personal configuration for an **x86_64 Linux laptop with Intel/NVIDIA hybrid graphics**, UEFI boot, an ext4 root filesystem, and a FAT32 EFI partition mounted at `/boot`. It is intended to be adapted to an existing NixOS installation; it does not partition disks or install NixOS for you.
 
-Shell-specific hooks for individual applications. Each file here contains only
-what Noctalia needs from or injects into a given app. All integration modules are
-guarded by `lib.mkIf config.myConfig.shell.noctalia`.
+### 1. Prepare your NixOS installation
 
-### `modules/features/user/`
-
-User-level environment configuration that is not application-specific. Covers
-GTK theming and cursor (`gtk.nix`), XDG session variables and user directories
-(`variables.nix`), and custom desktop entries (`desktop-entries.nix`).
-
-### `modules/hosts/nixos/`
-
-Host-specific wiring. Imports all feature modules and sets machine-level options.
-
-### `plugins/noctalia/`
-
-A local flake that pins the Noctalia shell and its plugins as independent inputs,
-allowing them to be updated separately from the main flake.
-
-### `plugins/sources/`
-
-A local flake that centralizes pinned non-flake source trees consumed by modules
-(for example GitHub sources previously fetched via `fetchFromGitHub`).
-It also centralizes pinned binary release metadata (such as Lotion and XDM
-`.deb` URLs and hashes) under `releaseAssets`.
-
-## Shell Toggle
-
-The active desktop shell is controlled by a single boolean option:
+You need an existing user with `sudo` access, internet access, Git, and Nix with `nix-command` and `flakes` enabled. If needed, add this to your existing NixOS configuration and rebuild it before continuing:
 
 ```nix
-myConfig.shell.noctalia = true; # or false
+nix.settings.experimental-features = [ "nix-command" "flakes" ];
 ```
 
-Setting this to `false` disables Noctalia and all its application integrations
-atomically without modifying any application module.
+Back up your current configuration and keep a working boot generation available.
 
-## Key Options
-
-| Option                        | Type    | Default                          | Description                          |
-| ----------------------------- | ------- | -------------------------------- | ------------------------------------ |
-| `myConfig.primaryUser`        | string  | `"<username>"`          | Primary user account                 |
-| `myConfig.primaryUid`         | int     | `1000`                           | Primary user UID                     |
-| `myConfig.repoRoot`           | string  | `/home/<username>/nixos-configs` | Absolute path to this repo           |
-| `myConfig.isUnderVoltEnabled` | bool    | `true`                           | Enable CPU undervolting              |
-| `myConfig.storage.rootUuid`   | string  | host-specific UUID               | Root filesystem UUID                 |
-| `myConfig.storage.bootUuid`   | string  | host-specific UUID               | Boot filesystem UUID                 |
-| `myConfig.storage.dataDrives` | list    | host-specific UUID list          | Additional mounted drives            |
-| `myConfig.shell.noctalia`     | bool    | `true`                           | Enable Noctalia shell integrations   |
-
-## Build and Apply
+### 2. Clone into your home directory
 
 ```bash
-# Load the ignored local configuration without copying it into the flake source
-export NIXOS_LOCAL_CONFIG="$PWD/.env.local"
-
-# Validate before applying
-nix build '.#nixosConfigurations.nixos.config.system.build.toplevel' --impure --dry-run --no-link
-
-# Apply
-sudo --preserve-env=NIXOS_LOCAL_CONFIG nixos-rebuild switch --flake '.#nixos' --impure
-```
-
-After the first apply, use the installed helpers:
-
-```bash
-nix-switch --plan           # Preview build jobs and downloads
-nix-switch --show-trace     # Start a detached system-service rebuild
-nix-switch --logs           # Follow progress; Ctrl-C only stops the viewer
-nix-switch --status         # Show the active job or recent result
-```
-
-The helper checks the main desktop binary packages before allowing a large local
-build. Retry a cache miss later, or explicitly opt in with `--allow-source-builds`.
-Successful switches schedule low-priority garbage collection without deleting
-rollback generations. `nix-clean` also preserves generations unless `-d` is
-explicitly supplied. Optional application-only cache targets are defined in
-`cache/packages.nix`; private cache credentials belong outside this repository.
-
-## Private Configuration and Publishing
-
-Keep machine settings, private desktop entries (`desktop_entries`), and extra
-service ports (`network.extra_tcp_ports`) in the ignored `.env.local`, with mode
-`0600`. Use the Git flake and `NIXOS_LOCAL_CONFIG` as shown above. Never use
-`path:.` for this checkout: it can copy ignored private files into the Nix store.
-Use `--no-link` for standalone builds to avoid leaving a `result` symlink.
-Generated private desktop entries still exist locally in the Nix store; this
-workflow protects publication, not access by local administrators.
-
-Enable the checks after cloning:
-
-```bash
+cd "$HOME"
+git clone https://github.com/Tharusha-Gunarathne/nixos.git nixos
+cd nixos
+cp .env.local.example .env.local
+chmod 600 .env.local
 git config core.hooksPath .githooks
 git config filter.noctalia-settings.required true
-python3 scripts/check-public-source.py
-python3 scripts/check-public-source.py --history
 ```
 
-Home Manager installs the Noctalia clean filter. Configure it before staging live
-settings; a missing required filter must stop staging. Review staged changes:
-hooks and scanners cannot identify every kind of private information.
+Repository access is required to clone. An authenticated SSH clone can be used instead.
 
-Rotate exposed credentials even after deleting them from Git. Collaborators must
-clean or replace old clones after a history rewrite; merging old history can
-restore removed data. GitHub Support controls server-side cache removal.
+### 3. Fill in your local configuration
 
-## Maintenance
+Edit `.env.local` as **TOML**, not as a shell script. Do not `source` it. Keep the template’s sections and keys, and replace the machine values.
+
+| Section | What to configure |
+| --- | --- |
+| `[user]` | Existing login name, UID, Git identity, and repository directory name. With the clone command above, use `repo_dir = "nixos"`. The configured repository path is `/home/<username>/<repo_dir>`. |
+| `[storage]` | Real root and EFI partition UUIDs. Run `lsblk -f` to find them. |
+| `[[storage.data_drives]]` | Actual NTFS data partitions and mount names. Remove unused entries; if you have no data drives, set `data_drives = []` inside `[storage]` before the next section. |
+| `[hardware]` | Intel/NVIDIA PCI bus IDs and display dimensions. Inspect PCI devices with `lspci`; for example, `00:02.0` becomes `PCI:0:2:0`. Convert hexadecimal bus numbers to decimal for NVIDIA’s notation. |
+| `[network]`, `[hotspot]` | DHCP or static addressing, Wi-Fi interface, and optional hotspot settings. |
+| `[paths]`, `[noctalia]` | Existing wallpaper/avatar paths and output names for the bar and dock. In a running Niri session, use `niri msg outputs`. |
+| `[locale]` | Your time zone, such as `Asia/Colombo`. |
+| `[claude_sync]` | Shared directory appropriate for your machine; review the `claudeSync` module before enabling this workflow. |
+| Credential sections | Supply credentials only for services you intend to use. The template documents optional values; Tailscale can be authenticated manually when its auth key is empty. |
+
+Export the local file path in **each terminal used for manual Nix commands**:
 
 ```bash
-# Update all inputs
-nix flake update
-
-# Update only Noctalia and its plugins
-nix flake update noctalia
-
-# Update only centralized source registry inputs
-nix flake update sources
-
-# Format all Nix files
-nix fmt
-
-# Show all flake outputs
-nix flake show
+export NIXOS_LOCAL_CONFIG="$PWD/.env.local"
 ```
 
-## Updating `fetchFromGitHub` Hashes
+The flake requires this variable and `--impure`. The template’s comment that no other steps are needed does not replace this requirement.
 
-When a pinned GitHub source gets a new release/tag, update both `rev` and `hash`.
-This applies to any entry in `plugins/sources/flake.nix` under `sourcePins`.
+### 4. Adapt the host before building
 
-### Method 1: Prefetch (quick)
+Review these files against your hardware and existing NixOS configuration:
 
-1. Build the archive URL for the tag/commit you want:
+- [Host hardware](modules/hosts/nixos/hardware.nix): filesystem types, mounts, initrd modules, Intel microcode, and virtualization support. Compare with a hardware configuration generated for your own machine; this repository uses a flake module wrapper, so do not blindly replace it with an ordinary generated file.
+- [Graphics](modules/features/hardware/graphics.nix): NVIDIA driver and PRIME offload. Machines with different GPUs need corresponding changes here, beyond editing PCI IDs.
+- [Boot](modules/features/hardware/boot.nix): systemd-boot plus custom rEFInd installation and EFI registration. Review these writes to `/boot` before activation.
+- [Power](modules/features/hardware/power.nix): machine-specific undervolting and power limits. For another machine, set `myConfig.isUnderVoltEnabled = false;` in the host module before applying.
+- [Swap](modules/features/hardware/swap.nix): a 25 GiB swapfile at `/var/lib/swapfile`.
+- [Enabled features](modules/hosts/nixos/configuration.nix): remove imports for applications or services you do not want. Review networking and shared-directory workflows as well.
+
+Keep `system.stateVersion` and `home.stateVersion` consistent with your installation’s migration history; these are compatibility settings, not the current Nixpkgs release.
+
+New source files must be added with `git add <file>` before a Git flake can see them. **Do not add `.env.local`.**
+
+### 5. Check, build, and activate
+
+Run from the repository root:
 
 ```bash
-nix-prefetch-url --unpack https://github.com/<owner>/<repo>/archive/refs/tags/<tag>.tar.gz
+# Inspect the build/download plan; this does not build the system.
+nix build '.#nixosConfigurations.nixos.config.system.build.toplevel' \
+  --impure --dry-run --no-link
+
+# Build the system without activating it.
+nix build '.#nixosConfigurations.nixos.config.system.build.toplevel' \
+  --impure --no-link
+
+# Activate the configuration and add its boot generation.
+sudo --preserve-env=NIXOS_LOCAL_CONFIG nixos-rebuild switch \
+  --flake '.#nixos' --impure
 ```
 
-2. Copy the last printed line (the hash) into `hash`.
-3. Update `rev` to the same tag/commit.
+Allow enough disk space and time for downloads and any local compilation. After a successful first activation, reboot to load the configured kernel and graphics driver, then log into the Niri session. Home Manager is integrated into the system rebuild; no separate `home-manager switch` is needed.
 
-Example:
+## Daily use
+
+After the first activation, these installed helpers operate from the configured repository path:
 
 ```bash
-nix-prefetch-url --unpack https://github.com/Samillion/ModernZ/archive/refs/tags/v1.0.tar.gz
+nix-switch --plan          # Preview builds and downloads
+nix-switch --show-trace    # Start a rebuild in a detached systemd service
+nix-switch --logs          # Follow the rebuild; Ctrl-C stops the log viewer
+nix-switch --status        # Inspect progress or the recent result
+nix-clean                 # Collect unused store paths, retaining generations
 ```
 
-### Method 2: Let Nix tell you the hash (most reliable)
+`nix-switch` checks desktop binary-cache availability first. On a cache miss, retry later or explicitly allow local compilation with `nix-switch --allow-source-builds`. It temporarily disconnects an active Tailscale connection during rebuilding and attempts to restore it afterward. Successful switches schedule background garbage collection while retaining rollback generations. Separate weekly garbage collection removes generations older than 30 days.
 
-1. Set a temporary fake hash:
+### Keyboard shortcuts
+
+On this desktop, `Mod` is the Super/Windows key. See [the Niri configuration](modules/features/software/niri/config.kdl) for the full bindings.
+
+| Shortcut | Action |
+| --- | --- |
+| `Mod + Return` or `Mod + T` | Open Kitty |
+| `Mod + O` | Toggle overview |
+| `Mod + Q` | Close the focused window |
+| `Mod + H / J / K / L` | Focus left / down / up / right |
+| `Mod + Ctrl + H / J / K / L` | Move a column or window |
+| `Mod + Shift + /` | Show the shortcut overlay |
+
+## Customization
+
+```text
+.
+├── flake.nix                    # Inputs and local TOML loading
+├── flake.lock                   # Pinned input revisions
+├── .env.local.example           # Machine configuration template
+├── modules/
+│   ├── systems.nix              # Supported build system
+│   ├── hosts/nixos/             # Host wiring and hardware
+│   └── features/
+│       ├── core/                # Options, packages, users, rebuild helpers
+│       ├── hardware/            # Boot, graphics, networking, power
+│       ├── software/            # Applications, services, desktop shell
+│       │   └── noctalia/
+│       │       └── integrations/ # Noctalia hooks for other applications
+│       └── user/                # GTK, XDG environment, desktop entries
+├── plugins/
+│   ├── noctalia/                # Shell and plugin input pins
+│   ├── vicinae/                 # Launcher input pins
+│   └── sources/                 # Source pins and binary release metadata
+├── scripts/                     # Public-source checks
+└── assets/                      # README desktop screenshot
+```
+
+`import-tree` discovers Nix files under `modules/`. Feature files expose named `flake.nixosModules` attributes; the host explicitly imports the features it uses. Add new feature modules there to enable them.
+
+Common options, set inside the host’s NixOS module:
 
 ```nix
-hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+myConfig.shell.noctalia = true;     # Shell and guarded integrations
+myConfig.isUnderVoltEnabled = false; # Disable custom CPU undervolting/limits
 ```
 
-2. Evaluate:
+Niri’s configuration is linked to the checkout, and Noctalia settings are synchronized with repository files. Keep the checkout at the path declared by `[user]` and review desktop-generated changes before committing. Disabling Noctalia requires arranging any replacement shell or desktop components yourself.
+
+### Update pinned inputs
 
 ```bash
-nix flake check --no-build
+export NIXOS_LOCAL_CONFIG="$PWD/.env.local"
+nix flake update             # Update all top-level inputs
+nix flake update noctalia    # Refresh the local Noctalia input
+nix flake update vicinae     # Refresh the local Vicinae input
+nix flake update sources     # Refresh the local source registry input
+nix fmt                      # Format Nix files
+nix-switch --plan
+nix-switch --show-trace
 ```
 
-3. Copy the `got:` hash from the error output into `hash`.
-4. Re-run `nix flake check --no-build` to confirm.
+The local subflakes define their own pins. To change an upstream version, edit or update the corresponding subflake first, then refresh its top-level input. For explicit source pins or binary releases in `plugins/sources/flake.nix`, update the revision/URL and matching hash together.
 
-### Rules of thumb
+## Private configuration
 
-1. Hash must match the exact source for the exact `rev`.
-2. Every `rev` change requires a new hash.
-3. Prefer tags over moving branches (`main`) for reproducible builds.
+Keep credentials and machine-specific details in the ignored `.env.local` with mode `0600`. Use the Git flake (`.#nixos`) and `NIXOS_LOCAL_CONFIG` as documented above. **Do not use `path:.` for this checkout:** it can copy ignored private files into the Nix store. `--no-link` avoids leaving a `result` symlink for standalone builds.
+
+Local configuration is not encrypted secret storage. Values rendered into generated configurations can be readable in the Nix store. Keep private cache credentials outside the repository too.
+
+After the first activation, Home Manager supplies the required `noctalia-settings` Git clean filter. Before staging synchronized Noctalia settings, confirm it is available:
+
+```bash
+git config --get filter.noctalia-settings.clean
+python3 scripts/check-public-source.py
+python3 scripts/check-public-source.py --history
+git diff --cached
+```
+
+If Python is unavailable before activation, enter `nix-shell -p python3` to run the checks. The required filter deliberately prevents staging settings when its cleaner is missing. Review changes yourself as well; automated checks cannot identify every private value.
 
 ## Troubleshooting
 
-1. Run with `--show-trace` to get the full error location.
-2. If a HM option is missing, check for `config` shadowing — capture NixOS-scope
-   values in outer `let` bindings before entering `home-manager.users` blocks.
-3. If the same file is managed by two modules, one will fail at activation.
-4. If evaluation passes but activation fails, check `journalctl --user -xe`.
-```.
+| Symptom | What to check |
+| --- | --- |
+| “Local configuration not found” | Export the absolute `NIXOS_LOCAL_CONFIG` path, confirm the file exists, and pass `--impure`. Preserve the variable when using `sudo`. |
+| A new module is missing | Add the source file to Git and import its module in the host configuration. |
+| A desktop cache is unavailable | Retry later or use `nix-switch --allow-source-builds` if you are prepared to compile. |
+| Rebuild terminal closes | The helper runs in `nix-switch.service`; reconnect and use `nix-switch --status` or `--logs`. |
+| Login succeeds but the screen stays black | Inspect `journalctl -b -u display-manager` and `journalctl --user -b`. Keep Niri on the system package dependency set (`pkgs.niri-unstable` here) so graphics libraries match the installed driver. |
+| Low disk space | Run `df -h /nix/store` and `nix-clean`. `nix-clean -d` also deletes old generations and their rollback options. |
+
+To return to the previous system generation from a working terminal:
+
+```bash
+sudo nixos-rebuild switch --rollback
+```
+
+If the desktop is unavailable, use a TTY (`Ctrl + Alt + F3`) or select a previous NixOS generation from the boot menu. System rollback does not restore mutable files in the checkout or application data.
