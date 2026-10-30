@@ -60,15 +60,29 @@
           })
           localPlugins;
 
-        home.activation.noctaliaPluginsEnable = lib.hm.dag.entryAfter ["writeBoundary"] ''
+        home.activation.noctaliaPluginsEnable = lib.hm.dag.entryAfter ["writeBoundary" "reloadSystemd"] ''
           export PATH="${config.home.profileDirectory}/bin:$PATH"
 
           if ! command -v noctalia >/dev/null 2>&1; then
             echo "[noctalia-plugins] noctalia binary not found on PATH, skipping"
           else
             PLUGINS_WANTED="${lib.concatStringsSep " " pluginsToEnable}"
-            CURRENT=$(noctalia msg plugins list 2>/dev/null)
+            # A newly restarted shell may not have its IPC socket/catalog ready.
+            CATALOG_READY=0
+            for i in $(seq 1 30); do
+              CURRENT=$(noctalia msg plugins list 2>/dev/null || true)
+              MISSING=0
+              for p in $PLUGINS_WANTED; do
+                echo "$CURRENT" | grep -qE "^$p " || MISSING=1
+              done
+              if [ "$MISSING" -eq 0 ]; then
+                CATALOG_READY=1
+                break
+              fi
+              sleep 1
+            done
 
+            if [ "$CATALOG_READY" -eq 1 ]; then
             for p in $PLUGINS_WANTED; do
               if echo "$CURRENT" | grep -qE "^$p .*enabled\$"; then
                 echo "[noctalia-plugins] $p already enabled, skipping"
@@ -79,7 +93,7 @@
             done
 
             for i in $(seq 1 60); do
-              CURRENT=$(noctalia msg plugins list 2>/dev/null)
+              CURRENT=$(noctalia msg plugins list 2>/dev/null || true)
               MISSING=0
               for p in $PLUGINS_WANTED; do
                 echo "$CURRENT" | grep -qE "^$p .*enabled\$" || MISSING=1
@@ -91,6 +105,9 @@
               [ "$i" -eq 60 ] && echo "[noctalia-plugins] timed out after 60s, some plugins may still be exporting"
               sleep 1
             done
+            else
+              echo "[noctalia-plugins] catalog not ready after 30s; enable deferred"
+            fi
           fi
         '';
       };

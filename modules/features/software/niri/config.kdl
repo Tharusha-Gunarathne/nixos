@@ -277,8 +277,9 @@ layout {
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
 
-// This line starts waybar, a commonly used bar for Wayland compositors.
-spawn-at-startup "noctalia"
+// Start the managed service. The transient fallback also works before the
+// configuration enabling noctalia.service has been activated for the first time.
+spawn-at-startup "sh" "-c" "if systemctl --user cat noctalia.service >/dev/null 2>&1; then exec systemctl --user start noctalia.service; else exec systemd-run --user --unit=noctalia-refresh --collect --service-type=exec noctalia; fi"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"

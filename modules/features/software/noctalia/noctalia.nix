@@ -1,5 +1,6 @@
 {
   self,
+  inputs,
   localConfig,
   ...
 }: {
@@ -192,6 +193,17 @@
         '';
       in {
         programs.noctalia.enable = true;
+        programs.noctalia.package = inputs.noctalia.inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default;
+        programs.noctalia.systemd.enable = true;
+        systemd.user.startServices = "sd-switch";
+
+        # Retire the temporary service used to refresh an older unmanaged shell.
+        # The managed service starts during reloadSystemd and tracks upgrades.
+        home.activation.noctaliaRetireLegacyService = lib.hm.dag.entryBetween ["reloadSystemd"] ["writeBoundary"] ''
+          if ${pkgs.systemd}/bin/systemctl --user is-active --quiet noctalia-refresh.service; then
+            ${pkgs.systemd}/bin/systemctl --user stop noctalia-refresh.service
+          fi
+        '';
 
         home.activation.noctaliaSeedSettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
           mkdir -p "${stateDir}"
