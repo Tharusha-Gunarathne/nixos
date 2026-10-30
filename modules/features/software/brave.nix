@@ -15,6 +15,7 @@
     braveRuntime = pkgs.symlinkJoin {
       name = "brave-${pkgs.brave.version}-runtime-flags";
       inherit (pkgs.brave) meta;
+      passthru.desktopCacheBase = pkgs.brave;
       paths = [pkgs.brave];
       nativeBuildInputs = [pkgs.makeWrapper];
       postBuild = ''

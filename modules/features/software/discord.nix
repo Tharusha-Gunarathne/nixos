@@ -70,6 +70,7 @@
     mkCachedVesktop = vencord: pkgs.symlinkJoin {
       name = "vesktop-${pkgs.vesktop.version}-cache-friendly";
       inherit (pkgs.vesktop) meta;
+      passthru.desktopCacheBase = pkgs.vesktop;
       paths = [pkgs.vesktop];
       nativeBuildInputs = [pkgs.makeWrapper];
       postBuild = ''
