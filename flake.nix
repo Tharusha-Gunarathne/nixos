@@ -1,5 +1,5 @@
 {
-  description = "Tharusha's NixOS Flake";  
+  description = "Modular NixOS configuration";
 
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
@@ -37,19 +37,24 @@
     # ── Load machine-specific config from .env.local (gitignored, TOML) ────────
     # Copy .env.local.example → .env.local and fill in your values.
     # The abort gives a clear error on fresh clones before the file exists.
+    localConfigPath = builtins.getEnv "NIXOS_LOCAL_CONFIG";
     localConfig =
-      if builtins.pathExists ./.env.local
-      then fromTOML (builtins.readFile ./.env.local)
+      if localConfigPath != "" && builtins.pathExists localConfigPath
+      then builtins.fromTOML (builtins.readFile localConfigPath)
       else
         abort ''
 
-          .env.local not found!
+          Local configuration not found!
 
           This file holds machine-specific values (UUIDs, API keys, paths).
           Create it from the template before building:
 
             cp .env.local.example .env.local
             # then edit .env.local and fill in your values
+            export NIXOS_LOCAL_CONFIG="$PWD/.env.local"
+
+          Evaluate with --impure and the Git flake (.#), never path:.
+          This keeps ignored files and credentials out of the flake source.
 
         '';
   in

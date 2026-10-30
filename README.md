@@ -109,11 +109,14 @@ atomically without modifying any application module.
 ## Build and Apply
 
 ```bash
-# Validate before applying (.env.local is intentionally outside Git)
-nix build 'path:.#nixosConfigurations.nixos.config.system.build.toplevel' --dry-run
+# Load the ignored local configuration without copying it into the flake source
+export NIXOS_LOCAL_CONFIG="$PWD/.env.local"
+
+# Validate before applying
+nix build '.#nixosConfigurations.nixos.config.system.build.toplevel' --impure --dry-run
 
 # Apply
-sudo nixos-rebuild switch --flake 'path:.#nixos'
+sudo --preserve-env=NIXOS_LOCAL_CONFIG nixos-rebuild switch --flake '.#nixos' --impure
 ```
 
 After the first apply, use the installed helpers:

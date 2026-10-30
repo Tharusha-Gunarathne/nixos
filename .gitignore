@@ -20,6 +20,13 @@ result-*
 /.aws/
 /.netrc
 /netrc
+/.private/
+/private/
+*.pem
+*.key
+*.p12
+*.pfx
+*.bundle
 
 # Local reports and optional setup notes (not public repository documentation)
 /docs/

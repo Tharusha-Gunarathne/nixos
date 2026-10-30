@@ -241,7 +241,7 @@ class Shared:
             return False
         return True
 
-    def private_app(self, path, label):
+    def archive(self, path, label):
         """Park whatever merge_move could not place, instead of deleting it."""
         if path.is_dir() and not any(path.iterdir()):
             path.rmdir()
@@ -264,7 +264,7 @@ class Shared:
             log(f"skipping {local}: used in the last {QUIET_SECONDS // 60} min")
             return
         merge_move(local, target)
-        self.private_app(local, label)
+        self.archive(local, label)
         self.link(local, target)
         log(f"shared {local} -> {target}")
 
@@ -551,7 +551,7 @@ class Shared:
         if local.is_symlink():
             local.unlink()
         elif local.is_dir():
-            self.private_app(local, f"skills/{name}")
+            self.archive(local, f"skills/{name}")
         shared = find_ci(self.root / "skills", name)
         if shared.exists() and not shared.is_symlink():
             # Same drive: a rename, so a power cut leaves it in one place or the other.
@@ -956,7 +956,7 @@ def os_context():
     """One line telling this session which OS it runs on, so it doesn't try the other one's commands."""
     name = "NixOS" if os.path.exists("/etc/NIXOS") else platform.system()
     return (f"Session OS: {name} (Linux), user {os.environ.get('USER', '?')}. Dual-boot with Windows; "
-            "E: is /mnt/E_Drive here. Use Linux/bash commands and paths only; never Windows commands "
+            "Use Linux/bash commands and the configured drive mappings; never Windows commands "
             "(powershell, cmd, .ps1, winget, C:\\ paths). Don't re-check the OS.")
 
 

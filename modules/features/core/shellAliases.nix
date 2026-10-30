@@ -16,6 +16,7 @@
       # Transient system services do not inherit the interactive shell's PATH.
       export PATH="${pkgs.lib.makeBinPath [pkgs.git pkgs.nix pkgs.coreutils]}:/run/current-system/sw/bin"
       cd "${config.myConfig.repoRoot}" || exit 1
+      export NIXOS_LOCAL_CONFIG="$PWD/.env.local"
 
       allow_source_builds=0
       rebuild_args=()
@@ -51,7 +52,7 @@
       trap restore_tailscale EXIT
 
       # Apply limits immediately, including before this config is activated.
-      if /run/current-system/sw/bin/nixos-rebuild switch --flake "path:.#nixos" \
+      if /run/current-system/sw/bin/nixos-rebuild switch --impure --flake ".#nixos" \
         --max-jobs 2 --cores 2 --option keep-going false \
         --option min-free ${toString config.nix.settings.min-free} \
         --option max-free ${toString config.nix.settings.max-free} "''${rebuild_args[@]}"; then
@@ -84,7 +85,8 @@
           --plan)
             shift
             cd "${config.myConfig.repoRoot}" || exit 1
-            exec ${pkgs.nix}/bin/nix build 'path:.#nixosConfigurations.nixos.config.system.build.toplevel' --no-link --dry-run "$@"
+            export NIXOS_LOCAL_CONFIG="$PWD/.env.local"
+            exec ${pkgs.nix}/bin/nix build '.#nixosConfigurations.nixos.config.system.build.toplevel' --impure --no-link --dry-run "$@"
             ;;
           --help|-h)
             echo "Usage: nix-switch [nixos-rebuild flags] [--allow-source-builds]"

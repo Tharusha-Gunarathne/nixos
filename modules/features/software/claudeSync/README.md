@@ -2,7 +2,7 @@
 
 > Claude adapter guide. Maintained source: `agent-sync/claude/`. Export changes
 > through `agent-sync/tools/sync_nixos.py` before rebuilding the NixOS module.
-> See [AgentSync](../README.md) for the combined system and bootstrap.
+> See [the workspace guide](WORKSPACE-README.md) for the combined system and bootstrap.
 
 One Claude Code ecosystem across a dual-boot machine:
 
@@ -65,7 +65,8 @@ Files in `_sync/` are **overwritten on every rebuild** — change them in the re
 Already part of the system config. After changing anything in `claudeSync/`:
 
 ```bash
-sudo nixos-rebuild switch --flake path:.#nixos   # plain .# fails: .env.local is gitignored
+export NIXOS_LOCAL_CONFIG="$PWD/.env.local"
+sudo --preserve-env=NIXOS_LOCAL_CONFIG nixos-rebuild switch --flake .#nixos --impure
 ```
 
 ### Windows — once per machine (as windows-user-b, admin)

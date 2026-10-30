@@ -526,7 +526,7 @@ function Repair-SkillLinks {
 # The only stdout: tells this session which OS it runs on, so it doesn't try
 # NixOS commands here. Skipped for the background -InstallOnly run.
 if (-not ($InstallOnly -or $ConfirmRemovals -or $RestoreRemovals)) {
-  [Console]::Out.WriteLine("Session OS: Windows, user $env:USERNAME. Dual-boot with NixOS; the shared drive is E:\ here (/mnt/E_Drive on NixOS). Use Windows commands and paths (PowerShell, or Git Bash for the Bash tool); never NixOS/Linux-only commands (nix, nixos-rebuild, systemctl, /etc, /mnt/E_Drive paths). Don't re-check the OS.")
+  [Console]::Out.WriteLine("Session OS: Windows, user $env:USERNAME. Dual-boot with NixOS. Use the configured shared drive and Windows commands and paths (PowerShell, or Git Bash for the Bash tool); never NixOS/Linux-only commands (nix, nixos-rebuild, systemctl, /etc). Don't re-check the OS.")
 }
 
 try {

@@ -105,7 +105,7 @@
           filter.noctalia-settings = {
             clean = "${noctaliaSettingsCleanFilter}";
             smudge = "cat";
-            required = false;
+            required = true;
           };
         };
       };

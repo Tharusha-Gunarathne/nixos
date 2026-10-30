@@ -86,7 +86,7 @@
         tmp="$(${pkgs.coreutils}/bin/mktemp)"
         umask 077
         printf '%s\n' "access-tokens = github.com=$token" > "$tmp"
-        ${pkgs.coreutils}/bin/install -m 0644 "$tmp" "$OUT_FILE"
+        ${pkgs.coreutils}/bin/install -m 0600 "$tmp" "$OUT_FILE"
         ${pkgs.coreutils}/bin/rm -f "$tmp"
       else
         ${pkgs.coreutils}/bin/rm -f "$OUT_FILE"
@@ -99,11 +99,13 @@
     '';
 
     nix.extraOptions = ''
-      !include /etc/nix/access-tokens.conf
       warn-dirty = false
       keep-going = false
       log-lines = 20
     '';
+
+    # Only the root daemon reads the token, not every unprivileged client.
+    systemd.services.nix-daemon.environment.NIX_CONFIG = "!include /etc/nix/access-tokens.conf";
     
     system.stateVersion = "25.11";
   };

@@ -18,12 +18,7 @@
       openFirewall = true;
       useRoutingFeatures = "client";
 
-      # When an auth key is present, pass it via the authKeyFile mechanism.
-      # NixOS writes the key to a tmpfs file at activation time and passes
-      # --authkey=file:<path> to `tailscale up`, keeping it out of the store.
-      authKeyFile = lib.mkIf hasKey (
-        pkgs.writeText "tailscale-authkey" authKey
-      );
+      # Auto-auth below uses a runtime file rather than a store derivation.
     };
 
     boot.kernel.sysctl = {
@@ -43,7 +38,8 @@
         set -euo pipefail
         KEY_FILE="/run/tailscale-authkey"
         install -m 0600 /dev/null "$KEY_FILE"
-        printf '%s' "${authKey}" > "$KEY_FILE"
+        ${pkgs.python3}/bin/python3 ${../core/local-value.py} \
+          ${lib.escapeShellArg "${config.myConfig.repoRoot}/.env.local"} tailscale auth_key > "$KEY_FILE"
       ''
     );
 
@@ -70,7 +66,7 @@
 
         echo "[tailscale-autoauth] Authenticating with key from .env.local..."
         ${pkgs.tailscale}/bin/tailscale up \
-          --authkey="$(cat /run/tailscale-authkey)" \
+          --authkey=file:/run/tailscale-authkey \
           --timeout=30s
       '';
     };

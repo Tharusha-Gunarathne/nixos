@@ -34,12 +34,14 @@
 #
 {localConfig, ...}: {
   flake.nixosModules.hotspot = {
+    config,
+    lib,
     pkgs,
     ...
   }: let
     hs        = localConfig.hotspot;
     ssid      = hs.ssid;
-    password  = hs.password;
+    readPassword = "${pkgs.python3}/bin/python3 ${../core/local-value.py} ${lib.escapeShellArg "${config.myConfig.repoRoot}/.env.local"} hotspot password";
     staIface  = hs.interface;   # your normal WiFi interface, e.g. wlan0
     apIface   = "ap0";          # virtual AP interface
 
@@ -77,7 +79,7 @@
       AP="${apIface}"
 
       SSID="${ssid}"
-      PASS="${password}"
+      PASS="$(${readPassword})"
       PW_SET=0
       NOPW_SET=0
 
@@ -536,7 +538,8 @@
       # with no override would use); with no flag, the passphrase of the
       # hotspot currently running.
       if [ "''${1:-}" = "--default" ]; then
-        printf '%s\n' "${password}"
+        ${readPassword}
+        printf '\n'
         exit 0
       fi
       CONF=/run/hostapd-ap0.conf

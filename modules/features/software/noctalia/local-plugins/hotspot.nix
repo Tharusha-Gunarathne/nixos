@@ -26,9 +26,9 @@
 #
 # Iterate on a local checkout without editing the wrapper flake at all.
 # `--override-input` takes a slash-separated path for transitive inputs:
-#   sudo nixos-rebuild switch --flake 'path:.#nixos' \
+#   sudo nixos-rebuild switch --flake '.#nixos' --impure \
 #     --override-input noctalia/noctalia-hotspot-plugin \
-#     path:REDACTED-HOME/dev/noctalia-hotspot
+#     "path:$HOME/dev/noctalia-hotspot"
 #
 # Noctalia treats ~/.local/share/noctalia/plugins/<dir>/ as a built-in "local"
 # source and scans it on startup, so nothing has to be registered in

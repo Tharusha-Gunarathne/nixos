@@ -1,4 +1,4 @@
-{...}: {
+{localConfig, ...}: {
   # Shares Claude Code sessions, auto-memory, skills, agents and plugin
   # settings with the Windows install on the dual-boot NTFS drives.
   # Windows side: run <sharedDir>\_sync\bootstrap.ps1 once (copied there below).
@@ -18,7 +18,10 @@
       (builtins.filter (d: builtins.match "[A-Z]_Drive" d.name != null)
         config.myConfig.storage.dataDrives);
 
-    manifest = ./shared.json;
+    manifest = pkgs.writeText "shared-tools.json" (builtins.toJSON (
+      lib.recursiveUpdate (builtins.fromJSON (builtins.readFile ./shared.json))
+        (builtins.fromJSON ((localConfig.claude_sync or {}).manifest_overrides_json or "{}"))
+    ));
 
     # Linux-side tool. claude-shared wraps it with this machine's paths.
     claude-shared-unwrapped = pkgs.writers.writePython3Bin "claude-shared-unwrapped" {
@@ -115,8 +118,8 @@
       enable = lib.mkEnableOption "sharing Claude Code state with Windows" // {default = true;};
       sharedDir = lib.mkOption {
         type = lib.types.str;
-        default = "/mnt/E_Drive/.claude-shared";
-        description = "Shared store on an NTFS drive Windows also sees (E:\\.claude-shared).";
+        default = (localConfig.claude_sync or {}).shared_dir or "/mnt/shared/.claude-shared";
+        description = "Shared store on a drive also accessible from Windows.";
       };
       backupDays = lib.mkOption {
         type = lib.types.int;

@@ -94,34 +94,8 @@
       }
     }
   },
-  "linuxSettings": {
-    "_comment": "Merged on NixOS only: entries whose paths differ per OS. Windows keeps its own E:\\ paths.",
-    "enabledPlugins": {
-      "daniel-riley-ai-bootcamp@daniel-riley-ai-bootcamp-marketplace": true
-    },
-    "extraKnownMarketplaces": {
-      "daniel-riley-ai-bootcamp-marketplace": {
-        "source": {
-          "source": "directory",
-          "path": "/mnt/E_Drive/YT Shorts/daniel-riley-ai-bootcamp"
-        }
-      }
-    }
-  },
-  "windowsSettings": {
-    "_comment": "Merged on Windows only.",
-    "enabledPlugins": {
-      "daniel-riley-ai-bootcamp@daniel-riley-ai-bootcamp-marketplace": true
-    },
-    "extraKnownMarketplaces": {
-      "daniel-riley-ai-bootcamp-marketplace": {
-        "source": {
-          "source": "directory",
-          "path": "E:\\YT Shorts\\daniel-riley-ai-bootcamp"
-        }
-      }
-    }
-  },
+  "linuxSettings": {},
+  "windowsSettings": {},
   "mcpServers": {
     "_comment": "Per-OS launch commands. An OS without an entry keeps whatever it has.",
     "headroom": {
@@ -249,7 +223,7 @@
           "-y",
           "@playwright/mcp@latest",
           "--executable-path",
-          "/etc/profiles/per-user/tharusha-gunarathne/bin/brave"
+          "/run/current-system/sw/bin/brave"
         ]
       },
       "windows": {

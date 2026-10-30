@@ -13,7 +13,7 @@
     services.cockpit = {
       enable = true;
       port = 9090;
-      openFirewall = true;
+      openFirewall = false;
       settings = {
         WebService = {
           AllowUnencrypted = true;
@@ -21,6 +21,9 @@
         };
       };
     };
+
+    # The desktop launcher only needs local access to this admin interface.
+    systemd.sockets.cockpit.listenStreams = lib.mkForce ["" "127.0.0.1:9090"];
 
     home-manager.sharedModules = [
       {
