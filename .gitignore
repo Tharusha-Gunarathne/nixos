@@ -13,7 +13,16 @@ result-*
 *.tmp
 
 # Machine-specific secrets — copy from .env.local.example
-.env.local
+.env
+.env.*
+!.env.example
+!.env.*.example
+/.aws/
+/.netrc
+/netrc
+
+# Local reports and optional setup notes (not public repository documentation)
+/docs/
 
 # claude-mem on Linux once created "C:\\Users\\..." dirs from Windows paths (NTFS rejects them)
 C:*
@@ -24,3 +33,10 @@ __pycache__/
 # Local AI tool state
 .claude/
 .serena/
+/.codex/
+.cache/
+
+# Generated development environments and IDE state
+.idea/
+.venv/
+node_modules/
