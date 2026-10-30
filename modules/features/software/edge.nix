@@ -29,7 +29,7 @@
           "$@"
       '';
     edgeDefaultLauncher = mkEdgeLauncher "edge-default-launcher" "Default";
-    edgeIncognitoLauncher = mkEdgeLauncher "edge-incognito-launcher" "Profile 3";
+    edgeIncognitoLauncher = mkEdgeLauncher "edge-incognito-launcher" "Incognito";
   in {
     home-manager.users.${username} = {...}: {
       home.packages = [
