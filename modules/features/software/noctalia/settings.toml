@@ -1,4 +1,4 @@
-config_version = 14
+config_version = 16
 
 [backdrop]
 enabled = true
@@ -63,7 +63,7 @@ widget_order = [
     [desktop_widgets.widget.desktop-widget-0000000000000001]
     box_height = 352.0
     box_width = 536.0
-    cx = 841.49993896484375
+    cx = 841.4998779296875
     cy = 405.5
     output = "eDP-1"
     placement_height = 1067.0
@@ -91,7 +91,7 @@ widget_order = [
 
         [desktop_widgets.widget.desktop-widget-0000000000000002.settings]
         background = false
-        background_color = "surface_variant"
+        background_color = "surface_container"
         background_opacity = 0.5
         background_padding = 18.0
         color = "secondary"
@@ -101,7 +101,7 @@ widget_order = [
     [desktop_widgets.widget.desktop-widget-0000000000000003]
     box_height = 192.0
     box_width = 208.0
-    cx = 1568.4998779296875
+    cx = 1568.499755859375
     cy = 669.5
     enabled = false
     output = "eDP-1"
@@ -160,7 +160,7 @@ inactive_opacity = 0.89999997988343239
 item_spacing = 5
 magnification_scale = 1.5000000074505806
 main_axis_padding = 10
-pinned = [ "brave-browser", "dev.zed.Zed", "org.gnome.Nautilus", "ferdium", "lotion", "spotify", "kitty" ]
+pinned = [ "brave-browser", "org.gnome.Nautilus", "ferdium", "lotion", "spotify", "kitty" ]
 show_dots = true
 
 [location]
@@ -198,7 +198,7 @@ widget_order = [
     type = "login_box"
 
         [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-3".settings]
-        background_color = "surface_variant"
+        background_color = "surface_container"
         background_opacity = 0.88
         background_radius = 12.0
         center_password_text = false
@@ -248,7 +248,7 @@ widget_order = [
 
         [lockscreen_widgets.widget.lockscreen-widget-0000000000000001.settings]
         background = true
-        background_color = "surface_variant"
+        background_color = "surface_container"
         background_opacity = 0.17000000000000001
         background_radius = 4.0
         color = "primary"
