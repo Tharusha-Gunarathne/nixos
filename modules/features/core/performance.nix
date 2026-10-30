@@ -2,10 +2,10 @@
   flake.nixosModules.performance = {pkgs, ...}: let
     # Store closures of apps worth having hot in page cache right after login.
     prefetchClosure = pkgs.closureInfo {
-      rootPaths = with pkgs; [brave nautilus];
+      rootPaths = with pkgs; [microsoft-edge nautilus];
     };
 
-    # Windows-Prefetch-style warmup: reads app binaries/libs and the Brave
+    # Windows-Prefetch-style warmup: reads app binaries/libs and the Edge
     # profile into page cache so the first launch after login skips disk I/O.
     # Runs at idle I/O priority; the cache is reclaimable, so it never
     # pressures memory.
@@ -14,14 +14,14 @@
 
       xargs -a ${prefetchClosure}/store-paths $vmtouch -tq -m 256M
 
-      brave_dir="$HOME/.config/BraveSoftware/Brave-Browser"
-      if [ -d "$brave_dir" ]; then
+      edge_dir="$HOME/.config/microsoft-edge"
+      if [ -d "$edge_dir" ]; then
         $vmtouch -tq -m 64M \
           -i 'Cache' -i 'Code Cache' -i 'GPUCache' -i 'DawnGraphiteCache' \
           -i 'DawnWebGPUCache' -i 'GrShaderCache' -i 'ShaderCache' \
           -i 'File System' -i 'Service Worker' -i 'Shared Dictionary' \
           -i 'component_crx_cache' -i 'optimization_guide_model_store' \
-          "$brave_dir"
+          "$edge_dir"
       fi
     '';
   in {

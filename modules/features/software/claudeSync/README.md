@@ -142,7 +142,7 @@ then records and changes nothing.
 | context7 | `npx` | `cmd /c npx` | Node |
 | headroom | `headroom` (uvx-pinned 0.39.1) | `uvx --from headroom-ai[all]==0.39.1` | uv (Python 3.13 fetched by uv) |
 | codegraph | `codegraph` (~/.codegraph install) | `cmd /c npx @colbymchenry/codegraph@1.1.6` | Node 20–24 |
-| playwright | `npx @playwright/mcp` + Brave | `cmd /c npx @playwright/mcp --browser msedge` | Node, Edge (built in) |
+| playwright | `npx @playwright/mcp` + Edge | `cmd /c npx @playwright/mcp --browser msedge` | Node, Edge (built in) |
 | thunder-compute, higgsfield | HTTP | HTTP (copied as-is) | — |
 
 Adding a new MCP server for both OSes: add it to `shared.json → mcpServers`

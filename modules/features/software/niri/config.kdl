@@ -368,8 +368,6 @@ window-rule {
 }
 
 window-rule {
-    match app-id=r#"^brave-[a-z0-9]+-Profile_[0-9]+$"#
-    match app-id="^brave-"
     match app-id="mpv"
     match app-id="Lotion"
     match app-id="dev.zed.Zed"
@@ -731,11 +729,11 @@ binds {
     // Urgent Situation Key Binds
     // ==========================
 
-    // Open Brave to YouTube in a new workspace
+    // Open Edge to YouTube in a new workspace
 
-    // Mod+grave hotkey-overlay-title="Open YouTube in Brave (new workspace)" { spawn-sh "ws_count=$(niri msg -j workspaces 2>/dev/null | jq length || echo 0); target=$((ws_count + 1)); niri msg action focus-workspace \"$target\" >/dev/null 2>&1 || true; brave-default-launcher --new-window 'https://www.youtube.com' >/dev/null 2>&1 & sleep 0.3; niri msg action move-workspace-to-index \"$target\" >/dev/null 2>&1 || true"; }
+    // Mod+grave hotkey-overlay-title="Open YouTube in Edge (new workspace)" { spawn-sh "ws_count=$(niri msg -j workspaces 2>/dev/null | jq length || echo 0); target=$((ws_count + 1)); niri msg action focus-workspace \"$target\" >/dev/null 2>&1 || true; edge-default-launcher --new-window 'https://www.youtube.com' >/dev/null 2>&1 & sleep 0.3; niri msg action move-workspace-to-index \"$target\" >/dev/null 2>&1 || true"; }
 
-    // Ctrl+Shift+grave hotkey-overlay-title="Open YouTube in Brave (new workspace)" { spawn-sh "ws_count=$(niri msg -j workspaces 2>/dev/null | jq length || echo 0); target=$((ws_count + 1)); niri msg action focus-workspace \"$target\" >/dev/null 2>&1 || true; brave-default-launcher --new-window 'https://www.youtube.com' >/dev/null 2>&1 & sleep 0.3; niri msg action move-workspace-to-index \"$target\" >/dev/null 2>&1 || true"; }
+    // Ctrl+Shift+grave hotkey-overlay-title="Open YouTube in Edge (new workspace)" { spawn-sh "ws_count=$(niri msg -j workspaces 2>/dev/null | jq length || echo 0); target=$((ws_count + 1)); niri msg action focus-workspace \"$target\" >/dev/null 2>&1 || true; edge-default-launcher --new-window 'https://www.youtube.com' >/dev/null 2>&1 & sleep 0.3; niri msg action move-workspace-to-index \"$target\" >/dev/null 2>&1 || true"; }
 
     // ============================
 

@@ -43,7 +43,7 @@
     nix.gc = {
       automatic = true;
       dates = "weekly";
-      options = "--delete-older-than 30d";
+      options = "--delete-older-than 7d";
     };
 
     # Keep the desktop responsive while nix-daemon is doing heavy builds

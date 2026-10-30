@@ -72,12 +72,18 @@
 
     # headroom-ai isn't in nixpkgs. Pinned to the version Windows runs
     # (uv tool install "headroom-ai[all]"); uv caches it after the first run.
+    # CPU torch: the default CUDA build drags in ~10GB of nvidia wheels for
+    # small compressor models. --exclude-newer freezes transitive deps so uvx
+    # stops re-resolving onto new torch/nvidia releases and re-downloading.
     headroomSpec = "headroom-ai[all]==0.39.1";
+    headroomExcludeNewer = "2026-10-30T00:00:00Z";
     headroom = pkgs.symlinkJoin {
       name = "headroom";
       paths = map (bin:
         pkgs.writeShellScriptBin bin ''
-          exec ${pkgs.uv}/bin/uvx --python 3.13 --from ${lib.escapeShellArg headroomSpec} ${bin} "$@"
+          exec ${pkgs.uv}/bin/uvx --python 3.13 --torch-backend cpu \
+            --exclude-newer ${headroomExcludeNewer} \
+            --from ${lib.escapeShellArg headroomSpec} ${bin} "$@"
         '') ["headroom" "headroom-cache-ttl"];
     };
 
@@ -206,6 +212,26 @@
         };
         systemd.user.timers.claude-shared-backup = {
           Unit.Description = "Daily snapshot of the shared Claude Code store";
+          Timer = {
+            OnCalendar = "daily";
+            Persistent = true;
+          };
+          Install.WantedBy = ["timers.target"];
+        };
+
+        # uv never evicts on its own; drop archives no cached env references.
+        # A running uvx (headroom, serena) holds the cache lock, so this only
+        # succeeds when Claude is closed; Persistent catches up at next login.
+        systemd.user.services.uv-cache-prune = {
+          Unit.Description = "Prune unused uv cache entries";
+          Service = {
+            Type = "oneshot";
+            Environment = "UV_LOCK_TIMEOUT=30";
+            ExecStart = "-${pkgs.uv}/bin/uv cache prune";
+          };
+        };
+        systemd.user.timers.uv-cache-prune = {
+          Unit.Description = "Daily uv cache prune";
           Timer = {
             OnCalendar = "daily";
             Persistent = true;

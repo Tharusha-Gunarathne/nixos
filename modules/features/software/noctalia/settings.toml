@@ -160,7 +160,7 @@ inactive_opacity = 0.89999997988343239
 item_spacing = 5
 magnification_scale = 1.5000000074505806
 main_axis_padding = 10
-pinned = [ "brave-browser", "org.gnome.Nautilus", "ferdium", "lotion", "spotify", "kitty" ]
+pinned = [ "microsoft-edge", "org.gnome.Nautilus", "ferdium", "lotion", "spotify", "kitty" ]
 show_dots = true
 
 [location]

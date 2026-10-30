@@ -35,13 +35,11 @@
 
         # IDEs
         jetbrains.webstorm
-        jetbrains.phpstorm
         jetbrains.pycharm
         jetbrains.idea
         jetbrains.datagrip
         jetbrains.rust-rover
         antigravity-ide
-        eclipses.eclipse-java
 
         # Dev-adjacent tooling
         gh

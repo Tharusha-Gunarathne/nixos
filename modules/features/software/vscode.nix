@@ -47,7 +47,7 @@
         };
       };
       "editor.defaultFormatter" = "esbenp.prettier-vscode";
-      "markdown-pdf.executablePath" = "${pkgs.brave}/bin/brave";
+      "markdown-pdf.executablePath" = "${pkgs.microsoft-edge}/bin/microsoft-edge";
       "python.defaultInterpreterPath" = "${pkgs.python3}/bin/python";
       "php.validate.enable" = false;
       "php.suggest.basic" = false;

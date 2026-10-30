@@ -20,7 +20,7 @@ A scrolling Wayland desktop, a coordinated shell, and modular system configurati
 
 ### Applications and development tools
 
-The configuration includes Brave, Discord with Nixcord, Spotify with Spicetify, MPV, Nautilus, OBS, and other desktop applications. Development, gaming, virtualization, Tailscale, and KDE Connect are configured through separate modules. The enabled modules are listed in [the host configuration](modules/hosts/nixos/configuration.nix).
+The configuration includes Microsoft Edge, Discord with Nixcord, Spotify with Spicetify, MPV, Nautilus, OBS, and other desktop applications. Development, gaming, virtualization, Tailscale, and KDE Connect are configured through separate modules. The enabled modules are listed in [the host configuration](modules/hosts/nixos/configuration.nix).
 
 ### One configuration, separate responsibilities
 

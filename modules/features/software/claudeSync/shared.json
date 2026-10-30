@@ -223,7 +223,7 @@
           "-y",
           "@playwright/mcp@latest",
           "--executable-path",
-          "/run/current-system/sw/bin/brave"
+          "/run/current-system/sw/bin/microsoft-edge"
         ]
       },
       "windows": {

@@ -33,7 +33,7 @@
       self.nixosModules.nautilus
       self.nixosModules.niri
       self.nixosModules.noctalia
-      self.nixosModules.brave
+      self.nixosModules.edge
       self.nixosModules.discord
       self.nixosModules.ferdium
       self.nixosModules.fish

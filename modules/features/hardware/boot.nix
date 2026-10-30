@@ -45,6 +45,7 @@
 
       grub.enable = false;
       systemd-boot.enable = true;
+      systemd-boot.configurationLimit = 10;
       refind.enable = false;
     };
 

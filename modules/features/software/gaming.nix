@@ -26,11 +26,9 @@
       # per-game, or run `mangohud <binary>` for non-Steam stuff.
       mangohud
 
-      # Non-Steam Windows game support (GOG/Epic/manual installs),
-      # used by Faugus and by umu-launcher directly.
+      # Non-Steam Windows game support (GOG/Epic/manual installs) via
+      # Proton through umu; Faugus and Lutris fetch their own runners.
       umu-launcher
-      wineWow64Packages.staging
-      winetricks
       faugus-launcher
       lutris
       protonup-qt
