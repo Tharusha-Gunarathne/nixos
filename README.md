@@ -113,7 +113,7 @@ atomically without modifying any application module.
 export NIXOS_LOCAL_CONFIG="$PWD/.env.local"
 
 # Validate before applying
-nix build '.#nixosConfigurations.nixos.config.system.build.toplevel' --impure --dry-run
+nix build '.#nixosConfigurations.nixos.config.system.build.toplevel' --impure --dry-run --no-link
 
 # Apply
 sudo --preserve-env=NIXOS_LOCAL_CONFIG nixos-rebuild switch --flake '.#nixos' --impure
@@ -134,6 +134,33 @@ Successful switches schedule low-priority garbage collection without deleting
 rollback generations. `nix-clean` also preserves generations unless `-d` is
 explicitly supplied. Optional application-only cache targets are defined in
 `cache/packages.nix`; private cache credentials belong outside this repository.
+
+## Private Configuration and Publishing
+
+Keep machine settings, private desktop entries (`desktop_entries`), and extra
+service ports (`network.extra_tcp_ports`) in the ignored `.env.local`, with mode
+`0600`. Use the Git flake and `NIXOS_LOCAL_CONFIG` as shown above. Never use
+`path:.` for this checkout: it can copy ignored private files into the Nix store.
+Use `--no-link` for standalone builds to avoid leaving a `result` symlink.
+Generated private desktop entries still exist locally in the Nix store; this
+workflow protects publication, not access by local administrators.
+
+Enable the checks after cloning:
+
+```bash
+git config core.hooksPath .githooks
+git config filter.noctalia-settings.required true
+python3 scripts/check-public-source.py
+python3 scripts/check-public-source.py --history
+```
+
+Home Manager installs the Noctalia clean filter. Configure it before staging live
+settings; a missing required filter must stop staging. Review staged changes:
+hooks and scanners cannot identify every kind of private information.
+
+Rotate exposed credentials even after deleting them from Git. Collaborators must
+clean or replace old clones after a history rewrite; merging old history can
+restore removed data. GitHub Support controls server-side cache removal.
 
 ## Maintenance
 
