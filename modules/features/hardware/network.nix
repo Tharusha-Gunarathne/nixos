@@ -29,6 +29,9 @@
       443 # HTTPS
       9090 # Cockpit
       9999 # private_app Server
+      9998
+      9997
+      5173
       8081
       3000
     ];
