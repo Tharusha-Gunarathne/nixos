@@ -89,6 +89,12 @@
     '';
   in {
     home-manager.users.${username} = {...}: {
+      # gh can't write the credential helper itself: ~/.config/git/config
+      # is a read-only nix store link, so declare it here.
+      programs.gh = {
+        enable = true;
+        gitCredentialHelper.enable = true;
+      };
       programs.git = {
         enable = true;
         settings = {
