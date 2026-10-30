@@ -53,6 +53,7 @@
         
         # CLI tooling
         claude-code
+        codex
 
         # Miscellaneous
         lmstudio

@@ -13,6 +13,7 @@
       programs.fish = {
         enable = true;
         interactiveShellInit = "set fish_greeting";
+        shellAliases.hcodex = "${pkgs.python3}/bin/python3 /mnt/E_Drive/.claude-shared/_sync/codex/agent_launcher.py headroom-codex --";
       };
 
       programs.oh-my-posh = {

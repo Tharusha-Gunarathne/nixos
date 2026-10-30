@@ -26,6 +26,8 @@
       tmux
       openssl
       zip
+      lsof
+      psmisc
       
       # Browser
       firefox
