@@ -1,16 +1,16 @@
 # Claude Code shared setup (NixOS ⇄ Windows)
 
-> Generated from the NixOS repo (`modules/features/software/claudeSync/README.md`)
-> and copied to `E:\.claude-shared\README.md` on every `nixos-rebuild`.
-> Edit it there, not here.
+> Claude adapter guide. Maintained source: `agent-sync/claude/`. Export changes
+> through `agent-sync/tools/sync_nixos.py` before rebuilding the NixOS module.
+> See [AgentSync](../README.md) for the combined system and bootstrap.
 
 One Claude Code ecosystem across a dual-boot machine:
 
 | Where | Who | Claude home |
 |---|---|---|
-| NixOS | `tharusha-gunarathne` | `~/.claude` |
-| Windows | `tharu` | `C:\Users\windows-user-a\.claude` |
-| Windows | `Recovery` (local admin) | `C:\Users\windows-user-b\.claude` |
+| NixOS | `linux-user` | `~/.claude` |
+| Windows | `windows-user-a` | `C:\Users\windows-user-a\.claude` |
+| Windows | `windows-user-b` (local admin) | `C:\Users\windows-user-b\.claude` |
 
 The shared store is `E:\.claude-shared` (NixOS: `/mnt/E_Drive/.claude-shared`).
 Two Claude accounts can be used; account (claude.ai) skills are copied into the
@@ -68,13 +68,13 @@ Already part of the system config. After changing anything in `claudeSync/`:
 sudo nixos-rebuild switch --flake path:.#nixos   # plain .# fails: .env.local is gitignored
 ```
 
-### Windows — once per machine (as Recovery, admin)
+### Windows — once per machine (as windows-user-b, admin)
 
 Fast Startup must be **off**, or NixOS sees `E:` as dirty/read-only. Running
 bootstrap from an **Administrator** PowerShell turns it off. Machine-wide, so
 once is enough.
 
-### Windows — once per user (tharu, then Recovery), logged in as that user
+### Windows — once per user (windows-user-a, then windows-user-b), logged in as that user
 
 1. Install on that user's PATH:
    - **Claude Code** (`claude`)

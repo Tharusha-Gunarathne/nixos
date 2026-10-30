@@ -1,7 +1,7 @@
 """End-to-end test of install/uninstall sharing, in a throwaway sandbox.
 
 Simulates the whole setup in a temp dir: a fake shared drive, NixOS
-(claude-shared.py), Windows user "tharu" and Windows user "Recovery"
+(claude-shared.py), Windows user "windows-user-a" and Windows user "windows-user-b"
 (hook.ps1 under pwsh), each with its own fake home, and a fake `claude`
 CLI that edits the plugin files the way the real one does. Touches nothing
 outside the temp dir.
@@ -70,7 +70,7 @@ class World:
         (self.bin / "claude").chmod(0o755)
         self.log = root / "stub.log"
         self.homes = {}
-        for who in ("linux", "tharu", "Recovery"):
+        for who in ("linux", "windows-user-a", "windows-user-b"):
             home = root / who
             self.homes[who] = home
             (home / ".claude" / "plugins").mkdir(parents=True)
@@ -109,7 +109,7 @@ class World:
         return p.stdout + p.stderr
 
     def everyone(self):
-        return ["linux", "tharu", "Recovery"] if PWSH else ["linux"]
+        return ["linux", "windows-user-a", "windows-user-b"] if PWSH else ["linux"]
 
     def round(self, times=1):
         for _ in range(times):
@@ -169,14 +169,14 @@ def main():
               str({x: w.plugins(x) for x in everyone}))
 
         # 2. uninstall on one machine spreads everywhere, and stays uninstalled
-        remover = "tharu" if PWSH else "linux"
+        remover = "windows-user-a" if PWSH else "linux"
         w.claude(remover, "plugin", "uninstall", "--scope", "user", "tool@mkt")
         w.round(3)
         check(f"uninstall on {remover} removes it everywhere", all("tool@mkt" not in w.plugins(x) for x in everyone),
               str({x: w.plugins(x) for x in everyone}))
 
         # 3. reinstall anywhere brings it back everywhere
-        reinstaller = "Recovery" if PWSH else "linux"
+        reinstaller = "windows-user-b" if PWSH else "linux"
         w.claude(reinstaller, "plugin", "install", "--scope", "user", "tool@mkt")
         w.round(2)
         check(f"reinstall on {reinstaller} brings it back everywhere", all("tool@mkt" in w.plugins(x) for x in everyone),
@@ -259,12 +259,12 @@ def main():
         w.claude("linux", "plugin", "install", "--scope", "user", "local-only@mkt")
         w.run("linux", "hook", CLAUDE_SHARED_OFF="1")
         if PWSH:
-            w.claude("tharu", "plugin", "install", "--scope", "user", "local-only@mkt")
-            w.run("tharu", CLAUDE_CONFIG_DIR=str(tmp / "elsewhere"))
+            w.claude("windows-user-a", "plugin", "install", "--scope", "user", "local-only@mkt")
+            w.run("windows-user-a", CLAUDE_CONFIG_DIR=str(tmp / "elsewhere"))
         check("CLAUDE_SHARED_OFF / other CLAUDE_CONFIG_DIR: nothing recorded", len(w.registry_lines()) == before)
         w.claude("linux", "plugin", "uninstall", "--scope", "user", "local-only@mkt")
         if PWSH:
-            w.claude("tharu", "plugin", "uninstall", "--scope", "user", "local-only@mkt")
+            w.claude("windows-user-a", "plugin", "uninstall", "--scope", "user", "local-only@mkt")
 
         box = tmp / "box"
         sandbox_env = w.env("linux", CLAUDE_SANDBOX_DIR=str(box), CLAUDE_SANDBOX_FROM=str(w.homes["linux"] / ".claude"),
