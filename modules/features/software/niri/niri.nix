@@ -10,9 +10,9 @@
   in {
     programs.niri = {
       enable = true;
-      # Use the flake's own dependency set: its Cachix builds match this output.
-      # The overlay rebuilds against our nixpkgs and can miss that cache.
-      package = inputs.niri-flake.packages.${pkgs.stdenv.hostPlatform.system}.niri-unstable;
+      # Use the system dependency set so EGL/GBM match the installed GPU
+      # driver. The flake's standalone cache uses an older graphics runtime.
+      package = pkgs.niri-unstable;
     };
 
     home-manager.users.${username} = {
@@ -32,7 +32,7 @@
           then "true"
           else "false"
         }" != "true" ]; then
-          ${pkgs.gnused}/bin/sed -i '/include "\.\/noctalia\.kdl"/d' "$NIRI_CONFIG"
+          ${pkgs.gnused}/bin/sed -i '/^[[:space:]]*include "\(\.\/\)\?noctalia\.kdl"[[:space:]]*$/d' "$NIRI_CONFIG"
         fi
       '';
     };

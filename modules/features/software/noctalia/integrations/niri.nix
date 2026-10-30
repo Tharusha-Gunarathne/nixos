@@ -26,7 +26,7 @@
               touch "$NOCTALIA_KDL"
             fi
 
-            if ! ${pkgs.gnugrep}/bin/grep -qE '^[[:space:]]*include "\./noctalia\.kdl"[[:space:]]*$' "$NIRI_CONFIG"; then
+            if ! ${pkgs.gnugrep}/bin/grep -qE '^[[:space:]]*include "(\./)?noctalia\.kdl"[[:space:]]*$' "$NIRI_CONFIG"; then
               printf '\n%s\n' "$INCLUDE_LINE" >> "$NIRI_CONFIG"
               echo "[noctalia] Injected include into config.kdl"
             fi
@@ -45,7 +45,7 @@
             NIRI_CONFIG="${configPath}"
 
             if [ -f "$NIRI_CONFIG" ]; then
-              ${pkgs.gnused}/bin/sed -i '/include "\.\/noctalia\.kdl"/d' "$NIRI_CONFIG"
+              ${pkgs.gnused}/bin/sed -i '/^[[:space:]]*include "\(\.\/\)\?noctalia\.kdl"[[:space:]]*$/d' "$NIRI_CONFIG"
             fi
 
             rm -f "${config.xdg.configHome}/niri/noctalia.kdl"
