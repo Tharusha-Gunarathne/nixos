@@ -16,16 +16,37 @@
     # `--gapplication-service` instance exits shortly after login and every
     # launch pays full cold-start cost. Make it effectively infinite so the
     # prewarmed instance stays resident; `nautilus -q` still quits it.
+    #
+    # GTK 4.22.4 GtkDragSource leaves a stale drag timeout behind when a list
+    # row is torn down, corrupting freed memory and segfaulting Nautilus while
+    # large folders load (GNOME/gtk#8191, fixed in 4.22.5). Patch GTK only for
+    # Nautilus so the rest of the system keeps the cached gtk4; drop this once
+    # nixpkgs ships gtk4 >= 4.22.5.
     nixpkgs.overlays = [
-      (final: prev: {
-        nautilus = prev.nautilus.overrideAttrs (old: {
+      (final: prev: let
+        gtk4 = prev.gtk4.overrideAttrs (old: {
+          patches = (old.patches or []) ++ [./gtk-dragsource-uaf.patch];
+        });
+      in {
+        nautilus =
+          # Every gtk4 consumer Nautilus links must share the patched build,
+          # otherwise the loader resolves the unpatched libgtk-4 first.
+          (prev.nautilus.override {
+            inherit gtk4;
+            libadwaita = prev.libadwaita.override {inherit gtk4;};
+            gnome-desktop = prev.gnome-desktop.override {inherit gtk4;};
+            libportal-gtk4 = prev.libportal-gtk4.override {inherit gtk4;};
+            libglycin-gtk4 = prev.libglycin-gtk4.override {inherit gtk4;};
+            # The hook propagates its own gtk4, which lands first in RUNPATH.
+            wrapGAppsHook4 = prev.wrapGAppsHook4.override {gtk3 = gtk4;};
+          }).overrideAttrs (old: {
           postPatch =
             (old.postPatch or "")
             + ''
               substituteInPlace src/nautilus-application.c \
                 --replace-fail '"inactivity-timeout", 12000' '"inactivity-timeout", G_MAXINT'
             '';
-        });
+          });
       })
     ];
 
@@ -100,6 +121,9 @@
           Environment = ["NAUTILUS_4_EXTENSION_DIR=${pkgs.nautilus-python}/lib/nautilus/extensions-4"];
           Restart = "always";
           RestartSec = "2s";
+          # Exit 1 means another instance already owns org.gnome.Nautilus
+          # (D-Bus activated or launched directly); retrying just loops.
+          RestartPreventExitStatus = "1";
         };
         Install.WantedBy = ["graphical-session.target"];
       };

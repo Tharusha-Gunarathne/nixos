@@ -1,0 +1,15 @@
+Upstream: https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/10188
+Fixes: https://gitlab.gnome.org/GNOME/gtk/-/issues/8191
+
+diff --git a/gtk/gtkdragsource.c b/gtk/gtkdragsource.c
+index 72a680e92a8..ce649fe083d 100644
+--- a/gtk/gtkdragsource.c
++++ b/gtk/gtkdragsource.c
+@@ -286,6 +286,7 @@ gtk_drag_source_begin (GtkGesture       *gesture,
+   GdkEventSequence *current;
+ 
+   current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
++  g_clear_handle_id (&source->timeout_id, g_source_remove);
+   source->timeout_id = g_timeout_add (MIN_TIME_TO_DND, drag_timeout, source);
+ 
+   gtk_gesture_get_point (gesture, current, &source->start_x, &source->start_y);
